@@ -1,0 +1,107 @@
+[
+  {
+    "id": "pokemon-1",
+    "name": "Pokémon №1",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/1-215acbda7534438bad45ce584f909482.webp",
+    "file": "assets/caps/pokemon-1.webp"
+  },
+  {
+    "id": "pokemon-4",
+    "name": "Pokémon №4",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/4-f26134ccab5064ededfa1c64ee0f8313.webp",
+    "file": "assets/caps/pokemon-4.webp"
+  },
+  {
+    "id": "pokemon-7",
+    "name": "Pokémon №7",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/7-12c1f5347c0714531343fa9691cc04e6.webp",
+    "file": "assets/caps/pokemon-7.webp"
+  },
+  {
+    "id": "pokemon-9",
+    "name": "Pokémon №9",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/9-7847d2388fa480755e53f246b5dd496b.webp",
+    "file": "assets/caps/pokemon-9.webp"
+  },
+  {
+    "id": "pokemon-12",
+    "name": "Pokémon №12",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/12-a428f6aab2a3f23d0a260a842d9fe4db.webp",
+    "file": "assets/caps/pokemon-12.webp"
+  },
+  {
+    "id": "pokemon-17",
+    "name": "Pokémon №17",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/17-423b5d6682cd74d7868471a37041d8ea.webp",
+    "file": "assets/caps/pokemon-17.webp"
+  },
+  {
+    "id": "mk-1",
+    "name": "Mortal Kombat №1",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/1-f29dca7e58f0ab50abfff5494fb3c936.webp",
+    "file": "assets/caps/mk-1.webp"
+  },
+  {
+    "id": "mk-3",
+    "name": "Mortal Kombat №3",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/3-2bd462acf4e90eeb3bb0f00a2b4ee1c8.webp",
+    "file": "assets/caps/mk-3.webp"
+  },
+  {
+    "id": "mk-5",
+    "name": "Mortal Kombat №5",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/5-fc65e7a6ffea56eaf69a20626537fd75.webp",
+    "file": "assets/caps/mk-5.webp"
+  },
+  {
+    "id": "mk-9",
+    "name": "Mortal Kombat №9",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/9-2209a428db504608f9d9288c52795830.webp",
+    "file": "assets/caps/mk-9.webp"
+  },
+  {
+    "id": "mk-12",
+    "name": "Mortal Kombat №12",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/12-dd53320b6999a5528fd320dddd83d1eb.webp",
+    "file": "assets/caps/mk-12.webp"
+  },
+  {
+    "id": "mk-18",
+    "name": "Mortal Kombat №18",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/18-4d2c3f6d13c0c4756659fbb4c24c041d.webp",
+    "file": "assets/caps/mk-18.webp"
+  },
+  {
+    "id": "turtles-1",
+    "name": "Черепашки №1",
+    "series": "turtles",
+    "source": "https://playcaps.ru/assets/thumbs/collection27/1-6d21be5f2ff47ff8cd32919bdbc94d85.webp",
+    "file": "assets/caps/turtles-1.webp"
+  },
+  {
+    "id": "turtles-4",
+    "name": "Черепашки №4",
+    "series": "turtles",
+    "source": "https://playcaps.ru/assets/thumbs/collection27/4-5a4cc7aed9583c8c61151d294ce55089.webp",
+    "file": "assets/caps/turtles-4.webp"
+  },
+  {
+    "id": "turtles-7",
+    "name": "Черепашки №7",
+    "series": "turtles",
+    "source": "https://playcaps.ru/assets/thumbs/collection27/7-dfe7f0fbba5a273365727ca1ead4b43e.webp",
+    "file": "assets/caps/turtles-7.webp"
+  }
+]

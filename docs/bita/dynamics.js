@@ -3,7 +3,7 @@ export {RAPIER};
 export async function createWorld(){
  await RAPIER.init();
  const world=new RAPIER.World({x:0,y:-12,z:0});world.timestep=1/120;world.numSolverIterations=12;world.integrationParameters.maxCcdSubsteps=4;
- world.createCollider(RAPIER.ColliderDesc.cuboid(4,.5,4).setTranslation(0,-.5,0).setFriction(.55).setRestitution(.18));
+ world.tableColliderHandle=world.createCollider(RAPIER.ColliderDesc.cuboid(4,.5,4).setTranslation(0,-.5,0).setFriction(.55).setRestitution(.18)).handle;
  for(const [x,z,hx,hz] of [[-3.12,0,.1,4],[3.12,0,.1,4],[0,-3.12,4,.1],[0,3.12,4,.1]])world.createCollider(RAPIER.ColliderDesc.cuboid(hx,10,hz).setTranslation(x,9.9,z).setRestitution(.28));
  return world;
 }
@@ -17,7 +17,7 @@ export function createCapBody(world,index,random=Math.random){
  const c1=Math.cos(x/2),c2=Math.cos(y/2),c3=Math.cos(z/2),s1=Math.sin(x/2),s2=Math.sin(y/2),s3=Math.sin(z/2);
  const rotation={x:s1*c2*c3+c1*s2*s3,y:c1*s2*c3-s1*c2*s3,z:c1*c2*s3+s1*s2*c3,w:c1*c2*c3-s1*s2*s3};
  const body=world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(Math.sin(index*1.7)*.025+(random()-.5)*.02,.038+index*.075,Math.cos(index*2.4)*.025+(random()-.5)*.02).setRotation(rotation).setLinearDamping(.35).setAngularDamping(.65).setCcdEnabled(true).setSoftCcdPrediction(.15));
- world.createCollider(discCollider(.53,.07).setMass(.012).setFriction(.43).setRestitution(.27),body);
+ world.createCollider(discCollider(.53,.07).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setMass(.012).setFriction(.43).setRestitution(.27),body);
  return body;
 }
 export function launch(body,count,power,target,rotation,spin){
@@ -54,7 +54,7 @@ export function sleepRestingBody(body,record,elapsed,dt){
  if(record.p){
   const distance=Math.hypot(p.x-record.p.x,p.y-record.p.y,p.z-record.p.z);
   const dot=Math.min(1,Math.abs(q.x*record.q.x+q.y*record.q.y+q.z*record.q.z+q.w*record.q.w));
-  if(p.y>.025&&p.y<.9&&distance<.04&&2*Math.acos(dot)<.15&&Math.hypot(v.x,v.y,v.z)<.6)body.sleep();
+  if(p.y>.015&&p.y<.9&&distance<.04&&2*Math.acos(dot)<.15&&Math.hypot(v.x,v.y,v.z)<.6)body.sleep();
  }
  record.p=p;record.q=q;
 }
@@ -75,7 +75,28 @@ export function sleepRestingGroup(bodies,record,elapsed,dt){
  const stable=record.poses&&poses.every(({p,q},i)=>{
   const old=record.poses[i],v=bodies[i].linvel();
   const dot=Math.min(1,Math.abs(q.x*old.q.x+q.y*old.q.y+q.z*old.q.z+q.w*old.q.w));
-  return p.y>.02&&p.y<1&&Math.hypot(p.x-old.p.x,p.y-old.p.y,p.z-old.p.z)<.07&&2*Math.acos(dot)<.24&&Math.hypot(v.x,v.y,v.z)<.65;
+  return p.y>.015&&p.y<1&&Math.hypot(p.x-old.p.x,p.y-old.p.y,p.z-old.p.z)<.07&&2*Math.acos(dot)<.24&&Math.hypot(v.x,v.y,v.z)<.65;
  });
  record.poses=poses;if(stable)bodies.forEach(b=>b.sleep());return Boolean(stable);
+}
+
+export const STACK_DISC_HEIGHT=.045;
+export function createStackBody(world,index,random=Math.random){
+ const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setCcdEnabled(true).setSoftCcdPrediction(.12));
+ world.createCollider(discCollider(.53,STACK_DISC_HEIGHT).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setMass(.008).setFriction(.43).setRestitution(.27),body);
+ const x=[0,.09,-.065,.055][index%4]+(random()-.5)*.055,z=[0,-.045,.055,-.025][index%4]+(random()-.5)*.055;
+ const ax=Math.PI+(random()-.5)*(index===0?.008:.025),ay=random()*Math.PI*2,az=(random()-.5)*.025;
+ const c1=Math.cos(ax/2),c2=Math.cos(ay/2),c3=Math.cos(az/2),s1=Math.sin(ax/2),s2=Math.sin(ay/2),s3=Math.sin(az/2);
+ const rotation={x:s1*c2*c3+c1*s2*s3,y:c1*s2*c3-s1*c2*s3,z:c1*c2*s3+s1*s2*c3,w:c1*c2*c3-s1*s2*s3};
+ const position={x,y:.034+index*.064,z};
+ body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased,true);body.setTranslation(position,true);body.setRotation(rotation,true);
+ return {body,position,rotation};
+}
+export function throwStack(bodies,power){
+ for(const [i,body] of bodies.entries()){
+  body.setBodyType(RAPIER.RigidBodyType.Dynamic,true);
+  body.setLinearDamping(.18);body.setAngularDamping(.5);
+  body.setLinvel({x:Math.sin(i*2.4)*.02,y:3.2+power*3.3,z:Math.cos(i*1.7)*.02},true);
+  body.setAngvel({x:Math.sin(i*2)*.06,y:.06,z:Math.cos(i*2.4)*.06},true);
+ }
 }
