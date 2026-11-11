@@ -139,5 +139,190 @@
     "file": "assets/caps/cheetos-82.png",
     "backFile": "assets/caps/cheetos-back.png",
     "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+  },
+  {
+    "id": "pokemon-6",
+    "name": "Pokémon — Чаризард",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/6-c6d5d5f2c8f5a8b0f7973dcbf5349fab.webp",
+    "file": "assets/caps/pokemon-6.webp"
+  },
+  {
+    "id": "pokemon-25",
+    "name": "Pokémon — Пикачу",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/25-9c86c011fa32d283fcba87c8d679c79c.webp",
+    "file": "assets/caps/pokemon-25.webp"
+  },
+  {
+    "id": "pokemon-39",
+    "name": "Pokémon — Джигглипафф",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/39-e692c9190ae3dfd78fee2e0146de2c3d.webp",
+    "file": "assets/caps/pokemon-39.webp"
+  },
+  {
+    "id": "pokemon-52",
+    "name": "Pokémon — Мяут",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/52-a851a967023d1f92f0962814944426ab.webp",
+    "file": "assets/caps/pokemon-52.webp"
+  },
+  {
+    "id": "pokemon-54",
+    "name": "Pokémon — Псайдак",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/54-5ab73c047668753b45fc3eb1793681c2.webp",
+    "file": "assets/caps/pokemon-54.webp"
+  },
+  {
+    "id": "pokemon-94",
+    "name": "Pokémon — Генгар",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/94-d8aecb8c57f575789acdd73ec3e04784.webp",
+    "file": "assets/caps/pokemon-94.webp"
+  },
+  {
+    "id": "pokemon-133",
+    "name": "Pokémon — Иви",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/133-d983df89ad1fdbed45b9b552b0dd7033.webp",
+    "file": "assets/caps/pokemon-133.webp"
+  },
+  {
+    "id": "pokemon-143",
+    "name": "Pokémon — Снорлакс",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/143-1bb75ca8241d010bb1cff583573735d6.webp",
+    "file": "assets/caps/pokemon-143.webp"
+  },
+  {
+    "id": "pokemon-150",
+    "name": "Pokémon — Мьюту",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/150-ffd58f8e5447ac9361c3b52efcfa4d06.webp",
+    "file": "assets/caps/pokemon-150.webp"
+  },
+  {
+    "id": "pokemon-151",
+    "name": "Pokémon — Мью",
+    "series": "pokemon",
+    "source": "https://playcaps.ru/assets/thumbs/collection29/151-b9e65b21449097459157dbe30bee12ee.webp",
+    "file": "assets/caps/pokemon-151.webp"
+  },
+  {
+    "id": "mk-2",
+    "name": "Mortal Kombat №2",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/2-441babb1a68b97fc545a7ede1990c5e8.webp",
+    "file": "assets/caps/mk-2.webp"
+  },
+  {
+    "id": "mk-4",
+    "name": "Mortal Kombat №4",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/4-3c77aedfa7770e87b0dbc627b6ca3766.webp",
+    "file": "assets/caps/mk-4.webp"
+  },
+  {
+    "id": "mk-6",
+    "name": "Mortal Kombat №6",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/6-273fca22a2aae7fc5873ad058115478b.webp",
+    "file": "assets/caps/mk-6.webp"
+  },
+  {
+    "id": "mk-7",
+    "name": "Mortal Kombat №7",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/7-44738cbfa3429e50711bd381094f5aa2.webp",
+    "file": "assets/caps/mk-7.webp"
+  },
+  {
+    "id": "mk-10",
+    "name": "Mortal Kombat №10",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/10-a6b481008c4db3da38608758abf41a13.webp",
+    "file": "assets/caps/mk-10.webp"
+  },
+  {
+    "id": "mk-15",
+    "name": "Mortal Kombat №15",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/15-a8291e4640e7ccd49aebe4c4e2ed917b.webp",
+    "file": "assets/caps/mk-15.webp"
+  },
+  {
+    "id": "mk-20",
+    "name": "Mortal Kombat №20",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/20-e7da24a190f6e89908cd55e0d7d6b6d6.webp",
+    "file": "assets/caps/mk-20.webp"
+  },
+  {
+    "id": "mk-25",
+    "name": "Mortal Kombat №25",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/25-077574fadfbcd53febb5e83a556eba3c.webp",
+    "file": "assets/caps/mk-25.webp"
+  },
+  {
+    "id": "mk-30",
+    "name": "Mortal Kombat №30",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/30-bc6b4d42b958ee91b9fe1d2d7f411ba9.webp",
+    "file": "assets/caps/mk-30.webp"
+  },
+  {
+    "id": "mk-40",
+    "name": "Mortal Kombat №40",
+    "series": "mk",
+    "source": "https://playcaps.ru/assets/thumbs/collection10/40-60b06d2e303c98c873cab951f477f764.webp",
+    "file": "assets/caps/mk-40.webp"
+  },
+  {
+    "id": "cheetos-70",
+    "name": "Cheetos Chester №70",
+    "series": "cheetos",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/70-Speedboat-racing-Chester-Cheetah.png",
+    "file": "assets/caps/cheetos-70.png",
+    "backFile": "assets/caps/cheetos-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+  },
+  {
+    "id": "cheetos-71",
+    "name": "Cheetos Chester №71",
+    "series": "cheetos",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/71-Windsurfing-Chester-Cheetah.png",
+    "file": "assets/caps/cheetos-71.png",
+    "backFile": "assets/caps/cheetos-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+  },
+  {
+    "id": "cheetos-78",
+    "name": "Cheetos Chester №78",
+    "series": "cheetos",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/78-Soccer-Chester-Cheetah.png",
+    "file": "assets/caps/cheetos-78.png",
+    "backFile": "assets/caps/cheetos-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+  },
+  {
+    "id": "cheetos-84",
+    "name": "Cheetos Chester №84",
+    "series": "cheetos",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/84-Australian-Football-Chester-Cheetah.png",
+    "file": "assets/caps/cheetos-84.png",
+    "backFile": "assets/caps/cheetos-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+  },
+  {
+    "id": "cheetos-90",
+    "name": "Cheetos Chester №90",
+    "series": "cheetos",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/90-Ghetto-Blaster-Chester-Cheetah.png",
+    "file": "assets/caps/cheetos-90.png",
+    "backFile": "assets/caps/cheetos-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
   }
 ]

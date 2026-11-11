@@ -10,3 +10,4 @@
 
 .controls{bottom:max(64px,calc(env(safe-area-inset-bottom) + 56px))}.adjust:disabled{opacity:.55}.collection-toggle:disabled{opacity:.5;cursor:default}
 .win-number{width:26px;height:26px;font-size:14px}@keyframes number-in{from{opacity:1;scale:.85}to{opacity:1;scale:1}}
+.collection-toggle{top:calc(max(12px,env(safe-area-inset-top)) + 60px);bottom:auto;height:44px;min-width:72px;padding:6px 12px;border-radius:12px;background:#ffffff65;backdrop-filter:blur(8px);color:#656e5b}html[data-theme=dark] .collection-toggle{background:#22291f80;color:#c7d0ba}#collectionFan img{width:32px;height:32px}.controls{bottom:max(48px,calc(env(safe-area-inset-bottom) + 32px))}

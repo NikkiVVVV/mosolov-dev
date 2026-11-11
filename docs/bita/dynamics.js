@@ -119,3 +119,5 @@ export function fanStack(bodies,power){
 export function turnStack(bodies,power){
  bodies.forEach((body,i)=>{const a=i*2.399963,k=.003*(.7+power*.6);body.applyImpulse({x:0,y:.008*(.6+power*.4),z:0},true);body.applyTorqueImpulse({x:Math.cos(a)*k,y:0,z:Math.sin(a)*k},true)});
 }
+
+export function chargeLift(power){return .85*Math.max(0,Math.min(1,power))**2}
