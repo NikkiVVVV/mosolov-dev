@@ -69,3 +69,6 @@
 - Коллекция перенесена вверх и скрыта до удара. Ручное «Забрать» даёт время рассмотреть и разобрать фишки.
 - 44 скана: добавлены знакомые Pokémon, MK3 и Cheetos. Разные поверхности пластика и картона, рисунок виден при добавлении фишки.
 - 72 проверки физики с зарядкой прошли; разбор верхней и нижней фишки проверен в браузере.
+
+## 2026-11-11 · /bita v5
+Separate insertable plastic slammer (three authentic designs), vertical layer control, 40-cap stack, sequential 3D prize reveals and rotatable won-cap viewer. Original collection storage preserved. Physics validated at 4/12/24/40 caps, three slammer layers and two powers (24 scenarios); downward strike regression passes. Source: ../pokemon-pogs.

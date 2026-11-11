@@ -1,0 +1,32 @@
+[
+  {
+    "id": "mk-dragon",
+    "name": "Mortal Kombat",
+    "color": "#454652",
+    "front": "https://static1.milkcapmania.co.uk/Img/Dunkin%20Caps/Mortal%20Kombat%203/Master%20Caps/300DPI/Logo-%28black%29.png",
+    "back": "https://static1.milkcapmania.co.uk/Img/Dunkin%20Caps/Mortal%20Kombat%203/Master%20Caps/300DPI/Back.png",
+    "source": "https://www.milkcapmania.co.uk/Dunkin-Caps/966-Mortal-Kombat-3-Master-Caps.html",
+    "frontFile": "assets/slammers/mk-dragon-front.png",
+    "backFile": "assets/slammers/mk-dragon-back.png"
+  },
+  {
+    "id": "chupa-blue",
+    "name": "Chupa Caps · Blue",
+    "color": "#4779c7",
+    "front": "https://static1.milkcapmania.co.uk/Img/Chupa%20Caps/Slammers/300DPI/Blue.png",
+    "back": "https://static1.milkcapmania.co.uk/Img/Chupa%20Caps/Slammers/300DPI/Blue-%28back%29.png",
+    "source": "https://www.milkcapmania.co.uk/Chupa-Caps/29-Slammers.html",
+    "frontFile": "assets/slammers/chupa-blue-front.png",
+    "backFile": "assets/slammers/chupa-blue-back.png"
+  },
+  {
+    "id": "chupa-purple",
+    "name": "Chupa Caps · Purple",
+    "color": "#a75cbd",
+    "front": "https://static1.milkcapmania.co.uk/Img/Chupa%20Caps/Slammers/300DPI/Purple.png",
+    "back": "https://static1.milkcapmania.co.uk/Img/Chupa%20Caps/Slammers/300DPI/Purple-%28back%29.png",
+    "source": "https://www.milkcapmania.co.uk/Chupa-Caps/29-Slammers.html",
+    "frontFile": "assets/slammers/chupa-purple-front.png",
+    "backFile": "assets/slammers/chupa-purple-back.png"
+  }
+]

@@ -117,7 +117,33 @@ export function fanStack(bodies,power){
  });
 }
 export function turnStack(bodies,power){
- bodies.forEach((body,i)=>{const a=i*2.399963,k=.003*(.7+power*.6);body.applyImpulse({x:0,y:.008*(.6+power*.4),z:0},true);body.applyTorqueImpulse({x:Math.cos(a)*k,y:0,z:Math.sin(a)*k},true)});
+ bodies.forEach((body,i)=>{const a=i*2.399963,k=.006*(.7+power*.6);body.applyImpulse({x:0,y:.008*(.6+power*.4),z:0},true);body.applyTorqueImpulse({x:Math.cos(a)*k,y:0,z:Math.sin(a)*k},true)});
 }
 
 export function chargeLift(power){return .85*Math.max(0,Math.min(1,power))**2}
+
+export const MAX_STACK=40;
+export const SLAMMER_HEIGHT=.08;
+export const SLAMMER_RADIUS=.55;
+export function slammerY(slot){return HOVER_HEIGHT+SLAMMER_HEIGHT/2+.004+slot*STACK_LAYER_STEP}
+export function capInsertionOffset(index,slot,enabled=true){return enabled&&index>=slot?SLAMMER_HEIGHT+.018:0}
+export function createSlammerBody(world,slot){
+ const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setTranslation(0,slammerY(slot),0).setCcdEnabled(true).setSoftCcdPrediction(.1));
+ const collider=world.createCollider(discCollider(SLAMMER_RADIUS,SLAMMER_HEIGHT).setMass(.015).setFriction(.38).setRestitution(.62).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS),body);
+ return {body,collider,position:{x:0,y:slammerY(slot),z:0},rotation:{x:0,y:0,z:0,w:1}};
+}
+export function slammerWeights(count,slot){
+ if(slot>=count)return Array(count).fill(0);
+ return Array.from({length:count},(_,i)=>{const above=i>=slot,d=above?i-slot:slot-1-i;return d>4?0:Math.exp(-d/1.3)*(above?1:.55)});
+}
+// A local elastic response at the stiff plastic insert. No final sides are chosen.
+// On top there are no overlying caps: only the insert receives the extra rebound.
+export function slammerResponse(bodies,insert,slot,power){
+ const weights=slammerWeights(bodies.length,slot);let reaction=0,affected=0;
+ if(slot>=bodies.length){insert.applyImpulse({x:0,y:.015*(.6+power),z:0},true);return {affected:0,weights}}
+ bodies.forEach((body,i)=>{const k=weights[i]*(.6+power*.5);if(!k)return;affected++;const a=i*2.399963,dy=.006*k;
+  body.applyImpulse({x:Math.cos(a)*.002*k,y:dy,z:Math.sin(a)*.002*k},true);
+  body.applyTorqueImpulse({x:Math.sin(a)*.0025*k,y:0,z:Math.cos(a)*.0025*k},true);reaction+=dy;
+ });
+ insert.applyImpulse({x:0,y:-reaction*.6,z:0},true);return {affected,weights};
+}
