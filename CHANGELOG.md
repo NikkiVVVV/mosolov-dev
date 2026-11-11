@@ -72,3 +72,6 @@
 
 ## 2026-11-11 · /bita v5
 Separate insertable plastic slammer (three authentic designs), vertical layer control, 40-cap stack, sequential 3D prize reveals and rotatable won-cap viewer. Original collection storage preserved. Physics validated at 4/12/24/40 caps, three slammer layers and two powers (24 scenarios); downward strike regression passes. Source: ../pokemon-pogs.
+
+## 2026-11-11 · /bita v7
+Automatic sequential prizes, header icon without count, larger bottom-sheet images, left layer pointer without copy. Seven-second charge limit with overload scatter; “Ещё раз” after impact. Stronger vertical bounce and slammer response; tighter render/collider envelope and contact skin. Added 16 Sonic/Dragon Ball Z/Space Jam scans (60 designs total). Validated 24 slammer and 12 downward scenarios, local 7.5-second overload, automatic award and no console errors. Cache version bounce7.

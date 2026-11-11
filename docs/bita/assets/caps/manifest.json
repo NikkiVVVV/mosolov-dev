@@ -324,5 +324,149 @@
     "file": "assets/caps/cheetos-90.png",
     "backFile": "assets/caps/cheetos-back.png",
     "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+  },
+  {
+    "id": "dbz-1",
+    "name": "Freeza",
+    "series": "dbz",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/01-Freeza.png",
+    "file": "assets/caps/dbz-1.png",
+    "backFile": "assets/caps/dbz-1-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/01-Freeza-%28back%29.png"
+  },
+  {
+    "id": "dbz-3",
+    "name": "Ginew",
+    "series": "dbz",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/03-Ginew.png",
+    "file": "assets/caps/dbz-3.png",
+    "backFile": "assets/caps/dbz-3-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/03-Ginew-%28back%29.png"
+  },
+  {
+    "id": "dbz-5",
+    "name": "Dodoria",
+    "series": "dbz",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/05-Dodoria.png",
+    "file": "assets/caps/dbz-5.png",
+    "backFile": "assets/caps/dbz-5-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/05-Dodoria-%28back%29.png"
+  },
+  {
+    "id": "dbz-7",
+    "name": "Saibamans",
+    "series": "dbz",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/07-Saibamans.png",
+    "file": "assets/caps/dbz-7.png",
+    "backFile": "assets/caps/dbz-7-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/07-Saibamans-%28back%29.png"
+  },
+  {
+    "id": "sonic-1",
+    "name": "Sonic the Hedgehog",
+    "series": "sonic",
+    "source": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/01-Sonic-the-Hedgehog.png",
+    "file": "assets/caps/sonic-1.png",
+    "backFile": "assets/caps/sonic-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/Back.png"
+  },
+  {
+    "id": "sonic-2",
+    "name": "Knuckles the Echidna",
+    "series": "sonic",
+    "source": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/02-Knuckles-the-Echidna.png",
+    "file": "assets/caps/sonic-2.png",
+    "backFile": "assets/caps/sonic-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/Back.png"
+  },
+  {
+    "id": "sonic-8",
+    "name": "Dr. Robotnik",
+    "series": "sonic",
+    "source": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/08-Dr.-Robotnik.png",
+    "file": "assets/caps/sonic-8.png",
+    "backFile": "assets/caps/sonic-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/Back.png"
+  },
+  {
+    "id": "sonic-13",
+    "name": "Sally Acorn",
+    "series": "sonic",
+    "source": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/13-Sally-Acorn.png",
+    "file": "assets/caps/sonic-13.png",
+    "backFile": "assets/caps/sonic-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/Back.png"
+  },
+  {
+    "id": "sonic-20",
+    "name": "Sonic the Hedgehog",
+    "series": "sonic",
+    "source": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/20-Sonic-the-Hedgehog.png",
+    "file": "assets/caps/sonic-20.png",
+    "backFile": "assets/caps/sonic-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/Back.png"
+  },
+  {
+    "id": "sonic-29",
+    "name": "Miles 'Tails' Prower",
+    "series": "sonic",
+    "source": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/29-Miles-%27Tails%27-Prower.png",
+    "file": "assets/caps/sonic-29.png",
+    "backFile": "assets/caps/sonic-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Wackers/Sonic%20the%20Hedgehog/300DPI/Back.png"
+  },
+  {
+    "id": "spacejam-1",
+    "name": "Bugs Bunny",
+    "series": "spacejam",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/01-Bugs-Bunny.png",
+    "file": "assets/caps/spacejam-1.png",
+    "backFile": "assets/caps/spacejam-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+  },
+  {
+    "id": "spacejam-4",
+    "name": "Tweety Pie",
+    "series": "spacejam",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/04-Tweety-Pie.png",
+    "file": "assets/caps/spacejam-4.png",
+    "backFile": "assets/caps/spacejam-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+  },
+  {
+    "id": "spacejam-7",
+    "name": "Daffy Duck",
+    "series": "spacejam",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/07-Daffy-Duck.png",
+    "file": "assets/caps/spacejam-7.png",
+    "backFile": "assets/caps/spacejam-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+  },
+  {
+    "id": "spacejam-10",
+    "name": "Lola Bunny",
+    "series": "spacejam",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/10-Lola-Bunny.png",
+    "file": "assets/caps/spacejam-10.png",
+    "backFile": "assets/caps/spacejam-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+  },
+  {
+    "id": "spacejam-12",
+    "name": "Tazmanian Devil",
+    "series": "spacejam",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/12-Tazmanian-Devil.png",
+    "file": "assets/caps/spacejam-12.png",
+    "backFile": "assets/caps/spacejam-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+  },
+  {
+    "id": "spacejam-18",
+    "name": "Michael Jordan",
+    "series": "spacejam",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/18-Michael-Jordan.png",
+    "file": "assets/caps/spacejam-18.png",
+    "backFile": "assets/caps/spacejam-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
   }
 ]

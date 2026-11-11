@@ -2,7 +2,7 @@ import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
 export async function createWorld({extent=3.12}={}){
  await RAPIER.init();
- const world=new RAPIER.World({x:0,y:-12,z:0});world.timestep=1/120;world.numSolverIterations=12;world.integrationParameters.maxCcdSubsteps=4;
+ const world=new RAPIER.World({x:0,y:-12,z:0});world.timestep=1/120;world.numSolverIterations=16;world.integrationParameters.maxCcdSubsteps=4;
  world.tableColliderHandle=world.createCollider(RAPIER.ColliderDesc.cuboid(4,.5,4).setTranslation(0,-.5,0).setFriction(.55).setRestitution(.18)).handle;
  for(const [x,z,hx,hz] of [[-extent,0,.1,4],[extent,0,.1,4],[0,-extent,4,.1],[0,extent,4,.1]])world.createCollider(RAPIER.ColliderDesc.cuboid(hx,10,hz).setTranslation(x,9.9,z).setRestitution(.28));
  return world;
@@ -85,7 +85,7 @@ export const HOVER_HEIGHT=.42;
 export const STACK_LAYER_STEP=.025;
 export function createStackBody(world,index,random=Math.random){
  const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setCcdEnabled(true).setSoftCcdPrediction(.12));
- world.createCollider(discCollider(.53,STACK_DISC_HEIGHT).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setMass(.003).setFriction(.55).setRestitution(.12),body);
+ world.createCollider(discCollider(.53,STACK_DISC_HEIGHT).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setContactSkin(.0015).setMass(.003).setFriction(.42).setRestitution(.24),body);
  const x=[0,.09,-.065,.055][index%4]+(random()-.5)*.055,z=[0,-.045,.055,-.025][index%4]+(random()-.5)*.055;
  const ax=Math.PI+(random()-.5)*.012,ay=random()*Math.PI*2,az=(random()-.5)*.012;
  const c1=Math.cos(ax/2),c2=Math.cos(ay/2),c3=Math.cos(az/2),s1=Math.sin(ax/2),s2=Math.sin(ay/2),s3=Math.sin(az/2);
@@ -113,11 +113,11 @@ export function strikeStackDown(bodies,power){
 }
 export function fanStack(bodies,power){
  bodies.forEach((body,i)=>{const p=body.translation(),a=i*2.399963,k=(.6+power*.4)*(1-i/(bodies.length*3)),dx=Math.cos(a),dz=Math.sin(a);
- body.applyImpulseAtPoint({x:dx*.010*k,y:.011*k,z:dz*.010*k},{x:p.x+dz*.12,y:p.y,z:p.z-dx*.12},true);
+ body.applyImpulseAtPoint({x:dx*.010*k,y:.016*k,z:dz*.010*k},{x:p.x+dz*.12,y:p.y,z:p.z-dx*.12},true);
  });
 }
 export function turnStack(bodies,power){
- bodies.forEach((body,i)=>{const a=i*2.399963,k=.006*(.7+power*.6);body.applyImpulse({x:0,y:.008*(.6+power*.4),z:0},true);body.applyTorqueImpulse({x:Math.cos(a)*k,y:0,z:Math.sin(a)*k},true)});
+ bodies.forEach((body,i)=>{const a=i*2.399963,k=.010*(.7+power*.6);body.applyImpulse({x:0,y:.012*(.6+power*.4),z:0},true);body.applyTorqueImpulse({x:Math.cos(a)*k,y:0,z:Math.sin(a)*k},true)});
 }
 
 export function chargeLift(power){return .85*Math.max(0,Math.min(1,power))**2}
@@ -141,9 +141,9 @@ export function slammerWeights(count,slot){
 export function slammerResponse(bodies,insert,slot,power){
  const weights=slammerWeights(bodies.length,slot);let reaction=0,affected=0;
  if(slot>=bodies.length){insert.applyImpulse({x:0,y:.015*(.6+power),z:0},true);return {affected:0,weights}}
- bodies.forEach((body,i)=>{const k=weights[i]*(.6+power*.5);if(!k)return;affected++;const a=i*2.399963,dy=.006*k;
+ bodies.forEach((body,i)=>{const k=weights[i]*(.6+power*.5);if(!k)return;affected++;const a=i*2.399963,dy=.018*k;
   body.applyImpulse({x:Math.cos(a)*.002*k,y:dy,z:Math.sin(a)*.002*k},true);
-  body.applyTorqueImpulse({x:Math.sin(a)*.0025*k,y:0,z:Math.cos(a)*.0025*k},true);reaction+=dy;
+  body.applyTorqueImpulse({x:Math.sin(a)*.005*k,y:0,z:Math.cos(a)*.005*k},true);reaction+=dy;
  });
  insert.applyImpulse({x:0,y:-reaction*.6,z:0},true);return {affected,weights};
 }
