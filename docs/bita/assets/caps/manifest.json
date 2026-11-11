@@ -103,5 +103,41 @@
     "series": "turtles",
     "source": "https://playcaps.ru/assets/thumbs/collection27/7-dfe7f0fbba5a273365727ca1ead4b43e.webp",
     "file": "assets/caps/turtles-7.webp"
+  },
+  {
+    "id": "cheetos-62",
+    "name": "Cheetos Chester №62",
+    "series": "cheetos",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/62-Climbing-Chester-Cheetah.png",
+    "file": "assets/caps/cheetos-62.png",
+    "backFile": "assets/caps/cheetos-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+  },
+  {
+    "id": "cheetos-66",
+    "name": "Cheetos Chester №66",
+    "series": "cheetos",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/66-Kite-Chester-Cheetah.png",
+    "file": "assets/caps/cheetos-66.png",
+    "backFile": "assets/caps/cheetos-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+  },
+  {
+    "id": "cheetos-74",
+    "name": "Cheetos Chester №74",
+    "series": "cheetos",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/74-Surfing-Chester-Cheetah.png",
+    "file": "assets/caps/cheetos-74.png",
+    "backFile": "assets/caps/cheetos-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+  },
+  {
+    "id": "cheetos-82",
+    "name": "Cheetos Chester №82",
+    "series": "cheetos",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/82-Skateboarding-Chester-Cheetah.png",
+    "file": "assets/caps/cheetos-82.png",
+    "backFile": "assets/caps/cheetos-back.png",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
   }
 ]

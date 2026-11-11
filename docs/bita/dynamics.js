@@ -1,10 +1,10 @@
 import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
-export async function createWorld(){
+export async function createWorld({extent=3.12}={}){
  await RAPIER.init();
  const world=new RAPIER.World({x:0,y:-12,z:0});world.timestep=1/120;world.numSolverIterations=12;world.integrationParameters.maxCcdSubsteps=4;
  world.tableColliderHandle=world.createCollider(RAPIER.ColliderDesc.cuboid(4,.5,4).setTranslation(0,-.5,0).setFriction(.55).setRestitution(.18)).handle;
- for(const [x,z,hx,hz] of [[-3.12,0,.1,4],[3.12,0,.1,4],[0,-3.12,4,.1],[0,3.12,4,.1]])world.createCollider(RAPIER.ColliderDesc.cuboid(hx,10,hz).setTranslation(x,9.9,z).setRestitution(.28));
+ for(const [x,z,hx,hz] of [[-extent,0,.1,4],[extent,0,.1,4],[0,-extent,4,.1],[0,extent,4,.1]])world.createCollider(RAPIER.ColliderDesc.cuboid(hx,10,hz).setTranslation(x,9.9,z).setRestitution(.28));
  return world;
 }
 export function discCollider(radius,height){
@@ -54,7 +54,7 @@ export function sleepRestingBody(body,record,elapsed,dt){
  if(record.p){
   const distance=Math.hypot(p.x-record.p.x,p.y-record.p.y,p.z-record.p.z);
   const dot=Math.min(1,Math.abs(q.x*record.q.x+q.y*record.q.y+q.z*record.q.z+q.w*record.q.w));
-  if(p.y>.015&&p.y<.9&&distance<.04&&2*Math.acos(dot)<.15&&Math.hypot(v.x,v.y,v.z)<.6)body.sleep();
+  if(p.y>.001&&p.y<.9&&distance<.04&&2*Math.acos(dot)<.15&&Math.hypot(v.x,v.y,v.z)<.6)body.sleep();
  }
  record.p=p;record.q=q;
 }
@@ -63,7 +63,7 @@ export function sleepRestingBody(body,record,elapsed,dt){
 export function enforceTable(body,radius=.53,height=.07){
  const p=body.translation(),q=body.rotation(),ny=1-2*(q.x*q.x+q.z*q.z);
  const support=Math.abs(ny)*height/2+radius*Math.sqrt(Math.max(0,1-ny*ny));
- if(p.y<height/2-.004){
+ if(p.y<height/2-Math.min(.004,height*.12)){
   body.setTranslation({x:p.x,y:support,z:p.z},false);
   const v=body.linvel();if(v.y<0)body.setLinvel({x:v.x*.97,y:-v.y*.12,z:v.z*.97},false);
  }
@@ -75,20 +75,22 @@ export function sleepRestingGroup(bodies,record,elapsed,dt){
  const stable=record.poses&&poses.every(({p,q},i)=>{
   const old=record.poses[i],v=bodies[i].linvel();
   const dot=Math.min(1,Math.abs(q.x*old.q.x+q.y*old.q.y+q.z*old.q.z+q.w*old.q.w));
-  return p.y>.015&&p.y<1&&Math.hypot(p.x-old.p.x,p.y-old.p.y,p.z-old.p.z)<.07&&2*Math.acos(dot)<.24&&Math.hypot(v.x,v.y,v.z)<.65;
+  return p.y>.001&&p.y<1&&Math.hypot(p.x-old.p.x,p.y-old.p.y,p.z-old.p.z)<.07&&2*Math.acos(dot)<.24&&Math.hypot(v.x,v.y,v.z)<.65;
  });
  record.poses=poses;if(stable)bodies.forEach(b=>b.sleep());return Boolean(stable);
 }
 
-export const STACK_DISC_HEIGHT=.045;
+export const STACK_DISC_HEIGHT=.014;
+export const HOVER_HEIGHT=.42;
+export const STACK_LAYER_STEP=.025;
 export function createStackBody(world,index,random=Math.random){
  const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setCcdEnabled(true).setSoftCcdPrediction(.12));
- world.createCollider(discCollider(.53,STACK_DISC_HEIGHT).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setMass(.008).setFriction(.43).setRestitution(.27),body);
+ world.createCollider(discCollider(.53,STACK_DISC_HEIGHT).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setMass(.003).setFriction(.55).setRestitution(.12),body);
  const x=[0,.09,-.065,.055][index%4]+(random()-.5)*.055,z=[0,-.045,.055,-.025][index%4]+(random()-.5)*.055;
- const ax=Math.PI+(random()-.5)*(index===0?.008:.025),ay=random()*Math.PI*2,az=(random()-.5)*.025;
+ const ax=Math.PI+(random()-.5)*.012,ay=random()*Math.PI*2,az=(random()-.5)*.012;
  const c1=Math.cos(ax/2),c2=Math.cos(ay/2),c3=Math.cos(az/2),s1=Math.sin(ax/2),s2=Math.sin(ay/2),s3=Math.sin(az/2);
  const rotation={x:s1*c2*c3+c1*s2*s3,y:c1*s2*c3-s1*c2*s3,z:c1*c2*s3+s1*s2*c3,w:c1*c2*c3-s1*s2*s3};
- const position={x,y:.034+index*.064,z};
+ const position={x,y:HOVER_HEIGHT+.012+index*STACK_LAYER_STEP,z};
  body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased,true);body.setTranslation(position,true);body.setRotation(rotation,true);
  return {body,position,rotation};
 }
@@ -99,4 +101,21 @@ export function throwStack(bodies,power){
   body.setLinvel({x:Math.sin(i*2.4)*.02,y:3.2+power*3.3,z:Math.cos(i*1.7)*.02},true);
   body.setAngvel({x:Math.sin(i*2)*.06,y:.06,z:Math.cos(i*2.4)*.06},true);
  }
+}
+
+export function strikeStackDown(bodies,power){
+ for(const [i,body] of bodies.entries()){
+  body.setBodyType(RAPIER.RigidBodyType.Dynamic,true);
+  body.setLinearDamping(.35);body.setAngularDamping(.8);
+  body.setLinvel({x:Math.sin(i*2.4)*.012,y:-2.4-power*3.4,z:Math.cos(i*1.7)*.012},true);
+  body.setAngvel({x:Math.sin(i*2)*.04,y:.03,z:Math.cos(i*2.4)*.04},true);
+ }
+}
+export function fanStack(bodies,power){
+ bodies.forEach((body,i)=>{const p=body.translation(),a=i*2.399963,k=(.6+power*.4)*(1-i/(bodies.length*3)),dx=Math.cos(a),dz=Math.sin(a);
+ body.applyImpulseAtPoint({x:dx*.010*k,y:.011*k,z:dz*.010*k},{x:p.x+dz*.12,y:p.y,z:p.z-dx*.12},true);
+ });
+}
+export function turnStack(bodies,power){
+ bodies.forEach((body,i)=>{const a=i*2.399963,k=.003*(.7+power*.6);body.applyImpulse({x:0,y:.008*(.6+power*.4),z:0},true);body.applyTorqueImpulse({x:Math.cos(a)*k,y:0,z:Math.sin(a)*k},true)});
 }

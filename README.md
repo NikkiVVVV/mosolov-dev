@@ -19,3 +19,5 @@ GitHub: https://github.com/NikkiVVVV/mosolov-dev . Pages публикует docs
 Адрес: https://mosolov.dev/bita/ . Исходники: outputs/pokemon-pogs, публикация: docs/bita/. Файлы index.html, app.js, dynamics.js, style.css, assets/, vendor/. Локальные Three.js и Rapier, без внешних CDN. Проверка: node outputs/pokemon-pogs/tests/physics.mjs. 72 сценария с разными начальными стопками, 1/2/6/12 фишек и тремя силами удара прошли 10.11.2026.
 
 /bita, второй сценарий: стартовая неровная стопка из 4 фишек, осмотр всей стопки, зарядка и подброс, удар о стол и верхняя камера. Дизайн контролов и верхний бар взяты из /money. Сканы Pokémon, Mortal Kombat 3, Turtles из Play CAPS; источники в docs/bita/assets/caps/manifest.json. Проверка новой механики: tests/stack-physics.mjs в исходном проекте; 72 сочетания прошли.
+
+/bita, 11.11.2026: тонкая парящая стопка, удар только вниз, компактный разлёт, номера выигранных фишек и перелёт в сохраняемую нижнюю коллекцию. Все три кнопки 56 px высотой, подпись количества удалена. Добавлены Cheetos Chester (4 рисунка и скан оборота). Актуальная проверка: tests/downward-physics.mjs в исходном проекте, 72 случая прошли.
