@@ -80,17 +80,18 @@ export function sleepRestingGroup(bodies,record,elapsed,dt){
 
 export const STACK_DISC_HEIGHT=.014;
 export const HOVER_HEIGHT=.42;
-export const STACK_LAYER_STEP=.025;
-export function createStackBody(world,index,random=Math.random){
+export const STACK_LAYER_STEP=.034;
+export function createStackBody(world,index,random=Math.random,material='cardboard'){
+ const plastic=material==='plastic',height=plastic?.022:STACK_DISC_HEIGHT;
  const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setCcdEnabled(true).setSoftCcdPrediction(.12));
- world.createCollider(discCollider(.53,STACK_DISC_HEIGHT).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setContactSkin(.0015).setMass(.003).setFriction(.42).setRestitution(.24),body);
+ world.createCollider(discCollider(.53,height).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setContactSkin(.0015).setMass(plastic?.005:.003).setFriction(plastic?.34:.42).setRestitution(plastic?.36:.24),body);
  const x=[0,.09,-.065,.055][index%4]+(random()-.5)*.055,z=[0,-.045,.055,-.025][index%4]+(random()-.5)*.055;
  const ax=Math.PI+(random()-.5)*.012,ay=random()*Math.PI*2,az=(random()-.5)*.012;
  const c1=Math.cos(ax/2),c2=Math.cos(ay/2),c3=Math.cos(az/2),s1=Math.sin(ax/2),s2=Math.sin(ay/2),s3=Math.sin(az/2);
  const rotation={x:s1*c2*c3+c1*s2*s3,y:c1*s2*c3-s1*c2*s3,z:c1*c2*s3+s1*s2*c3,w:c1*c2*c3-s1*s2*s3};
  const position={x,y:HOVER_HEIGHT+.012+index*STACK_LAYER_STEP,z};
  body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased,true);body.setTranslation(position,true);body.setRotation(rotation,true);
- return {body,position,rotation};
+ return {body,position,rotation,height};
 }
 export function throwStack(bodies,power){
  for(const [i,body] of bodies.entries()){

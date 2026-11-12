@@ -1024,5 +1024,619 @@
     "collectionSource": "https://www.milkcapmania.co.uk/World-Caps-Federation/Mad-Monster-Caps/586-114-123-Light.html",
     "backFile": "assets/caps/mad-monster-back.webp",
     "backSource": "https://static1.milkcapmania.co.uk/Img/World%20Caps%20Federation/Mad%20Monster%20Caps%20Light/300DPI/Back.png"
+  },
+  {
+    "id": "bionicle-2001-01",
+    "name": "Bionicle 2001 · Тоа Тау (Tahu)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29.png",
+    "file": "assets/caps/bionicle-2001-01.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-02",
+    "name": "Bionicle 2001 · Тоа Копака (Kopaka)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/02-%D0%A2%D0%BE%D0%B0-%D0%9A%D0%BE%D0%BF%D0%B0%D0%BA%D0%B0-%28Kopaka%29.png",
+    "file": "assets/caps/bionicle-2001-02.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-03",
+    "name": "Bionicle 2001 · Тоа Онуа (Onua)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/03-%D0%A2%D0%BE%D0%B0-%D0%9E%D0%BD%D1%83%D0%B0-%28Onua%29.png",
+    "file": "assets/caps/bionicle-2001-03.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-04",
+    "name": "Bionicle 2001 · Тоа Поату (Pohatu)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/04-%D0%A2%D0%BE%D0%B0-%D0%9F%D0%BE%D0%B0%D1%82%D1%83-%28Pohatu%29.png",
+    "file": "assets/caps/bionicle-2001-04.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-05",
+    "name": "Bionicle 2001 · Тоа Гали (Gali)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/05-%D0%A2%D0%BE%D0%B0-%D0%93%D0%B0%D0%BB%D0%B8-%28Gali%29.png",
+    "file": "assets/caps/bionicle-2001-05.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-06",
+    "name": "Bionicle 2001 · Тоа Луа (Lua)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/06-%D0%A2%D0%BE%D0%B0-%D0%9B%D1%83%D0%B0-%28Lua%29.png",
+    "file": "assets/caps/bionicle-2001-06.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-07",
+    "name": "Bionicle 2001 · Таракава (Tarakava)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/07-%D0%A2%D0%B0%D1%80%D0%B0%D0%BA%D0%B0%D0%B2%D0%B0-%28Tarakava%29.png",
+    "file": "assets/caps/bionicle-2001-07.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-11",
+    "name": "Bionicle 2001 · Нуи Раму (Nui Ramu)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/11-%D0%9D%D1%83%D0%B8-%D0%A0%D0%B0%D0%BC%D1%83-%28Nui-Ramu%29.png",
+    "file": "assets/caps/bionicle-2001-11.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-13",
+    "name": "Bionicle 2001 · Нуи Джага (Nui Jaga)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/13-%D0%9D%D1%83%D0%B8-%D0%94%D0%B6%D0%B0%D0%B3%D0%B0-%28Nui-Jaga%29.png",
+    "file": "assets/caps/bionicle-2001-13.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-15",
+    "name": "Bionicle 2001 · Борок Парак (Pahrak)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/15-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%9F%D0%B0%D1%80%D0%B0%D0%BA-%28Pahrak%29.png",
+    "file": "assets/caps/bionicle-2001-15.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-16",
+    "name": "Bionicle 2001 · Борок Нувок (Nuhvok)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/16-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%9D%D1%83%D0%B2%D0%BE%D0%BA-%28Nuhvok%29.png",
+    "file": "assets/caps/bionicle-2001-16.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-18",
+    "name": "Bionicle 2001 · Борок Галок (Gahlok)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/18-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%93%D0%B0%D0%BB%D0%BE%D0%BA-%28Gahlok%29.png",
+    "file": "assets/caps/bionicle-2001-18.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-20",
+    "name": "Bionicle 2001 · Борок Танок (Tаhnok)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/20-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%A2%D0%B0%D0%BD%D0%BE%D0%BA-%28T%D0%B0hnok%29.png",
+    "file": "assets/caps/bionicle-2001-20.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-21",
+    "name": "Bionicle 2001 · Борок Танок (Tahnok)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/21-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%A2%D0%B0%D0%BD%D0%BE%D0%BA-%28Tahnok%29.png",
+    "file": "assets/caps/bionicle-2001-21.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-23",
+    "name": "Bionicle 2001 · Борок Корак (Kohrak)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/23-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%9A%D0%BE%D1%80%D0%B0%D0%BA-%28Kohrak%29.png",
+    "file": "assets/caps/bionicle-2001-23.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2001-24",
+    "name": "Bionicle 2001 · Борок Левак (Lehvak)",
+    "series": "bionicle-2001",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/24-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%9B%D0%B5%D0%B2%D0%B0%D0%BA-%28Lehvak%29.png",
+    "file": "assets/caps/bionicle-2001-24.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2001-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+  },
+  {
+    "id": "bionicle-2003-130",
+    "name": "Bionicle 2003 · Маска Кса Кал (Xa Kal)",
+    "series": "bionicle-2003",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Blue%20back/300DPI/130-%D0%9C%D0%B0%D1%81%D0%BA%D0%B0-%D0%9A%D1%81%D0%B0-%D0%9A%D0%B0%D0%BB-%28Xa-Kal%29.png",
+    "file": "assets/caps/bionicle-2003-130.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/771-Blue-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2003-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Blue%20back/300DPI/130-%D0%9C%D0%B0%D1%81%D0%BA%D0%B0-%D0%9A%D1%81%D0%B0-%D0%9A%D0%B0%D0%BB-%28Xa-Kal%29-Back.png"
+  },
+  {
+    "id": "bionicle-2003-147",
+    "name": "Bionicle 2003 · Такуа и Певку (Takua & Pewku)",
+    "series": "bionicle-2003",
+    "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Blue%20back/300DPI/147-%D0%A2%D0%B0%D0%BA%D1%83%D0%B0-%D0%B8-%D0%9F%D0%B5%D0%B2%D0%BA%D1%83-%28Takua-%26-Pewku%29.png",
+    "file": "assets/caps/bionicle-2003-147.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/771-Blue-back.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/bionicle-2003-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Blue%20back/300DPI/130-%D0%9C%D0%B0%D1%81%D0%BA%D0%B0-%D0%9A%D1%81%D0%B0-%D0%9A%D0%B0%D0%BB-%28Xa-Kal%29-Back.png"
+  },
+  {
+    "id": "nintendo-01",
+    "name": "Nintendo · Mario",
+    "series": "nintendo",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/01-Mario.png",
+    "file": "assets/caps/nintendo-01.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/348-Nintendo-Greatest-Games.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/nintendo-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/Back.png",
+    "blankBack": true
+  },
+  {
+    "id": "nintendo-02",
+    "name": "Nintendo · Fulgore",
+    "series": "nintendo",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/02-Fulgore.png",
+    "file": "assets/caps/nintendo-02.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/348-Nintendo-Greatest-Games.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/nintendo-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/Back.png",
+    "blankBack": true
+  },
+  {
+    "id": "nintendo-03",
+    "name": "Nintendo · Samus Aran",
+    "series": "nintendo",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/03-Samus-Aran.png",
+    "file": "assets/caps/nintendo-03.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/348-Nintendo-Greatest-Games.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/nintendo-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/Back.png",
+    "blankBack": true
+  },
+  {
+    "id": "nintendo-04",
+    "name": "Nintendo · Yoshi",
+    "series": "nintendo",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/04-Yoshi.png",
+    "file": "assets/caps/nintendo-04.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/348-Nintendo-Greatest-Games.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/nintendo-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/Back.png",
+    "blankBack": true
+  },
+  {
+    "id": "nintendo-05",
+    "name": "Nintendo · Kirby",
+    "series": "nintendo",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/05-Kirby.png",
+    "file": "assets/caps/nintendo-05.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/348-Nintendo-Greatest-Games.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/nintendo-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/Back.png",
+    "blankBack": true
+  },
+  {
+    "id": "nintendo-06",
+    "name": "Nintendo · Link",
+    "series": "nintendo",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/06-Link.png",
+    "file": "assets/caps/nintendo-06.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/348-Nintendo-Greatest-Games.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/nintendo-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/Back.png",
+    "blankBack": true
+  },
+  {
+    "id": "nintendo-07",
+    "name": "Nintendo · Andross",
+    "series": "nintendo",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/07-Andross.png",
+    "file": "assets/caps/nintendo-07.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/348-Nintendo-Greatest-Games.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/nintendo-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/Back.png",
+    "blankBack": true
+  },
+  {
+    "id": "nintendo-08",
+    "name": "Nintendo · Donkey Kong",
+    "series": "nintendo",
+    "source": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/08-Donkey-Kong.png",
+    "file": "assets/caps/nintendo-08.webp",
+    "collectionSource": "https://www.milkcapmania.co.uk/348-Nintendo-Greatest-Games.html",
+    "material": "cardboard",
+    "backFile": "assets/caps/nintendo-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Nintendo%20Greatest%20Games/300DPI/Back.png",
+    "blankBack": true
+  },
+  {
+    "id": "bakugan-roks-1",
+    "name": "bakugan-roks · 22",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      218,
+      120,
+      182,
+      182
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "bakugan-roks-2",
+    "name": "bakugan-roks · 2",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      421,
+      110,
+      182,
+      182
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "bakugan-roks-3",
+    "name": "bakugan-roks · 3",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      817,
+      94,
+      180,
+      180
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "bakugan-roks-4",
+    "name": "bakugan-roks · 13",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      1008,
+      94,
+      178,
+      178
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "bakugan-roks-5",
+    "name": "bakugan-roks · 19",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      1381,
+      124,
+      174,
+      174
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "bakugan-roks-6",
+    "name": "bakugan-roks · 29",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      15,
+      532,
+      188,
+      188
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "bakugan-roks-7",
+    "name": "bakugan-roks · 7",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      218,
+      529,
+      182,
+      182
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "bakugan-roks-8",
+    "name": "bakugan-roks · 5",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      426,
+      523,
+      178,
+      178
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "bakugan-roks-9",
+    "name": "bakugan-roks · 17",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      625,
+      518,
+      176,
+      176
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "bakugan-roks-10",
+    "name": "bakugan-roks · 12",
+    "series": "bakugan-roks",
+    "file": "assets/caps/bakugan-roks-atlas.webp",
+    "imageRect": [
+      1377,
+      503,
+      174,
+      174
+    ],
+    "source": "https://www.ebay.com/itm/256867054361",
+    "collectionSource": "https://www.ebay.com/itm/256867054361",
+    "material": "plastic",
+    "rimColor": "#38608a"
+  },
+  {
+    "id": "simpsons-2006-1",
+    "name": "simpsons-2006 · Sideshow Bob",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      37,
+      28,
+      94,
+      94
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
+  },
+  {
+    "id": "simpsons-2006-2",
+    "name": "simpsons-2006 · Marge",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      151,
+      37,
+      94,
+      94
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
+  },
+  {
+    "id": "simpsons-2006-3",
+    "name": "simpsons-2006 · Homer",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      259,
+      47,
+      94,
+      94
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
+  },
+  {
+    "id": "simpsons-2006-4",
+    "name": "simpsons-2006 · Krusty",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      377,
+      53,
+      92,
+      92
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
+  },
+  {
+    "id": "simpsons-2006-5",
+    "name": "simpsons-2006 · Willie",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      41,
+      148,
+      92,
+      92
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
+  },
+  {
+    "id": "simpsons-2006-6",
+    "name": "simpsons-2006 · Moe",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      152,
+      161,
+      92,
+      92
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
+  },
+  {
+    "id": "simpsons-2006-7",
+    "name": "simpsons-2006 · Chief Wiggum",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      269,
+      175,
+      92,
+      92
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
+  },
+  {
+    "id": "simpsons-2006-8",
+    "name": "simpsons-2006 · Maggie",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      374,
+      191,
+      92,
+      92
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
+  },
+  {
+    "id": "simpsons-2006-9",
+    "name": "simpsons-2006 · Smithers",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      121,
+      278,
+      92,
+      92
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
+  },
+  {
+    "id": "simpsons-2006-10",
+    "name": "simpsons-2006 · Martin",
+    "series": "simpsons-2006",
+    "file": "assets/caps/simpsons-2006-atlas.webp",
+    "imageRect": [
+      262,
+      290,
+      92,
+      92
+    ],
+    "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
+    "material": "cardboard",
+    "rimColor": "#d5ccb9"
   }
 ]
