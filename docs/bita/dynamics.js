@@ -110,18 +110,23 @@ export function strikeStackDown(bodies,power){
   body.setAngvel({x:Math.sin(i*2)*.04,y:.03,z:Math.cos(i*2.4)*.04},true);
  }
 }
-export function fanStack(bodies,power){
- bodies.forEach((body,i)=>{const p=body.translation(),a=i*2.399963,k=(.6+power*.4)*(1-i/(bodies.length*3)),dx=Math.cos(a),dz=Math.sin(a);
- body.applyImpulseAtPoint({x:dx*.010*k,y:.024*k,z:dz*.010*k},{x:p.x+dz*.12,y:p.y,z:p.z-dx*.12},true);
- });
+// A small, mass-scaled flex release only while a cap touches another cap
+// or the table. Never give a flying cap a second upward kick.
+export function fanStack(bodies,power,contactConfirmed=false,released=null){
+ let affected=0;
+ bodies.forEach((body,i)=>{if(released?.has(body.collider(0).handle))return;const p=body.translation(),shape=body.collider(0).shape,q=body.rotation(),ny=1-2*(q.x*q.x+q.z*q.z),support=Math.abs(ny)*shape.halfHeight+shape.radius*Math.sqrt(Math.max(0,1-ny*ny));
+ const touches=contactConfirmed||p.y-support<.025||bodies.some(other=>other!==body&&body.collider(0).contactCollider(other.collider(0),.012));
+ if(!touches||body.linvel().y>2.5)return;released?.add(body.collider(0).handle);
+ const a=2*Math.atan2(q.z,q.x)+i*2.399963+p.x*7+p.z*11,dx=Math.cos(a),dz=Math.sin(a),mass=body.mass(),k=.55+power*.85;
+ body.applyImpulseAtPoint({x:dx*mass*.8*k,y:mass*(2.2*k-Math.min(0,body.linvel().y)),z:dz*mass*.8*k},{x:p.x+dz*.42,y:p.y,z:p.z-dx*.42},true);affected++;
+ });return affected;
 }
-export function turnStack(bodies,power){
- bodies.forEach((body,i)=>{const a=i*2.399963,k=.010*(.7+power*.6);body.applyImpulse({x:0,y:.018*(.6+power*.4),z:0},true);body.applyTorqueImpulse({x:Math.cos(a)*k,y:0,z:Math.sin(a)*k},true)});
-}
+// Kept for old callers; rigid contact handles the later tumbling.
+export function turnStack(){return 0}
 
 export function chargeLift(power){return .85*Math.max(0,Math.min(1,power))**2}
 
-export const MAX_STACK=40;
+export const MAX_STACK=25;
 export const SLAMMER_HEIGHT=.08;
 export const SLAMMER_RADIUS=.55;
 export function slammerY(slot){return HOVER_HEIGHT+SLAMMER_HEIGHT/2+.004+slot*STACK_LAYER_STEP}
@@ -139,12 +144,11 @@ export function slammerWeights(count,slot){
 // On top there are no overlying caps: only the insert receives the extra rebound.
 export function slammerResponse(bodies,insert,slot,power){
  const weights=slammerWeights(bodies.length,slot);let reaction=0,affected=0;
- if(slot>=bodies.length){insert.applyImpulse({x:0,y:.015*(.6+power),z:0},true);return {affected:0,weights}}
- bodies.forEach((body,i)=>{const k=weights[i]*(.6+power*.5);if(!k)return;affected++;const a=i*2.399963,dy=.028*k;
-  body.applyImpulse({x:Math.cos(a)*.002*k,y:dy,z:Math.sin(a)*.002*k},true);
-  body.applyTorqueImpulse({x:Math.sin(a)*.005*k,y:0,z:Math.cos(a)*.005*k},true);reaction+=dy;
- });
- insert.applyImpulse({x:0,y:-reaction*.6,z:0},true);return {affected,weights};
+ if(slot>=bodies.length)return {affected,weights};
+ bodies.forEach((body,i)=>{const contact=body.collider(0).contactCollider(insert.collider(0),.025),k=weights[i]*(.5+power*.5);if(!k||!contact)return;
+ const p=body.translation(),a=i*2.399963,impulse=body.mass()*1.6*k;
+ body.applyImpulseAtPoint({x:Math.cos(a)*impulse*.15,y:impulse,z:Math.sin(a)*impulse*.15},{x:p.x+Math.sin(a)*.16,y:p.y,z:p.z-Math.cos(a)*.16},true);reaction+=impulse;affected++;
+ });insert.applyImpulse({x:0,y:-reaction,z:0},true);return {affected,weights};
 }
 
 // Resolve residual overlap before freezing the result.
