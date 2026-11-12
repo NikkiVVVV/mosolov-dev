@@ -75,3 +75,6 @@ Separate insertable plastic slammer (three authentic designs), vertical layer co
 
 ## 2026-11-11 · /bita v7
 Automatic sequential prizes, header icon without count, larger bottom-sheet images, left layer pointer without copy. Seven-second charge limit with overload scatter; “Ещё раз” after impact. Stronger vertical bounce and slammer response; tighter render/collider envelope and contact skin. Added 16 Sonic/Dragon Ball Z/Space Jam scans (60 designs total). Validated 24 slammer and 12 downward scenarios, local 7.5-second overload, automatic award and no console errors. Cache version bounce7.
+
+## 2026-11-12 · /bita v8
+118 designs: added selected Batman, Power Rangers, Digimon, Street Fighter II and Mad Monster Light (The Mask excluded). WebP copies and shared reverse textures; originals retained locally. Contact tolerances, cylinder shapes and CCD refined; smaller flight timestep, reduced idle stepping, speed limits. Non-intersecting display poses with restoration of physical trajectories, velocity and orientation; residual separation before freezing result. Added contact and display regressions up to 40 discs. Browser connection unavailable during this update; numerical tests and public file verification used.

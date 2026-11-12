@@ -2,15 +2,13 @@ import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
 export async function createWorld({extent=3.12}={}){
  await RAPIER.init();
- const world=new RAPIER.World({x:0,y:-12,z:0});world.timestep=1/120;world.numSolverIterations=16;world.integrationParameters.maxCcdSubsteps=4;
+ const world=new RAPIER.World({x:0,y:-12,z:0});world.timestep=1/240;world.numSolverIterations=16;world.integrationParameters.maxCcdSubsteps=8;world.integrationParameters.normalizedAllowedLinearError=.00015;world.integrationParameters.normalizedPredictionDistance=.003;
  world.tableColliderHandle=world.createCollider(RAPIER.ColliderDesc.cuboid(4,.5,4).setTranslation(0,-.5,0).setFriction(.55).setRestitution(.18)).handle;
  for(const [x,z,hx,hz] of [[-extent,0,.1,4],[extent,0,.1,4],[0,-extent,4,.1],[0,extent,4,.1]])world.createCollider(RAPIER.ColliderDesc.cuboid(hx,10,hz).setTranslation(x,9.9,z).setRestitution(.28));
  return world;
 }
 export function discCollider(radius,height){
- const vertices=new Float32Array(32*2*3);let k=0;
- for(const y of [-height/2,height/2])for(let i=0;i<32;i++){const a=i/32*Math.PI*2;vertices[k++]=Math.cos(a)*radius;vertices[k++]=y;vertices[k++]=Math.sin(a)*radius}
- return RAPIER.ColliderDesc.convexHull(vertices);
+ return RAPIER.ColliderDesc.cylinder(height/2,radius);
 }
 export function createCapBody(world,index,random=Math.random){
  const x=Math.PI+Math.sin(index*2.7)*.018+(random()-.5)*.015,y=index*.73,z=Math.cos(index*2)*.012;
@@ -63,9 +61,9 @@ export function sleepRestingBody(body,record,elapsed,dt){
 export function enforceTable(body,radius=.53,height=.07){
  const p=body.translation(),q=body.rotation(),ny=1-2*(q.x*q.x+q.z*q.z);
  const support=Math.abs(ny)*height/2+radius*Math.sqrt(Math.max(0,1-ny*ny));
- if(p.y<height/2-Math.min(.004,height*.12)){
+ if(p.y<support-.0005){
   body.setTranslation({x:p.x,y:support,z:p.z},false);
-  const v=body.linvel();if(v.y<0)body.setLinvel({x:v.x*.97,y:-v.y*.12,z:v.z*.97},false);
+  const v=body.linvel();if(v.y<0)body.setLinvel({x:v.x*.97,y:0,z:v.z*.97},false);
  }
 }
 export function sleepRestingGroup(bodies,record,elapsed,dt){
@@ -113,11 +111,11 @@ export function strikeStackDown(bodies,power){
 }
 export function fanStack(bodies,power){
  bodies.forEach((body,i)=>{const p=body.translation(),a=i*2.399963,k=(.6+power*.4)*(1-i/(bodies.length*3)),dx=Math.cos(a),dz=Math.sin(a);
- body.applyImpulseAtPoint({x:dx*.010*k,y:.016*k,z:dz*.010*k},{x:p.x+dz*.12,y:p.y,z:p.z-dx*.12},true);
+ body.applyImpulseAtPoint({x:dx*.010*k,y:.024*k,z:dz*.010*k},{x:p.x+dz*.12,y:p.y,z:p.z-dx*.12},true);
  });
 }
 export function turnStack(bodies,power){
- bodies.forEach((body,i)=>{const a=i*2.399963,k=.010*(.7+power*.6);body.applyImpulse({x:0,y:.012*(.6+power*.4),z:0},true);body.applyTorqueImpulse({x:Math.cos(a)*k,y:0,z:Math.sin(a)*k},true)});
+ bodies.forEach((body,i)=>{const a=i*2.399963,k=.010*(.7+power*.6);body.applyImpulse({x:0,y:.018*(.6+power*.4),z:0},true);body.applyTorqueImpulse({x:Math.cos(a)*k,y:0,z:Math.sin(a)*k},true)});
 }
 
 export function chargeLift(power){return .85*Math.max(0,Math.min(1,power))**2}
@@ -141,9 +139,23 @@ export function slammerWeights(count,slot){
 export function slammerResponse(bodies,insert,slot,power){
  const weights=slammerWeights(bodies.length,slot);let reaction=0,affected=0;
  if(slot>=bodies.length){insert.applyImpulse({x:0,y:.015*(.6+power),z:0},true);return {affected:0,weights}}
- bodies.forEach((body,i)=>{const k=weights[i]*(.6+power*.5);if(!k)return;affected++;const a=i*2.399963,dy=.018*k;
+ bodies.forEach((body,i)=>{const k=weights[i]*(.6+power*.5);if(!k)return;affected++;const a=i*2.399963,dy=.028*k;
   body.applyImpulse({x:Math.cos(a)*.002*k,y:dy,z:Math.sin(a)*.002*k},true);
   body.applyTorqueImpulse({x:Math.sin(a)*.005*k,y:0,z:Math.cos(a)*.005*k},true);reaction+=dy;
  });
  insert.applyImpulse({x:0,y:-reaction*.6,z:0},true);return {affected,weights};
 }
+
+// Resolve residual overlap before freezing the result.
+// Orientations and horizontal trajectories remain the simulated ones.
+export function separateDiscs(world,entries){
+ const sorted=entries.filter(e=>!e.collected).map(e=>{const b=e.body,q=b.rotation(),s=b.collider(0).shape,ny=1-2*(q.x*q.x+q.z*q.z);return {b,r:s.radius,support:Math.abs(ny)*s.halfHeight+s.radius*Math.sqrt(Math.max(0,1-ny*ny))}}).sort((a,b)=>a.b.translation().y-b.b.translation().y);
+ const placed=[];let corrections=0;world.propagateModifiedBodyPositionsToColliders();
+ for(const item of sorted){const b=item.b,p=b.translation(),near=placed.filter(o=>{const q=o.b.translation();return Math.hypot(p.x-q.x,p.z-q.z)<item.r+o.r+.002});
+  const clearAt=y=>{if(b.translation().y!==y){b.setTranslation({x:p.x,y,z:p.z},false);world.propagateModifiedBodyPositionsToColliders()}return near.every(o=>{if(Math.abs(y-o.b.translation().y)>item.support+o.support+.001)return true;const c=b.collider(0).contactCollider(o.b.collider(0),.001);return !c||c.distance>=.0005})};
+  let low=Math.max(p.y,item.support+.0005);if(!clearAt(low)){let high=Math.max(low,...near.map(o=>o.b.translation().y+o.support+item.support+.002));for(let i=0;i<18;i++){const mid=(low+high)/2;if(clearAt(mid))high=mid;else low=mid}clearAt(high);corrections++}
+  placed.push(item);
+ }
+ world.propagateModifiedBodyPositionsToColliders();return corrections;
+}
+export function limitDiscSpeed(body){const w=body.angvel(),spin=Math.hypot(w.x,w.y,w.z);if(spin>36)body.setAngvel({x:w.x*36/spin,y:w.y*36/spin,z:w.z*36/spin},false);const v=body.linvel(),speed=Math.hypot(v.x,v.y,v.z);if(speed>12)body.setLinvel({x:v.x*12/speed,y:v.y*12/speed,z:v.z*12/speed},false)}

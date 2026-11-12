@@ -1,6 +1,6 @@
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse} from './dynamics.js?v=20261111-bounce7';
-import {createShowcase} from './showcase.js?v=20261111-bounce7';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261112-contact8';
+import {createShowcase} from './showcase.js?v=20261112-contact8';
 const CHARGE_MS=7000;
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
 const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
@@ -18,9 +18,9 @@ let dark=localStorage.getItem('bita-theme')==='dark';
 function applyTheme(){document.documentElement.dataset.theme=dark?'dark':'light';$('theme').setAttribute('aria-pressed',String(dark));$('theme').setAttribute('aria-label',dark?'Включить светлую тему':'Включить тёмную тему');hemi.intensity=dark?.85:1.6;key.intensity=dark?3:2.4;key.position.set(dark?4:-3,7,dark?-2:4);fill.intensity=dark?1.1:.65;floor.material.opacity=dark?.35:.20;document.querySelector('meta[name="theme-color"]').content=dark?'#191b1a':'#f8f8f6'}
 applyTheme();$('theme').onclick=async e=>{const change=()=>{dark=!dark;localStorage.setItem('bita-theme',dark?'dark':'light');applyTheme();renderer.render(scene,camera)};if(!document.startViewTransition||matchMedia('(prefers-reduced-motion:reduce)').matches)return change();const x=e.clientX,y=e.clientY,r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));const transition=document.startViewTransition(change);try{await transition.ready}catch{return}document.documentElement.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${r}px at ${x}px ${y}px)`]},{duration:480,easing:'ease-out',pseudoElement:'::view-transition-new(root)'})};
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
-const manifest=await fetch('assets/caps/manifest.json?v=20261111-bounce7').then(r=>r.json());
+const manifest=await fetch('assets/caps/manifest.json?v=20261112-contact8').then(r=>r.json());
 const imageCache=new Map();
-function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=path+'?v=20261111-bounce7'}));return imageCache.get(path)}
+function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=path+'?v=20261112-contact8'}));return imageCache.get(path)}
 const images=await Promise.all(manifest.map(e=>loadImage(e.file)));
 const reverseImages=await Promise.all(manifest.map(e=>e.backFile?loadImage(e.backFile):null));
 await document.fonts.ready;
@@ -43,7 +43,8 @@ function backTexture(entry,i){if(reverseImages[i]){const t=new THREE.Texture(rev
  for(let k=0;k<1800;k++){c.fillStyle=k%2?'#ffffff09':'#57371509';c.fillRect((k*127.31)%512,(k*79.63)%512,1.5,1.5)}
 })}
 const frontMats=images.map((img,i)=>{const t=new THREE.Texture(img);t.needsUpdate=true;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return new THREE.MeshPhysicalMaterial({map:t,roughness:.44,metalness:0,clearcoat:.22,clearcoatRoughness:.25})});
-const backMats=manifest.map((e,i)=>new THREE.MeshPhysicalMaterial({map:backTexture(e,i),roughness:.53,metalness:0,clearcoat:.16,clearcoatRoughness:.5}));
+const backTextureCache=new Map();
+const backMats=manifest.map((e,i)=>{const key=e.backFile??(['mk','pokemon','turtles'].includes(e.series)?e.id:e.series);if(!backTextureCache.has(key))backTextureCache.set(key,backTexture(e,i));return new THREE.MeshPhysicalMaterial({map:backTextureCache.get(key),roughness:.53,metalness:0,clearcoat:.16,clearcoatRoughness:.5})});
 const edgeMap=texture((c,w,h)=>{c.fillStyle='#bdbbb0';c.fillRect(0,0,w,h);for(let y=0;y<h;y++){c.fillStyle=y%5===0?'#8e8c80':'#e7e4d8';c.globalAlpha=.15;c.fillRect(0,y,w,1)}for(let i=0;i<1800;i++){c.globalAlpha=.15;c.fillStyle=i%2?'#fffbe8':'#4b3927';c.fillRect((i*71.3)%w,(i*13.7)%h,1.5,1)}c.globalAlpha=.35;c.fillStyle='#77766d';c.fillRect(0,0,w,2);c.fillRect(0,h-2,w,2)},512,64);
 const edgeMat=new THREE.MeshStandardMaterial({map:edgeMap,roughness:.92,metalness:0,color:0xffffff});
 const plasticEdgeMat=new THREE.MeshPhysicalMaterial({color:0xcbd1d8,roughness:.28,metalness:0,clearcoat:.65});
@@ -74,7 +75,7 @@ let overloaded=false;
 function setStrikeLabel(text){strike.setAttribute('aria-label',text+'. Удерживайте для сильного удара');const label=$('strikeLabel');if(label.textContent===text)return;label.textContent=text;label.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'})}
 let caps=[],count=12,state='ready',charge=null,physicsTime=0,flightStart=0,impactAt=0,impactElevation=.43,edgeAt=-1,twistAt=-1,groupRest={},still=0;
 let orbitYaw=-.18,orbitElevation=.43,orbitVelocity=0,viewWidth=2.65,viewElevation=.43,viewTarget=new THREE.Vector3(0,.18,0),viewYaw=-.18;
-const preferred=['sonic-1','spacejam-10','dbz-1','sonic-29','spacejam-12','pokemon-25','cheetos-82','pokemon-25','mk-3','pokemon-6','mk-5','cheetos-62','pokemon-94','mk-7','pokemon-150','cheetos-90','pokemon-133','mk-20'];
+const preferred=['batman-1','digimon-1','streetfighter-1','power-rangers-1','mad-monster-1','sonic-1','spacejam-10','dbz-1','sonic-29','spacejam-12','pokemon-25','cheetos-82','pokemon-25','mk-3','pokemon-6','mk-5','cheetos-62','pokemon-94','mk-7','pokemon-150','cheetos-90','pokemon-133','mk-20'];
 const order=[...new Set([...preferred.map(id=>manifest.findIndex(e=>e.id===id)).filter(i=>i>=0),...manifest.map((_,i)=>i)])];let serial=0;
 const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
 function resize(){renderer.setSize(stage.clientWidth,stage.clientHeight)}new ResizeObserver(resize).observe(stage);resize();
@@ -111,17 +112,17 @@ renderer.domElement.addEventListener('pointerdown',e=>{
 renderer.domElement.addEventListener('pointermove',e=>{
  if(!pointers.has(e.pointerId)||!lastGesture)return;
  if(dragging?.pointerId===e.pointerId){updateRay(e);if(pickRay.ray.intersectPlane(dragPlane,planePoint)){const c=dragging.cap,x=clamp(planePoint.x+dragging.offsetX,-1.6,1.6),z=clamp(planePoint.z+dragging.offsetZ,-1.6,1.6);dragging.moved ||= Math.hypot(e.clientX-dragging.startX,e.clientY-dragging.startY)>4;
-  if(dragging.moved){const others=pieces().filter(o=>o!==c&&!o.collected&&Math.hypot(o.body.translation().x-x,o.body.translation().z-z)<1.02);const y=Math.max(supportHeight(c)+.04,...others.map(o=>o.body.translation().y+supportHeight(o)+supportHeight(c)+.04));c.body.setNextKinematicTranslation({x,y,z});c.body.setNextKinematicRotation(dragging.rotation)}
+  if(dragging.moved){const others=pieces().filter(o=>o!==c&&!o.collected&&Math.hypot(o.body.translation().x-x,o.body.translation().z-z)<1.12);const y=Math.max(supportHeight(c)+.04,...others.map(o=>o.body.translation().y+supportHeight(o)+supportHeight(c)+.04));c.body.setNextKinematicTranslation({x,y,z});c.body.setNextKinematicRotation(dragging.rotation)}
  }lastGesture={x:e.clientX,y:e.clientY};return}
  const dx=e.clientX-lastGesture.x,dy=e.clientY-lastGesture.y;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
  if(pointers.size===1){orbitYaw-=dx*.009;if(state==='ready')orbitElevation=clamp(orbitElevation+dy*.006,.16,1.3);orbitVelocity=-dx*.0018}else{viewTarget.x=clamp(viewTarget.x-dx*.003,-.35,.35);viewTarget.z=clamp(viewTarget.z-dy*.003,-.35,.35)}lastGesture={x:e.clientX,y:e.clientY};
 });
-function endGesture(e){if(dragging?.pointerId===e.pointerId){const c=dragging.cap,p=c.body.translation();if(dragging.moved){const support=supportHeight(c),others=pieces().filter(o=>o!==c&&!o.collected&&Math.hypot(o.body.translation().x-p.x,o.body.translation().z-p.z)<1.01);const y=Math.max(support,...others.map(o=>o.body.translation().y+supportHeight(o)+support+.002));c.body.setTranslation({x:p.x,y,z:p.z},true)}parkBody(c.body);dragging=null;}pointers.delete(e.pointerId);if(!pointers.size)lastGesture=null;}
+function endGesture(e){if(dragging?.pointerId===e.pointerId){const c=dragging.cap,p=c.body.translation();if(dragging.moved){const support=supportHeight(c),others=pieces().filter(o=>o!==c&&!o.collected&&Math.hypot(o.body.translation().x-p.x,o.body.translation().z-p.z)<1.12);const y=Math.max(support,...others.map(o=>o.body.translation().y+supportHeight(o)+support+.002));c.body.setTranslation({x:p.x,y,z:p.z},true)}parkBody(c.body);dragging=null;}pointers.delete(e.pointerId);if(!pointers.size)lastGesture=null;}
 renderer.domElement.addEventListener('pointerup',endGesture);renderer.domElement.addEventListener('pointercancel',endGesture);
 function impact(){if(state!=='airborne')return;hasHit=true;setStrikeLabel('Ещё раз');state='scattering';renderCollection();impactAt=physicsTime;impactElevation=viewElevation;edgeAt=overloaded?-1:physicsTime+3/120;twistAt=overloaded?-1:physicsTime+24/120;const p=caps[0].power;sound(p);navigator.vibrate?.(12)}
 function parkBody(body){const p=body.translation(),q=body.rotation();body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased,true);body.setTranslation(p,true);body.setRotation(q,true);body.setNextKinematicTranslation(p);body.setNextKinematicRotation(q)}
 function projectCap(c){return c.mesh.position.clone().project(camera)}
-function finish(){stage.setAttribute('aria-label','Перетаскивайте фишки по столу');pieces().forEach(c=>{c.won=!overloaded&&!c.isSlammer&&faceUp(c.body);parkBody(c.body)});const won=caps.filter(c=>c.won).sort((a,b)=>projectCap(b).y-projectCap(a).y);$('markers').replaceChildren();setStrikeLabel('Ещё раз');
+function finish(){separateDiscs(world,pieces());stage.setAttribute('aria-label','Перетаскивайте фишки по столу');pieces().forEach(c=>{c.won=!overloaded&&!c.isSlammer&&faceUp(c.body);parkBody(c.body)});const won=caps.filter(c=>c.won).sort((a,b)=>projectCap(b).y-projectCap(a).y);$('markers').replaceChildren();setStrikeLabel('Ещё раз');
 if(!won.length){state='result';$('announcer').textContent=overloaded?'Стопка рассыпалась от избытка силы':'Ни одна фишка не перевернулась';renderCollection();controls();return}
 state='inspection';won.forEach((c,i)=>c.rank=i+1);$('announcer').textContent=`Перевернулось: ${won.length}`;collectWinners();}
 async function collectWinners(){if(state!=='inspection'||dragging)return;state='collecting';renderCollection();controls();$('markers').replaceChildren();const won=caps.filter(c=>c.won).sort((a,b)=>a.rank-b.rank);
@@ -136,17 +137,22 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
   for(const [i,c]of caps.entries()){
    const age=(now-c.born)/750,progress=clamp(age,0,1),drop=1-progress,bounce=age>1?.018*Math.sin((age-1)*22)*Math.exp(-(age-1)*9):0,jitter=p*p*.026,bob=.010*Math.sin(t*.9);
    const x=c.position.x+drop*drop*1.6+Math.sin(t*56+i*.7)*jitter,y=c.position.y+capInsertionOffset(i,slammerSlot,slammerEnabled)+(slotOpened&&i>=slammerSlot?.14:0)+.8*(1-progress*progress)+bounce+bob+chargeLift(p)+Math.sin(t*65)*jitter*.7,z=c.position.z+Math.cos(t*61+i)*jitter*.6;
-   c.body.setNextKinematicTranslation({x,y,z});const q=new THREE.Quaternion(c.rotation.x,c.rotation.y,c.rotation.z,c.rotation.w);if(drop>0){const flip=Math.PI*(1-THREE.MathUtils.smoothstep(progress,.35,1));q.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),flip))}if(jitter){const w=new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.sin(t*67)*jitter*.6,0,Math.cos(t*59)*jitter*.6));q.premultiply(w)}c.body.setNextKinematicRotation(q);
+   c.body.setNextKinematicTranslation({x,y,z});const q=new THREE.Quaternion(c.rotation.x,c.rotation.y,c.rotation.z,c.rotation.w);if(jitter){const w=new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.sin(t*67)*jitter*.6,0,Math.cos(t*59)*jitter*.6));q.premultiply(w)}c.body.setNextKinematicRotation(q);
   }
   if(slammer){const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0,j=p*p*.026;slammer.body.setNextKinematicTranslation({x:Math.max(0,1-(now-insertAt)/450)*.9+Math.sin(t*56)*j,y:slammerY(slammerSlot)+chargeLift(p)+.01*Math.sin(t*.9),z:Math.cos(t*61)*j});slammer.body.setNextKinematicRotation({x:0,y:0,z:0,w:1})}
  }
- acc+=dt;while(acc>=1/120){world.step(events);physicsTime+=1/120;events.drainCollisionEvents((a,b,start)=>{if(start&&slammer&&['airborne','scattering'].includes(state)&&(a===slammer.body.collider(0).handle||b===slammer.body.collider(0).handle))slammerContact=true;if(start&&state==='airborne'&&physicsTime-flightStart>.025&&(a===world.tableColliderHandle||b===world.tableColliderHandle)){const handle=a===world.tableColliderHandle?b:a;if(pieces().some(c=>c.body.collider(0).handle===handle))impact()}});
+ acc+=dt;if(!['airborne','scattering'].includes(state)){world.timestep=dt;world.step(events);physicsTime+=dt;acc=0}world.timestep=1/240;while(acc>=1/240){if(['airborne','scattering'].includes(state))pieces().forEach(c=>limitDiscSpeed(c.body));world.step(events);physicsTime+=1/240;events.drainCollisionEvents((a,b,start)=>{if(start&&slammer&&['airborne','scattering'].includes(state)&&(a===slammer.body.collider(0).handle||b===slammer.body.collider(0).handle))slammerContact=true;if(start&&state==='airborne'&&physicsTime-flightStart>.025&&(a===world.tableColliderHandle||b===world.tableColliderHandle)){const handle=a===world.tableColliderHandle?b:a;if(pieces().some(c=>c.body.collider(0).handle===handle))impact()}});
   if(!overloaded&&state==='scattering'&&slammerContact&&slammerAt===-1)slammerAt=physicsTime+14/120;if(slammerAt>0&&physicsTime>=slammerAt){slammerResponse(caps.map(c=>c.body),slammer.body,slammerSlot,caps[0].power);slammerAt=-2}
   if(edgeAt>=0&&physicsTime>=edgeAt){fanStack(caps.map(c=>c.body),caps[0].power);edgeAt=-1}
   if(twistAt>=0&&physicsTime>=twistAt){turnStack(caps.map(c=>c.body),caps[0].power);twistAt=-1}
-  if(state==='scattering'){const elapsed=physicsTime-impactAt;for(const c of pieces()){enforceTable(c.body,c.isSlammer?SLAMMER_RADIUS:.53,c.isSlammer?SLAMMER_HEIGHT:STACK_DISC_HEIGHT);sleepRestingBody(c.body,c.rest,elapsed,1/120);if(elapsed>4){c.body.setAngularDamping(4);c.body.setLinearDamping(1.8)}}sleepRestingGroup(pieces().map(c=>c.body),groupRest,elapsed,1/120)}acc-=1/120;
+  if(state==='scattering'){const elapsed=physicsTime-impactAt;for(const c of pieces()){enforceTable(c.body,c.isSlammer?SLAMMER_RADIUS:.53,c.isSlammer?SLAMMER_HEIGHT:STACK_DISC_HEIGHT);sleepRestingBody(c.body,c.rest,elapsed,1/240);if(elapsed>4){c.body.setAngularDamping(4);c.body.setLinearDamping(1.8)}}sleepRestingGroup(pieces().map(c=>c.body),groupRest,elapsed,1/240)}acc-=1/240;
  }
+ // Keep displayed faces disjoint between physics ticks. The physics poses and
+ // velocities are restored immediately; this does not select winning sides.
+ const displayPass=['airborne','scattering'].includes(state),displaySaved=displayPass?pieces().filter(c=>!c.collected).map(c=>({body:c.body,p:c.body.translation()})):null;
+ if(displaySaved)separateDiscs(world,pieces());
  for(const c of pieces()){const p=c.body.translation(),q=c.body.rotation();c.mesh.position.set(p.x,p.y,p.z);c.mesh.quaternion.set(q.x,q.y,q.z,q.w);c.mesh.visible=!c.collected}
+ if(displaySaved){for(const {body,p}of displaySaved)if(body.translation().y!==p.y)body.setTranslation(p,false);world.propagateModifiedBodyPositionsToColliders()}
  if(state==='scattering'){const moving=pieces().some(c=>{const v=c.body.linvel(),w=c.body.angvel();return Math.hypot(v.x,v.y,v.z)>.2||Math.hypot(w.x,w.y,w.z)>1.3});still=!moving&&physicsTime-impactAt>1?still+dt:0;if(still>.5)finish()}
  if(!pointers.size&&idle){orbitYaw+=orbitVelocity;orbitVelocity*=.87;if(state==='ready'&&Math.abs(orbitVelocity)<.0001)orbitYaw+=dt*.022}
  const spreading=['scattering','inspection','collecting','result'].includes(state),air=state==='airborne';
