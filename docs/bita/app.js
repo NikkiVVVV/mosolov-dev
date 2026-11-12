@@ -1,7 +1,7 @@
-import {makeCapDeck} from './cap-deck.js?v=20261112-contact10';
+import {makeCapDeck} from './cap-deck.js?v=20261112-lazy11';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261112-contact10';
-import {createShowcase} from './showcase.js?v=20261112-contact10';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261112-lazy11';
+import {createShowcase} from './showcase.js?v=20261112-lazy11';
 const CHARGE_MS=7000;
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
 const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
@@ -19,19 +19,18 @@ let dark=localStorage.getItem('bita-theme')==='dark';
 function applyTheme(){document.documentElement.dataset.theme=dark?'dark':'light';$('theme').setAttribute('aria-pressed',String(dark));$('theme').setAttribute('aria-label',dark?'Включить светлую тему':'Включить тёмную тему');hemi.intensity=dark?.85:1.6;key.intensity=dark?3:2.4;key.position.set(dark?4:-3,7,dark?-2:4);fill.intensity=dark?1.1:.65;floor.material.opacity=dark?.35:.20;document.querySelector('meta[name="theme-color"]').content=dark?'#191b1a':'#f8f8f6'}
 applyTheme();$('theme').onclick=async e=>{const change=()=>{dark=!dark;localStorage.setItem('bita-theme',dark?'dark':'light');applyTheme();renderer.render(scene,camera)};if(!document.startViewTransition||matchMedia('(prefers-reduced-motion:reduce)').matches)return change();const x=e.clientX,y=e.clientY,r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));const transition=document.startViewTransition(change);try{await transition.ready}catch{return}document.documentElement.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${r}px at ${x}px ${y}px)`]},{duration:480,easing:'ease-out',pseudoElement:'::view-transition-new(root)'})};
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
-const manifest=await fetch('assets/caps/manifest.json?v=20261112-contact10').then(r=>r.json());
+const manifest=await fetch('assets/caps/manifest.json?v=20261112-lazy11').then(r=>r.json());
 const imageCache=new Map();
-function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=path+'?v=20261112-contact10'}));return imageCache.get(path)}
+function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261112-lazy11'}));return imageCache.get(path)}
 async function capImage(entry){const image=await loadImage(entry.file);if(!entry.imageRect)return image;const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');ctx.drawImage(image,...entry.imageRect,0,0,256,256);const result=new Image();result.src=c.toDataURL('image/png');await result.decode();return result}
-const images=await Promise.all(manifest.map(capImage));
-const reverseImages=await Promise.all(manifest.map(e=>e.backFile?loadImage(e.backFile):null));
+const images=Array(manifest.length),reverseImages=Array(manifest.length);
 await document.fonts.ready;
 function arcText(c,text,r,y,spacing){c.save();c.translate(256,y);c.fillStyle='#fff8df';c.font='500 43px "Golos Text",sans-serif';c.textAlign='center';for(let i=0;i<text.length;i++){c.save();c.rotate((i-(text.length-1)/2)*spacing);c.fillText(text[i],0,-r);c.restore()}c.restore()}
 function backTexture(entry,i){if(entry.blankBack||entry.series==='bakugan-roks'||entry.series==='simpsons-2006')return texture(c=>{c.fillStyle=entry.blankBack?'#ede9dd':entry.rimColor??'#ddd7cb';c.fillRect(0,0,512,512);if(!entry.blankBack){c.strokeStyle='#ffffff35';c.lineWidth=5;c.beginPath();c.arc(256,256,224,0,Math.PI*2);c.stroke()}});if(reverseImages[i]){const t=new THREE.Texture(reverseImages[i]);t.needsUpdate=true;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return t}return texture(c=>{
  c.fillStyle='#d0b880';c.fillRect(0,0,512,512);c.beginPath();c.arc(256,256,248,0,Math.PI*2);c.fillStyle=entry.series==='mk'?'#cb672d':entry.series==='turtles'?'#67a33b':'#f4ecd7';c.fill();
  if(entry.series==='mk'){
   arcText(c,'DUNKIN',155,264,.2);c.font='italic 500 42px "Golos Text",sans-serif';c.textAlign='center';c.fillStyle='#fff3d4';c.fillText('SUPER',256,345);c.font='italic 500 83px "Golos Text",sans-serif';c.fillText('CAP',256,419);
-  c.save();c.beginPath();c.arc(256,244,70,0,Math.PI*2);c.clip();c.drawImage(images[6],184,171,144,144);c.restore();c.strokeStyle='#ffedc3';c.lineWidth=4;c.beginPath();c.arc(256,244,70,0,Math.PI*2);c.stroke();
+  c.save();c.beginPath();c.arc(256,244,70,0,Math.PI*2);c.clip();if(images[6])c.drawImage(images[6],184,171,144,144);c.restore();c.strokeStyle='#ffedc3';c.lineWidth=4;c.beginPath();c.arc(256,244,70,0,Math.PI*2);c.stroke();
   for(const [x,n]of[[93,'2'],[419,String(18+i)]]){c.fillStyle='#fff1d3';c.beginPath();c.arc(x,264,23,0,Math.PI*2);c.fill();c.fillStyle='#c86930';c.font='500 25px "Golos Text"';c.fillText(n,x,273)}
  }else if(entry.series==='pokemon'){
   c.save();c.beginPath();c.arc(256,256,242,0,Math.PI*2);c.clip();c.fillStyle='#c62932';c.fillRect(0,0,512,228);c.fillStyle='#292b29';c.fillRect(0,223,512,9);c.restore();
@@ -44,9 +43,13 @@ function backTexture(entry,i){if(entry.blankBack||entry.series==='bakugan-roks'|
  // A light paper grain, never UI decoration.
  for(let k=0;k<1800;k++){c.fillStyle=k%2?'#ffffff09':'#57371509';c.fillRect((k*127.31)%512,(k*79.63)%512,1.5,1.5)}
 })}
-const frontMats=images.map((img,i)=>{const t=new THREE.Texture(img);t.needsUpdate=true;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return new THREE.MeshPhysicalMaterial({map:t,roughness:manifest[i].material==='plastic'?.28:.44,metalness:0,clearcoat:manifest[i].material==='plastic'?.7:.22,clearcoatRoughness:.25})});
-const backTextureCache=new Map();
-const backMats=manifest.map((e,i)=>{const key=e.backFile??(['mk','pokemon','turtles'].includes(e.series)?e.id:e.series);if(!backTextureCache.has(key))backTextureCache.set(key,backTexture(e,i));return new THREE.MeshPhysicalMaterial({map:backTextureCache.get(key),roughness:.53,metalness:0,clearcoat:.16,clearcoatRoughness:.5})});
+const frontMats=manifest.map(e=>new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:e.material==='plastic'?.28:.44,clearcoat:e.material==='plastic'?.7:.22}));
+const backMats=manifest.map(()=>new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.53,clearcoat:.16}));
+const backTextureCache=new Map(),capLoads=new Map();
+function ensureCap(i){if(!capLoads.has(i))capLoads.set(i,(async()=>{const e=manifest[i];images[i]=await capImage(e);reverseImages[i]=e.backFile?await loadImage(e.backFile):null;const t=new THREE.Texture(images[i]);t.needsUpdate=true;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;frontMats[i].map=t;frontMats[i].needsUpdate=true;const key=e.backFile??(['mk','pokemon','turtles'].includes(e.series)?e.id:e.series);if(!backTextureCache.has(key))backTextureCache.set(key,backTexture(e,i));backMats[i].map=backTextureCache.get(key);backMats[i].needsUpdate=true;})());return capLoads.get(i)}
+let deck=makeCapDeck(manifest),readyDeck=[];
+async function loadBatch(){const batch=deck.splice(0,5);await Promise.all(batch.map(async i=>{try{await ensureCap(i);return i}catch(e){capLoads.delete(i);console.warn('Cap unavailable',manifest[i].id);return null}})).then(ids=>readyDeck.push(...ids.filter(i=>i!==null)));}
+await loadBatch();
 const edgeMap=texture((c,w,h)=>{c.fillStyle='#bdbbb0';c.fillRect(0,0,w,h);for(let y=0;y<h;y++){c.fillStyle=y%5===0?'#8e8c80':'#e7e4d8';c.globalAlpha=.15;c.fillRect(0,y,w,1)}for(let i=0;i<1800;i++){c.globalAlpha=.15;c.fillStyle=i%2?'#fffbe8':'#4b3927';c.fillRect((i*71.3)%w,(i*13.7)%h,1.5,1)}c.globalAlpha=.35;c.fillStyle='#77766d';c.fillRect(0,0,w,2);c.fillRect(0,h-2,w,2)},512,64);
 const edgeMat=new THREE.MeshStandardMaterial({map:edgeMap,roughness:.92,metalness:0,color:0xffffff});
 const plasticEdgeMat=new THREE.MeshPhysicalMaterial({color:0xcbd1d8,roughness:.28,metalness:0,clearcoat:.65});
@@ -60,8 +63,8 @@ const world=await createWorld({extent:2.15}),events=new RAPIER.EventQueue(true);
 
 const slammerManifest=await fetch('assets/slammers/manifest.json').then(r=>r.json());
 const slammerMats=await Promise.all(slammerManifest.map(async e=>Promise.all([e.frontFile,e.backFile].map(async path=>{const img=await loadImage(path),t=new THREE.Texture(img);t.needsUpdate=true;t.colorSpace=THREE.SRGBColorSpace;return new THREE.MeshPhysicalMaterial({map:t,bumpMap:t,bumpScale:.004,roughness:.25,clearcoat:1,clearcoatRoughness:.18})}))));
-let slammer=null,slammerDesign=1,slammerSlot=6,slammerEnabled=true,slotOpened=false,insertAt=0,slammerContact=false,slammerAt=-1;
-function makeSlammer(){const g=new THREE.Group(),e=slammerManifest[slammerDesign],mat=new THREE.MeshPhysicalMaterial({color:e.color,roughness:.22,clearcoat:1});const edge=new THREE.Mesh(new THREE.CylinderGeometry(.55,.55,SLAMMER_HEIGHT,64,1,true),mat);edge.castShadow=true;g.add(edge);for(const [i,front]of[true,false].entries()){const geo=new THREE.CircleGeometry(.548,64);geo.rotateX(front?-Math.PI/2:Math.PI/2);geo.translate(0,front?.041:-.041,0);const m=new THREE.Mesh(geo,slammerMats[slammerDesign][i]);m.castShadow=true;g.add(m)}for(const y of[-.035,.035]){const rim=new THREE.Mesh(new THREE.TorusGeometry(.544,.007,6,64),mat);rim.rotation.x=Math.PI/2;rim.position.y=y;g.add(rim)}scene.add(g);return g}
+let slammer=null,slammerDesign=1,slammerSlot=2,slammerEnabled=true,slotOpened=false,insertAt=0,slammerContact=false,slammerAt=-1;
+function makeSlammer(){const g=new THREE.Group(),e=slammerManifest[slammerDesign],mat=new THREE.MeshPhysicalMaterial({color:e.color,roughness:.22,clearcoat:1});const edge=new THREE.Mesh(new THREE.CylinderGeometry(.55,.55,SLAMMER_HEIGHT,64,1,true),mat);edge.castShadow=true;g.add(edge);for(const [i,front]of[true,false].entries()){const geo=new THREE.CircleGeometry(.548,64);geo.rotateX(front?-Math.PI/2:Math.PI/2);geo.translate(0,front?.038:-.038,0);const m=new THREE.Mesh(geo,slammerMats[slammerDesign][i]);m.castShadow=true;g.add(m)}for(const y of[-.033,.033]){const rim=new THREE.Mesh(new THREE.TorusGeometry(.538,.004,6,64),mat);rim.rotation.x=Math.PI/2;rim.position.y=y;g.add(rim)}scene.add(g);return g}
 const pieces=()=>slammer?[...caps,slammer]:caps;
 const showcase=createShowcase({makeModel:item=>{const m=makeCap(item.index,0);scene.remove(m);return m},nameFor:item=>manifest[item.index].name,onBack:()=>showCollection()});
 function setupSlammer(){if(slammer)removeCap(slammer);slammer=null;slammerSlot=Math.min(slammerSlot,count);if(slammerEnabled)slammer={...createSlammerBody(world,slammerSlot),mesh:makeSlammer(),isSlammer:true,rest:{},born:-10000};$('slammerSlot').max=count;$('slammerSlot').value=slammerSlot;updateSlammerUI()}
@@ -75,20 +78,21 @@ $('closeSlammer').onclick=()=>$('slammerPicker').close();
 
 let overloaded=false;
 function setStrikeLabel(text){strike.setAttribute('aria-label',text+'. Удерживайте для сильного удара');const label=$('strikeLabel');if(label.textContent===text)return;label.textContent=text;label.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'})}
-let caps=[],count=12,state='ready',charge=null,physicsTime=0,flightStart=0,impactAt=0,impactElevation=.43,edgeAt=-1,twistAt=-1,groupRest={},still=0;
+let caps=[],count=5,state='ready',charge=null,physicsTime=0,flightStart=0,impactAt=0,impactElevation=.43,edgeAt=-1,twistAt=-1,groupRest={},still=0;
 let orbitYaw=-.18,orbitElevation=.43,orbitVelocity=0,viewWidth=2.65,viewElevation=.43,viewTarget=new THREE.Vector3(0,.18,0),viewYaw=-.18;
-let deck=makeCapDeck(manifest);function nextCap(){if(!deck.length)deck=makeCapDeck(manifest);return deck.shift()}
+function nextCap(){return readyDeck.shift()}
+
 const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
 function resize(){renderer.setSize(stage.clientWidth,stage.clientHeight)}new ResizeObserver(resize).observe(stage);resize();
 const collection=[];
 try{const saved=JSON.parse(localStorage.getItem('bita-collection-v3')||'[]');for(const id of saved){const i=manifest.findIndex(e=>e.id===id);if(i>=0)collection.push(i)}}catch{}
-function controls(){const locked=!['ready','result'].includes(state);$('slammerTool').hidden=!['ready','result','charging'].includes(state);$('chooseSlammer').disabled=locked;$('slammerSlot').disabled=locked||!slammerEnabled;$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=locked||count<=1;$('plus').disabled=locked||count>=MAX_STACK;strike.disabled=(locked&&state!=='charging')||(state==='ready'&&caps.some(c=>performance.now()-c.born<750));}
-function renderCollection(){const fan=$('collectionFan');fan.replaceChildren();for(const i of collection.slice(-3)){const img=new Image();img.src=images[i].src;img.alt='';fan.append(img)}$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label','Открыть выбитые фишки');}
-function showCollection(){const grid=$('albumGrid');grid.replaceChildren();for(const i of collection){const img=new Image();img.src=images[i].src;img.alt=manifest[i].name;const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`Рассмотреть ${manifest[i].name}`);b.append(img);b.onclick=()=>{$('album').close();showcase.inspect({index:i})};grid.append(b)}$('albumCount').textContent=collection.length;$('album').showModal()}
+function controls(){const locked=!['ready','result'].includes(state);$('slammerTool').hidden=!['ready','result','charging'].includes(state);$('chooseSlammer').disabled=locked;$('slammerSlot').disabled=locked||!slammerEnabled;$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=locked||count<=1;$('plus').disabled=locked||(count>=MAX_STACK||!readyDeck.length);strike.disabled=(locked&&state!=='charging')||(state==='ready'&&caps.some(c=>performance.now()-c.born<750));}
+function renderCollection(){const fan=$('collectionFan');fan.replaceChildren();for(const i of collection.slice(-3)){const img=new Image();img.alt='';fan.append(img);ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{})}$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label','Открыть выбитые фишки');}
+function showCollection(){const grid=$('albumGrid');grid.replaceChildren();for(const i of collection){const img=new Image();img.alt=manifest[i].name;img.loading='lazy';ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{});const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`Рассмотреть ${manifest[i].name}`);b.append(img);b.onclick=async()=>{await ensureCap(i);$('album').close();showcase.inspect({index:i})};grid.append(b)}$('albumCount').textContent=collection.length;$('album').showModal()}
 $('collectionToggle').onclick=showCollection;$('closeAlbum').onclick=()=>$('album').close();$('album').onclick=e=>{if(e.target!==$('album'))return;const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()};renderCollection();
 function addCap(drop=true,chosen=null){const i=caps.length,index=chosen??nextCap();const physical=createStackBody(world,i,Math.random,manifest[index].material);const item={...physical,index,mesh:makeCap(index,i*.91),born:drop?performance.now():-10000,rest:{},won:false};caps.push(item);count=caps.length;if(drop){item.body.setTranslation({x:1.6,y:physical.position.y+.8,z:physical.position.z},true);item.body.setRotation(physical.rotation,true)}return item}
 function removeCap(c){scene.remove(c.mesh);c.mesh.traverse(o=>{if(o.isMesh)o.geometry.dispose()});world.removeRigidBody(c.body)}
-function reset(n=count,drop=true,indices=null){caps.forEach(removeCap);caps=[];count=clamp(n||12,1,MAX_STACK);hasHit=false;flexed.clear();overloaded=false;setStrikeLabel('Бить');state='ready';stage.setAttribute('aria-label','Вращайте всю стопку пальцем');$('announcer').textContent='';$('markers').replaceChildren();edgeAt=twistAt=-1;groupRest={};still=0;const desired=count;for(let i=0;i<desired;i++){const item=addCap(drop,indices?.[i]);if(drop)item.born=performance.now()+i*70}count=caps.length;setupSlammer();renderCollection();controls()}
+function reset(n=count,drop=true,indices=null){caps.forEach(removeCap);caps=[];count=clamp(n||5,1,MAX_STACK);hasHit=false;flexed.clear();overloaded=false;setStrikeLabel('Бить');state='ready';stage.setAttribute('aria-label','Вращайте всю стопку пальцем');$('announcer').textContent='';$('markers').replaceChildren();edgeAt=twistAt=-1;groupRest={};still=0;const desired=indices?count:Math.min(count,readyDeck.length);for(let i=0;i<desired;i++){const item=addCap(drop,indices?.[i]);if(drop)item.born=performance.now()+i*70}count=caps.length;setupSlammer();renderCollection();controls()}
 function restackRemaining(drop=true){const indices=caps.filter(c=>!c.won).map(c=>c.index);reset(indices.length||4,drop,indices.length?indices:null)}
 $('plus').onclick=()=>{if(state==='result'&&!caps.some(c=>!c.won)){reset(1);return}if(state==='result')restackRemaining();if(state==='ready'&&count<MAX_STACK){addCap(true);$('slammerSlot').max=count;updateSlammerUI();controls()}};
 $('minus').onclick=()=>{if(state==='result')restackRemaining();if(state==='ready'&&count>1){removeCap(caps.pop());count=caps.length;slammerSlot=Math.min(slammerSlot,count);$('slammerSlot').max=count;$('slammerSlot').value=slammerSlot;updateSlammerUI();controls()}};
@@ -150,7 +154,7 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  }
  // Keep displayed faces disjoint between physics ticks. The physics poses and
  // velocities are restored immediately; this does not select winning sides.
- const displayPass=['ready','charging','airborne','scattering'].includes(state),displaySaved=displayPass?pieces().filter(c=>!c.collected).map(c=>({body:c.body,p:c.body.translation()})):null;
+ const displayPass=true,displaySaved=displayPass?pieces().filter(c=>!c.collected).map(c=>({body:c.body,p:c.body.translation()})):null;
  if(displaySaved)separateDiscs(world,pieces());
  for(const c of pieces()){const p=c.body.translation(),q=c.body.rotation();c.mesh.position.set(p.x,p.y,p.z);c.mesh.quaternion.set(q.x,q.y,q.z,q.w);c.mesh.visible=!c.collected}
  if(displaySaved){for(const {body,p}of displaySaved)if(body.translation().y!==p.y)body.setTranslation(p,false);world.propagateModifiedBodyPositionsToColliders()}
@@ -176,4 +180,6 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  }
  renderer.render(scene,camera);
 }
-reset(12);$('loading').remove();requestAnimationFrame(frame);
+reset(Math.min(5,readyDeck.length));$('loading').remove();requestAnimationFrame(frame);
+
+async function backgroundCaps(){while(true){await new Promise(r=>setTimeout(r,1500));if(!deck.length&&readyDeck.length<10)deck=makeCapDeck(manifest);if(deck.length){await loadBatch();controls()}}}backgroundCaps();
