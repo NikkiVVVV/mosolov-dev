@@ -1,140 +1,33 @@
-const clamp = value => Math.max(0, Math.min(1, value));
-const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
-const rgb = color => `rgb(${color.join(' ')})`;
-
-// A small, local canvas: no full-screen buffer or extra animation loop.
-export function createChargeFeedback(button) {
-  const canvas = document.createElement('canvas');
-  canvas.className = 'charge-fx';
-  canvas.setAttribute('aria-hidden', 'true');
-  button.append(canvas);
-  const context = canvas.getContext('2d');
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const pad = 80, embers = [], maxEmbers = 64;
-  let width = 144, height = 56, ratio = 1, power = 0, emission = 0, dirty = false;
-
-  function resize() {
-    width = button.clientWidth;
-    height = button.clientHeight;
-    ratio = Math.min(devicePixelRatio || 1, 1.5);
-    canvas.width = Math.ceil((width + pad * 2) * ratio);
-    canvas.height = Math.ceil((height + pad * 2) * ratio);
-    canvas.style.width = `${width + pad * 2}px`;
-    canvas.style.height = `${height + pad * 2}px`;
-    dirty = true;
+import * as THREE from './vendor/three.module.js';
+import {traceShape,spawnArc,vertex,fragment,ARCS,PULSES,hexToRgb} from './vendor/electric-logo-core.js';
+// React Bits Electric Logo shader and edge tracing, with a Three.js adapter.
+export function createChargeFeedback(button){
+ const renderer=new THREE.WebGLRenderer({alpha:true,premultipliedAlpha:true,antialias:false,powerPreference:'low-power'});renderer.setClearColor(0,0);renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.25));
+ const canvas=renderer.domElement;canvas.className='charge-fx';canvas.setAttribute('aria-hidden','true');button.append(canvas);
+ const ends=new Float32Array(ARCS*4),arcs=new Float32Array(ARCS*4),pulses=new Float32Array(PULSES*4);
+ const uniforms={tFieldFrom:{value:null},tFieldTo:{value:null},tGlowFrom:{value:null},tGlowTo:{value:null},uMapFrom:{value:[0,0,1,0]},uMapTo:{value:[0,0,1,0]},uSizeFrom:{value:[1,1,1,1]},uSizeTo:{value:[1,1,1,1]},uMorph:{value:1},uResolution:{value:[1,1]},uUnit:{value:1},uTime:{value:0},uPresence:{value:0},uHover:{value:[0,0,0]},uHoverRadius:{value:80},uPulses:{value:pulses},uPulseBoost:{value:0},uFlash:{value:0},uColor:{value:hexToRgb('#e1f2ff')},uGlowColor:{value:hexToRgb('#6f93f6')},uIntensity:{value:1},uGlow:{value:1},uThickness:{value:1.1},uStrands:{value:2},uBend:{value:.5},uCrackle:{value:1.5},uFlicker:{value:.5},uFill:{value:0},uInk:{value:1},uArcEnds:{value:ends},uArcShape:{value:arcs}};
+ const material=new THREE.RawShaderMaterial({vertexShader:vertex.replace('#version 300 es',''),fragmentShader:fragment.replace('#version 300 es',''),glslVersion:THREE.GLSL3,uniforms,transparent:true,premultipliedAlpha:true,depthTest:false,depthWrite:false});
+ const scene=new THREE.Scene(),mesh=new THREE.Mesh(new THREE.PlaneGeometry(2,2),material),camera=new THREE.Camera();mesh.frustumCulled=false;scene.add(mesh);
+ const reduced=matchMedia('(prefers-reduced-motion:reduce)'),sparks=[];let power=0,presence=0,time=0,width=1,height=1,shape,fit=1,ox=0,oy=0,dirty=false,field,glow;
+ function texture(data,w,h,format,internal){const t=new THREE.DataTexture(data,w,h,format,THREE.FloatType);t.internalFormat=internal;t.minFilter=t.magFilter=THREE.LinearFilter;t.generateMipmaps=false;t.flipY=false;t.unpackAlignment=1;t.needsUpdate=true;return t}
+ function resize(){const bw=button.clientWidth,bh=button.clientHeight;if(!bw||!bh)return;width=bw+160;height=bh+160;renderer.setSize(width,height,false);canvas.style.width=width+'px';canvas.style.height=height+'px';
+  const mask=document.createElement('canvas');mask.width=bw*2;mask.height=bh*2;const c=mask.getContext('2d');c.fillStyle='#fff';c.beginPath();c.roundRect(1,1,mask.width-2,mask.height-2,30);c.fill();shape=traceShape(mask);if(!shape)return;field?.dispose();glow?.dispose();
+  field=texture(shape.field,shape.width,shape.height,THREE.RedFormat,'R16F');glow=texture(shape.glow,shape.glowWidth,shape.glowHeight,THREE.RGFormat,'RG16F');uniforms.tFieldFrom.value=uniforms.tFieldTo.value=field;uniforms.tGlowFrom.value=uniforms.tGlowTo.value=glow;
+  fit=bw/shape.logoWidth;ox=width/2-(shape.pad+shape.logoWidth/2)*fit;oy=height/2-(shape.pad+shape.logoHeight/2)*fit;uniforms.uMapFrom.value=uniforms.uMapTo.value=[ox,oy,fit,shape.glowOffset];uniforms.uSizeFrom.value=uniforms.uSizeTo.value=[shape.width,shape.height,shape.glowWidth,shape.glowHeight];uniforms.uResolution.value=[width,height];uniforms.uUnit.value=bw/100;dirty=true;
+ }
+ const observer=new ResizeObserver(resize);observer.observe(button);resize();
+ return {setPower(value){power=Math.max(0,Math.min(1,value));button.style.setProperty('--charge',power);button.dataset.level=power>.8?'edge':power>.45?'strong':power?'building':'idle'},update(now,dt){
+  if(!shape)return;const target=reduced.matches?0:power;presence+=(target-presence)*(1-Math.exp(-dt/(target>presence?.09:.14)));
+  if(!power&&presence<.002){presence=0;if(dirty){renderer.clear();dirty=false}return}if(reduced.matches)return;dirty=true;time+=Math.min(dt,.05)*(1.2+power*3.3);
+  for(let i=sparks.length-1;i>=0;i--)if(time-sparks[i].born>sparks[i].life)sparks.splice(i,1);
+  if(power>.12&&sparks.length<ARCS&&Math.random()<dt*(2+power*power*24)){
+   let spark;
+   if(power>.48&&Math.random()<power*.8){const i=Math.floor(Math.random()*shape.edges.length/2),ax=shape.edges[i*2],ay=shape.edges[i*2+1],cx=shape.pad+shape.logoWidth/2,cy=shape.pad+shape.logoHeight/2;let nx=(ax-cx)/(shape.logoWidth/2),ny=(ay-cy)/(shape.logoHeight/2);const length=Math.hypot(nx,ny)||1;nx/=length;ny/=length;const reach=shape.logoWidth*(.12+power*.17);spark={ax,ay,bx:ax+nx*reach,by:ay+ny*reach,bow:(Math.random()-.5)*reach*.5,seed:1+Math.random()*60,born:time,life:.35+Math.random()*.35}}
+   else spark=spawnArc(shape,time,null);
+   if(spark)sparks.push(spark)
   }
-  const observer = new ResizeObserver(resize);
-  observer.observe(button);
-  resize();
-
-  function setPower(value) {
-    power = clamp(value);
-    const heat = clamp((power - .035) / .965);
-    const dark = document.documentElement.dataset.theme === 'dark';
-    const neutralTop = dark ? [70, 72, 73] : [250, 250, 248];
-    const neutralBottom = dark ? [43, 45, 46] : [229, 231, 227];
-    const top = mix(neutralTop, [226, 51, 45], Math.pow(heat, .8));
-    const bottom = mix(neutralBottom, [150, 19, 28], Math.pow(heat, .9));
-    const ink = dark ? [255, 255, 255] : power >= .77 ? [255, 255, 255] :
-      mix([67, 71, 65], [0, 0, 0], clamp(heat * 2));
-    button.style.setProperty('--charge', power.toFixed(4));
-    button.style.setProperty('--heat', heat.toFixed(4));
-    button.style.setProperty('--heat-glow', (Math.pow(heat, 3) * .3).toFixed(4));
-    button.style.setProperty('--charge-top', rgb(top));
-    button.style.setProperty('--charge-bottom', rgb(bottom));
-    button.style.setProperty('--charge-ink', rgb(ink));
-    button.dataset.level = power >= .8 ? 'edge' : power >= .45 ? 'strong' : power > 0 ? 'building' : 'idle';
-    if (power === 0) emission = 0;
-  }
-
-  function emit(energy) {
-    if (embers.length >= maxEmbers) return;
-    const side = Math.random(), along = Math.random();
-    let x, y, nx, ny;
-    if (side < .58) { x = pad + 10 + along * (width - 20); y = pad + 1; nx = (along - .5) * .7; ny = -1; }
-    else if (side < .79) { x = pad + 1; y = pad + 8 + along * (height - 16); nx = -1; ny = (along - .6) * .8; }
-    else { x = pad + width - 1; y = pad + 8 + along * (height - 16); nx = 1; ny = (along - .6) * .8; }
-    const speed = 24 + energy * (45 + Math.random() * 100);
-    embers.push({ x, y, vx: nx * speed, vy: ny * speed, age: 0,
-      life: .18 + Math.random() * .3, size: .65 + Math.random() * 1.2,
-      warm: Math.random() > .5, bright: Math.random() > .8 });
-  }
-
-  function update(now, delta) {
-    const dt = Math.min(delta, .05);
-    if (reducedMotion.matches) {
-      if (dirty) context.clearRect(0, 0, canvas.width, canvas.height);
-      embers.length = 0; dirty = false; return;
-    }
-    if (!power && !embers.length && !dirty) return;
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    context.clearRect(0, 0, width + pad * 2, height + pad * 2);
-    dirty = power > 0 || embers.length > 0;
-    const t = now / 1000;
-
-    // Light lives inside the material; the text remains above this canvas.
-    if (power > .08) {
-      context.save();
-      context.beginPath();
-      context.roundRect(pad + 1, pad + 1, width - 2, height - 2, 15);
-      context.clip();
-      const strength = Math.pow(power, 1.6);
-      const flow = t * (.7 + power * 2.6);
-      for (let i = 0; i < 3; i++) {
-        const x = pad + width * (.5 + Math.sin(flow + i * 2.1) * .4);
-        const y = pad + height * (.62 + Math.cos(flow * .8 + i) * .24);
-        const light = context.createRadialGradient(x, y, 0, x, y, width * .45);
-        light.addColorStop(0, `rgba(255, 206, 106, ${strength * .24})`);
-        light.addColorStop(1, 'rgba(255, 112, 48, 0)');
-        context.fillStyle = light;
-        context.fillRect(pad, pad, width, height);
-      }
-      const amount = Math.floor(3 + power * power * 45);
-      for (let i = 0; i < amount; i++) {
-        const seed = i * 2.399963, speed = .35 + (i % 7) * .065 + power * .9;
-        const age = ((t * speed + i * .618034) % 1);
-        const x = pad + ((i * 37.31 + t * (9 + power * 30)) % width) + Math.sin(age * 5 + seed) * 5;
-        const y = pad + height + 5 - age * (height + 12);
-        const alpha = Math.sin(age * Math.PI) * strength * (i % 3 ? .72 : .95);
-        context.strokeStyle = i % 4 ? `rgba(255, 210, 128, ${alpha})` : `rgba(255, 249, 223, ${alpha})`;
-        context.lineWidth = i % 5 ? 1 : 1.6;
-        context.lineCap = 'round';
-        context.beginPath(); context.moveTo(x, y);
-        context.lineTo(x - 1.3, y + 1.5 + power * (i % 4 + 1)); context.stroke();
-      }
-      // Fast, narrow currents become visible only at higher charge.
-      if (power > .5) {
-        for (let i = 0; i < 2; i++) {
-          const y = pad + height * (.35 + i * .3);
-          context.strokeStyle = `rgba(255, 202, 119, ${(power - .5) * .32})`;
-          context.lineWidth = 1;
-          context.beginPath(); context.moveTo(pad - 10, y);
-          context.bezierCurveTo(pad + width * .35, y + Math.sin(flow * 3 + i) * 16,
-            pad + width * .7, y - Math.sin(flow * 2 + i) * 15, pad + width + 10, y - 4);
-          context.stroke();
-        }
-      }
-      context.restore();
-    }
-
-    // Emission grows sharply near the limit, always from the button's edges.
-    const energy = clamp((power - .57) / .43);
-    emission += dt * 100 * energy * energy;
-    while (emission >= 1) { emit(energy); emission--; }
-    for (let i = embers.length - 1; i >= 0; i--) {
-      const ember = embers[i]; ember.age += dt;
-      if (ember.age >= ember.life) { embers.splice(i, 1); continue; }
-      ember.x += ember.vx * dt; ember.y += ember.vy * dt;
-      ember.vy -= dt * 26;
-      const fade = Math.pow(1 - ember.age / ember.life, 1.5);
-      context.strokeStyle = ember.bright ? `rgba(255, 232, 173, ${fade})` :
-        ember.warm ? `rgba(224, 71, 35, ${fade * .9})` : `rgba(246, 140, 60, ${fade})`;
-      context.lineWidth = ember.size;
-      context.lineCap = 'round';
-      context.beginPath(); context.moveTo(ember.x, ember.y);
-      context.lineTo(ember.x - ember.vx * .045, ember.y - ember.vy * .045); context.stroke();
-    }
-  }
-
-  return { setPower, update, destroy() { observer.disconnect(); canvas.remove(); } };
+  for(let i=0;i<ARCS;i++){const p=sparks[i],o=i*4;if(!p){arcs[o+1]=0;continue}ends[o]=ox+p.ax*fit;ends[o+1]=oy+p.ay*fit;ends[o+2]=ox+p.bx*fit;ends[o+3]=oy+p.by*fit;arcs[o]=p.bow*fit;arcs[o+1]=Math.sin(Math.PI*Math.min(1,(time-p.born)/p.life))*presence;arcs[o+2]=p.seed}
+  uniforms.uTime.value=time;uniforms.uPresence.value=Math.sqrt(presence);uniforms.uIntensity.value=.25+power*power*1.1;uniforms.uGlow.value=.35+power*.55;uniforms.uThickness.value=.6+power*.6;uniforms.uStrands.value=1+Math.floor(power*4);uniforms.uBend.value=.16+power*power*.9;uniforms.uCrackle.value=.6+power*2;
+  const ambient=Number(document.documentElement.style.getPropertyValue('--scene-dark'))||0;uniforms.uInk.value=1-ambient;renderer.render(scene,camera);
+ },destroy(){observer.disconnect();field?.dispose();glow?.dispose();mesh.geometry.dispose();material.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove()}};
 }
