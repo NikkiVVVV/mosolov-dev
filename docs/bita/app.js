@@ -1,7 +1,8 @@
-import {makeCapDeck} from './cap-deck.js?v=20261113-effects13';
+import {makeCapDeck} from './cap-deck.js?v=20261113-heat14';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-effects13';
-import {createShowcase} from './showcase.js?v=20261113-effects13';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-heat14';
+import {createShowcase} from './showcase.js?v=20261113-heat14';
+import {createChargeFeedback} from './charge-feedback.js?v=20261113-heat14';
 const CHARGE_MS=7000;
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
 const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
@@ -19,9 +20,9 @@ let dark=localStorage.getItem('bita-theme')==='dark';
 function applyTheme(){document.documentElement.dataset.theme=dark?'dark':'light';$('theme').setAttribute('aria-pressed',String(dark));$('theme').setAttribute('aria-label',dark?'Включить светлую тему':'Включить тёмную тему');hemi.intensity=dark?.85:1.6;key.intensity=dark?3:2.4;key.position.set(dark?.15:0,9,.25);fill.intensity=dark?1.1:.65;floor.material.opacity=dark?.35:.20;document.querySelector('meta[name="theme-color"]').content=dark?'#191b1a':'#f8f8f6'}
 applyTheme();$('theme').onclick=async e=>{const change=()=>{dark=!dark;localStorage.setItem('bita-theme',dark?'dark':'light');applyTheme();renderer.render(scene,camera)};if(!document.startViewTransition||matchMedia('(prefers-reduced-motion:reduce)').matches)return change();const x=e.clientX,y=e.clientY,r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));const transition=document.startViewTransition(change);try{await transition.ready}catch{return}document.documentElement.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${r}px at ${x}px ${y}px)`]},{duration:480,easing:'ease-out',pseudoElement:'::view-transition-new(root)'})};
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
-const manifest=await fetch('assets/caps/manifest.json?v=20261113-effects13').then(r=>r.json());
+const manifest=await fetch('assets/caps/manifest.json?v=20261113-heat14').then(r=>r.json());
 const imageCache=new Map();
-function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-effects13'}));return imageCache.get(path)}
+function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-heat14'}));return imageCache.get(path)}
 async function capImage(entry){const image=await loadImage(entry.file);if(!entry.imageRect)return image;const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');ctx.drawImage(image,...entry.imageRect,0,0,256,256);const result=new Image();result.src=c.toDataURL('image/png');await result.decode();return result}
 const images=Array(manifest.length),reverseImages=Array(manifest.length);
 await document.fonts.ready;
@@ -71,7 +72,7 @@ function makeSlammer(){const g=new THREE.Group(),e=slammerManifest[slammerDesign
 const pieces=()=>slammer?[...caps,slammer]:caps;
 const showcase=createShowcase({makeModel:item=>{const m=makeCap(item.index,0);scene.remove(m);return m},nameFor:item=>manifest[item.index].name,onBack:()=>showCollection()});
 function setupSlammer(){if(slammer)removeCap(slammer);slammer=null;slammerSlot=Math.min(slammerSlot,count);if(slammerEnabled)slammer={...createSlammerBody(world,slammerSlot,slammerManifest[slammerDesign].id),mesh:makeSlammer(),isSlammer:true,rest:{},born:-10000};$('slammerSlot').max=count;$('slammerSlot').value=slammerSlot;updateSlammerUI()}
-function updateSlammerUI(){$('slammerSlot').disabled=!slammerEnabled;$('slammerSlot').setAttribute('aria-valuetext',slammerEnabled?`Слой ${slammerSlot} из ${count}`:'Без биты');$('slammerImage').src=slammerManifest[slammerDesign].frontFile;chargeThumb.src=slammerManifest[slammerDesign].frontFile}
+function updateSlammerUI(){$('slammerSlot').disabled=!slammerEnabled;$('slammerSlot').setAttribute('aria-valuetext',slammerEnabled?`Слой ${slammerSlot} из ${count}`:'Без биты');$('slammerImage').src=slammerManifest[slammerDesign].frontFile}
 $('slammerSlot').onpointerdown=()=>{if(state==='result')restackRemaining(false);slotOpened=true};
 $('slammerSlot').oninput=e=>{slammerSlot=+e.target.value;insertAt=performance.now();updateSlammerUI()};
 $('slammerSlot').onchange=()=>slotOpened=false;window.addEventListener('pointerup',()=>slotOpened=false);window.addEventListener('pointercancel',()=>slotOpened=false);
@@ -104,11 +105,8 @@ let audio=null;function ensureAudio(){try{audio??=new(window.AudioContext||windo
 function sound(power){if(!audio||audio.state!=='running')return;const t=audio.currentTime;const buffer=audio.createBuffer(1,audio.sampleRate*.09,audio.sampleRate),samples=buffer.getChannelData(0);for(let i=0;i<samples.length;i++)samples[i]=(Math.random()*2-1)*Math.exp(-i/(samples.length*.13));const src=audio.createBufferSource(),filter=audio.createBiquadFilter(),gain=audio.createGain();src.buffer=buffer;filter.type='lowpass';filter.frequency.value=2200;gain.gain.value=.18+power*.08;src.connect(filter).connect(gain).connect(audio.destination);src.start(t)}
 function begin(e){if(state==='result'){restackRemaining(false);return}if(state!=='ready'||performance.now()<assemblingUntil)return;ensureAudio();charge={start:performance.now(),power:0};orbitVelocity=0;state='charging';if(e.pointerId!==undefined)e.currentTarget.setPointerCapture?.(e.pointerId);strike.classList.add('charging');controls()}
 function cancel(){if(!charge)return;charge=null;state='ready';strike.classList.remove('charging');setChargeVisual(0);controls()}
-const chargeThumb=document.createElement('img');chargeThumb.className='charge-thumb';chargeThumb.alt='';chargeThumb.src=slammerManifest[slammerDesign].frontFile;strike.append(chargeThumb);
-const chargeTicks=document.createElement('span');chargeTicks.className='charge-ticks';chargeTicks.setAttribute('aria-hidden','true');chargeTicks.innerHTML='<i></i>'.repeat(6);strike.append(chargeTicks);
-const chargeLabel=document.createElement('span');chargeLabel.className='charge-label';chargeLabel.setAttribute('aria-hidden','true');chargeLabel.textContent='Бить';strike.append(chargeLabel);
-const chargePixels=document.createElement('span');chargePixels.className='charge-pixels';chargePixels.setAttribute('aria-hidden','true');for(let i=0;i<10;i++){const dot=document.createElement('i');dot.style.setProperty('--i',i);dot.style.left=-(i%4)*6+'px';dot.style.top=(i%3)*8+'px';chargePixels.append(dot)}strike.append(chargePixels);
-function setChargeVisual(p){strike.style.setProperty('--charge',p);strike.style.setProperty('--charge-fill',p<.45?'#c8daed':p<.85?'#4b6e9d':p<.98?'#273a60':'#81545b');strike.dataset.level=p>=.85?'edge':p>=.45?'strong':p>0?'building':'idle'}
+const chargeFeedback=createChargeFeedback(strike);
+function setChargeVisual(p){chargeFeedback.setPower(p)}
 const impactGlint=document.createElement('span');impactGlint.className='impact-glint';impactGlint.setAttribute('aria-hidden','true');impactGlint.innerHTML='<i></i><i></i><i></i>';strike.append(impactGlint);
 function showImpactGlint(power){if(power<.6||matchMedia('(prefers-reduced-motion:reduce)').matches)return;impactGlint.animate([{opacity:0,transform:'translate(-50%, -50%) scale(.3) rotate(-12deg)'},{opacity:.95,offset:.15,transform:'translate(-50%, -65%) scale(1) rotate(0deg)'},{opacity:0,transform:'translate(-50%, -150%) scale(1.8) rotate(12deg)'}],{duration:320,easing:'cubic-bezier(.16,.7,.3,1)'})}
 function release(){if(!charge)return;if(performance.now()-charge.start>=CHARGE_MS)return overload();const power=clamp((performance.now()-charge.start)/CHARGE_MS,.15,1);lastPower=power;charge=null;strike.classList.remove('charging');setChargeVisual(0);showImpactGlint(power);state='airborne';flightStart=physicsTime;still=0;groupRest={};slammerContact=false;slammerAt=-1;strikeStackDown(pieces().map(c=>c.body),power);pieces().forEach(c=>{c.power=power;c.rest={}});controls()}
@@ -147,6 +145,7 @@ state='result';count=caps.filter(c=>!c.won).length;renderCollection();controls()
 let previous=performance.now(),acc=0,lastFrame=0;
 function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=state==='ready'||state==='result'||state==='inspection';if(idle&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.05);previous=now;const t=now/1000;
  showcase.update(now,dt);if(charge&&now-charge.start>=CHARGE_MS)overload();if(state==='ready')controls();
+ chargeFeedback.update(now,dt);
  if(['ready','charging'].includes(state)){
   const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0;if(charge)setChargeVisual(p);
   for(const [i,c]of caps.entries()){

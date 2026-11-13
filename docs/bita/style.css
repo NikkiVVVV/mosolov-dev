@@ -32,20 +32,25 @@
 
 html #showcase[data-mode=reward]::before{background:#0a1018;backdrop-filter:blur(5px)}
 
-/* A charge track inside the existing button: the selected slammer is its marker. */
-.toss.charging::before{background:var(--charge-fill,#c8daed);opacity:1}
-.charge-label{position:absolute;inset:0;display:grid;place-items:center;color:#fff;pointer-events:none;opacity:0;clip-path:inset(0 calc((1 - var(--charge,0))*100%) 0 0)}
-.toss.charging[data-level=strong] .charge-label,.toss.charging[data-level=edge] .charge-label{opacity:1}
-.charge-ticks{position:absolute;left:14px;right:14px;bottom:7px;display:flex;justify-content:space-between;pointer-events:none;opacity:.35}
-.charge-ticks i{width:3px;height:3px;border-radius:50%;background:#7a8994}
-.charging .charge-ticks i{background:#adbed2}
-.charge-thumb{position:absolute;bottom:-4px;left:calc(10px + var(--charge,0)*(100% - 20px));width:20px;height:20px;border-radius:50%;transform:translateX(-50%);box-shadow:0 1px 3px #192f4933;pointer-events:none;opacity:0;z-index:2}
-.charging .charge-thumb{opacity:1}
-.charge-pixels{position:absolute;right:6px;top:8px;width:1px;height:1px;pointer-events:none;opacity:0}
-.charging[data-level=edge] .charge-pixels{opacity:1}
-.charge-pixels i{position:absolute;width:4px;height:4px;border-radius:1px;background:#b6d3ec;}
-.charge-pixels i:nth-child(3n){background:#d9b8ce}.charge-pixels i:nth-child(4n){background:#f0d8b8}
-@keyframes charge-pixel{0%{opacity:0;transform:translate(0,6px) scale(.7)}30%{opacity:.8}100%{opacity:0;transform:translate(16px,-24px) scale(.4)}}
-@media(prefers-reduced-motion:reduce){.charge-pixels{display:none}.charge-thumb{transition:none}}
-
-.charging[data-level=edge] .charge-pixels i{animation:charge-pixel .8s ease-out infinite;animation-delay:calc(var(--i)*-.13s)}
+/* Quiet grey at rest. Heat and embers replace the old slider decoration. */
+.toss{background:linear-gradient(#fafaf8,#e5e7e3);color:#434741}
+html[data-theme=dark] .toss{background:linear-gradient(#464849,#2b2d2e);border-color:#5b5d5e;color:#ecedea}
+.toss::before,html[data-theme=dark] .toss::before{
+  z-index:0;transform:none;opacity:0;
+  background:linear-gradient(var(--charge-top,#fafaf8),var(--charge-bottom,#e5e7e3));
+  box-shadow:inset 0 1px 0 #ffffff35,inset 0 -2px 6px #620c141c;
+  transition:opacity .18s ease-out;
+}
+.toss.charging::before{opacity:1}
+.toss.charging{
+  color:var(--charge-ink,#434741);
+  border-color:color-mix(in srgb,#fff, #ed6542 calc(var(--heat,0)*72%));
+  box-shadow:0 4px 12px #424b3410,inset 0 1px 3px #5b171422,
+    0 2px 16px rgba(238,65,31,var(--heat-glow,0)),0 0 36px rgba(238,65,31,calc(var(--heat-glow,0)*.4));
+}
+html[data-theme=dark] .toss.charging{color:var(--charge-ink,#ecedea);border-color:color-mix(in srgb,#5b5d5e,#fa7758 calc(var(--heat,0)*85%));box-shadow:0 5px 14px #0005,inset 0 1px 1px #ffffff28,0 0 24px rgba(250,75,35,var(--heat-glow,0))}
+.toss::after{content:'';position:absolute;z-index:1;left:10px;right:10px;bottom:5px;height:1px;border-radius:2px;background:#ffe2b2;box-shadow:0 0 5px #ffc77c;transform:scaleX(var(--charge,0));transform-origin:left;opacity:0;pointer-events:none}
+.toss.charging::after{opacity:calc(var(--heat,0)*.65)}
+.toss #strikeLabel{position:relative;z-index:3}
+.charge-fx{position:absolute;inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;max-width:none;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.charge-fx{display:none}.toss::before{transition:none}}
