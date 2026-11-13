@@ -143,3 +143,5 @@ html #showcase[data-mode=inspect] #showcaseBack{color:#f4eefb;background:#211c2b
  .controls .adjust{width:76px;height:76px;border-radius:16px}
  .controls .toss{height:76px;border-radius:16px}
 }
+
+#albumPreview>.showcase-canvas:focus-visible{outline:1px solid #d1b8ff80;outline-offset:-4px;border-radius:16px}
