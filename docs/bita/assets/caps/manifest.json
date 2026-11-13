@@ -1,105 +1,105 @@
 [
   {
     "id": "pokemon-1",
-    "name": "Pokémon · 1",
+    "name": "Bulbasaur",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/1-215acbda7534438bad45ce584f909482.webp",
     "file": "assets/caps/pokemon-1.webp"
   },
   {
     "id": "pokemon-4",
-    "name": "Pokémon · 4",
+    "name": "Charmander",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/4-f26134ccab5064ededfa1c64ee0f8313.webp",
     "file": "assets/caps/pokemon-4.webp"
   },
   {
     "id": "pokemon-7",
-    "name": "Pokémon · 7",
+    "name": "Squirtle",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/7-12c1f5347c0714531343fa9691cc04e6.webp",
     "file": "assets/caps/pokemon-7.webp"
   },
   {
     "id": "pokemon-9",
-    "name": "Pokémon · 9",
+    "name": "Blastoise",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/9-7847d2388fa480755e53f246b5dd496b.webp",
     "file": "assets/caps/pokemon-9.webp"
   },
   {
     "id": "pokemon-12",
-    "name": "Pokémon · 12",
+    "name": "Butterfree",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/12-a428f6aab2a3f23d0a260a842d9fe4db.webp",
     "file": "assets/caps/pokemon-12.webp"
   },
   {
     "id": "pokemon-17",
-    "name": "Pokémon · 17",
+    "name": "Pidgeotto",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/17-423b5d6682cd74d7868471a37041d8ea.webp",
     "file": "assets/caps/pokemon-17.webp"
   },
   {
     "id": "mk-1",
-    "name": "Mortal Kombat №1",
+    "name": "Mortal Kombat · 1",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/1-f29dca7e58f0ab50abfff5494fb3c936.webp",
     "file": "assets/caps/mk-1.webp"
   },
   {
     "id": "mk-3",
-    "name": "Mortal Kombat №3",
+    "name": "Mortal Kombat · 3",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/3-2bd462acf4e90eeb3bb0f00a2b4ee1c8.webp",
     "file": "assets/caps/mk-3.webp"
   },
   {
     "id": "mk-5",
-    "name": "Mortal Kombat №5",
+    "name": "Mortal Kombat · 5",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/5-fc65e7a6ffea56eaf69a20626537fd75.webp",
     "file": "assets/caps/mk-5.webp"
   },
   {
     "id": "mk-9",
-    "name": "Mortal Kombat №9",
+    "name": "Mortal Kombat · 9",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/9-2209a428db504608f9d9288c52795830.webp",
     "file": "assets/caps/mk-9.webp"
   },
   {
     "id": "mk-12",
-    "name": "Mortal Kombat №12",
+    "name": "Mortal Kombat · 12",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/12-dd53320b6999a5528fd320dddd83d1eb.webp",
     "file": "assets/caps/mk-12.webp"
   },
   {
     "id": "mk-18",
-    "name": "Mortal Kombat №18",
+    "name": "Mortal Kombat · 18",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/18-4d2c3f6d13c0c4756659fbb4c24c041d.webp",
     "file": "assets/caps/mk-18.webp"
   },
   {
     "id": "turtles-1",
-    "name": "Черепашки №1",
+    "name": "TMNT · 1",
     "series": "turtles",
     "source": "https://playcaps.ru/assets/thumbs/collection27/1-6d21be5f2ff47ff8cd32919bdbc94d85.webp",
     "file": "assets/caps/turtles-1.webp"
   },
   {
     "id": "turtles-4",
-    "name": "Черепашки №4",
+    "name": "TMNT · 4",
     "series": "turtles",
     "source": "https://playcaps.ru/assets/thumbs/collection27/4-5a4cc7aed9583c8c61151d294ce55089.webp",
     "file": "assets/caps/turtles-4.webp"
   },
   {
     "id": "turtles-7",
-    "name": "Черепашки №7",
+    "name": "TMNT · 7",
     "series": "turtles",
     "source": "https://playcaps.ru/assets/thumbs/collection27/7-dfe7f0fbba5a273365727ca1ead4b43e.webp",
     "file": "assets/caps/turtles-7.webp"
@@ -111,7 +111,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/62-Climbing-Chester-Cheetah.png",
     "file": "assets/caps/cheetos-62.webp",
     "backFile": "assets/caps/cheetos-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "cheetos-66",
@@ -120,7 +122,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/66-Kite-Chester-Cheetah.png",
     "file": "assets/caps/cheetos-66.webp",
     "backFile": "assets/caps/cheetos-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "cheetos-74",
@@ -129,7 +133,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/74-Surfing-Chester-Cheetah.png",
     "file": "assets/caps/cheetos-74.webp",
     "backFile": "assets/caps/cheetos-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "cheetos-82",
@@ -138,144 +144,146 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/82-Skateboarding-Chester-Cheetah.png",
     "file": "assets/caps/cheetos-82.webp",
     "backFile": "assets/caps/cheetos-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "pokemon-6",
-    "name": "Pokémon · 6",
+    "name": "Charizard",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/6-c6d5d5f2c8f5a8b0f7973dcbf5349fab.webp",
     "file": "assets/caps/pokemon-6.webp"
   },
   {
     "id": "pokemon-25",
-    "name": "Pokémon · 25",
+    "name": "Pikachu",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/25-9c86c011fa32d283fcba87c8d679c79c.webp",
     "file": "assets/caps/pokemon-25.webp"
   },
   {
     "id": "pokemon-39",
-    "name": "Pokémon · 39",
+    "name": "Nidorino",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/39-e692c9190ae3dfd78fee2e0146de2c3d.webp",
     "file": "assets/caps/pokemon-39.webp"
   },
   {
     "id": "pokemon-52",
-    "name": "Pokémon · 52",
+    "name": "Paras",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/52-a851a967023d1f92f0962814944426ab.webp",
     "file": "assets/caps/pokemon-52.webp"
   },
   {
     "id": "pokemon-54",
-    "name": "Pokémon · 54",
+    "name": "Venonat",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/54-5ab73c047668753b45fc3eb1793681c2.webp",
     "file": "assets/caps/pokemon-54.webp"
   },
   {
     "id": "pokemon-94",
-    "name": "Pokémon · 94",
+    "name": "Grimer",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/94-d8aecb8c57f575789acdd73ec3e04784.webp",
     "file": "assets/caps/pokemon-94.webp"
   },
   {
     "id": "pokemon-133",
-    "name": "Pokémon · 133",
+    "name": "Pinsir",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/133-d983df89ad1fdbed45b9b552b0dd7033.webp",
     "file": "assets/caps/pokemon-133.webp"
   },
   {
     "id": "pokemon-143",
-    "name": "Pokémon · 143",
+    "name": "Porygon",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/143-1bb75ca8241d010bb1cff583573735d6.webp",
     "file": "assets/caps/pokemon-143.webp"
   },
   {
     "id": "pokemon-150",
-    "name": "Pokémon · 150",
+    "name": "Articuno",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/150-ffd58f8e5447ac9361c3b52efcfa4d06.webp",
     "file": "assets/caps/pokemon-150.webp"
   },
   {
     "id": "pokemon-151",
-    "name": "Pokémon · 151",
+    "name": "Zapdos",
     "series": "pokemon",
     "source": "https://playcaps.ru/assets/thumbs/collection29/151-b9e65b21449097459157dbe30bee12ee.webp",
     "file": "assets/caps/pokemon-151.webp"
   },
   {
     "id": "mk-2",
-    "name": "Mortal Kombat №2",
+    "name": "Mortal Kombat · 2",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/2-441babb1a68b97fc545a7ede1990c5e8.webp",
     "file": "assets/caps/mk-2.webp"
   },
   {
     "id": "mk-4",
-    "name": "Mortal Kombat №4",
+    "name": "Mortal Kombat · 4",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/4-3c77aedfa7770e87b0dbc627b6ca3766.webp",
     "file": "assets/caps/mk-4.webp"
   },
   {
     "id": "mk-6",
-    "name": "Mortal Kombat №6",
+    "name": "Mortal Kombat · 6",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/6-273fca22a2aae7fc5873ad058115478b.webp",
     "file": "assets/caps/mk-6.webp"
   },
   {
     "id": "mk-7",
-    "name": "Mortal Kombat №7",
+    "name": "Mortal Kombat · 7",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/7-44738cbfa3429e50711bd381094f5aa2.webp",
     "file": "assets/caps/mk-7.webp"
   },
   {
     "id": "mk-10",
-    "name": "Mortal Kombat №10",
+    "name": "Mortal Kombat · 10",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/10-a6b481008c4db3da38608758abf41a13.webp",
     "file": "assets/caps/mk-10.webp"
   },
   {
     "id": "mk-15",
-    "name": "Mortal Kombat №15",
+    "name": "Mortal Kombat · 15",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/15-a8291e4640e7ccd49aebe4c4e2ed917b.webp",
     "file": "assets/caps/mk-15.webp"
   },
   {
     "id": "mk-20",
-    "name": "Mortal Kombat №20",
+    "name": "Mortal Kombat · 20",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/20-e7da24a190f6e89908cd55e0d7d6b6d6.webp",
     "file": "assets/caps/mk-20.webp"
   },
   {
     "id": "mk-25",
-    "name": "Mortal Kombat №25",
+    "name": "Mortal Kombat · 25",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/25-077574fadfbcd53febb5e83a556eba3c.webp",
     "file": "assets/caps/mk-25.webp"
   },
   {
     "id": "mk-30",
-    "name": "Mortal Kombat №30",
+    "name": "Mortal Kombat · 30",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/30-bc6b4d42b958ee91b9fe1d2d7f411ba9.webp",
     "file": "assets/caps/mk-30.webp"
   },
   {
     "id": "mk-40",
-    "name": "Mortal Kombat №40",
+    "name": "Mortal Kombat · 40",
     "series": "mk",
     "source": "https://playcaps.ru/assets/thumbs/collection10/40-60b06d2e303c98c873cab951f477f764.webp",
     "file": "assets/caps/mk-40.webp"
@@ -287,7 +295,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/70-Speedboat-racing-Chester-Cheetah.png",
     "file": "assets/caps/cheetos-70.webp",
     "backFile": "assets/caps/cheetos-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "cheetos-71",
@@ -296,7 +306,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/71-Windsurfing-Chester-Cheetah.png",
     "file": "assets/caps/cheetos-71.webp",
     "backFile": "assets/caps/cheetos-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "cheetos-78",
@@ -305,7 +317,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/78-Soccer-Chester-Cheetah.png",
     "file": "assets/caps/cheetos-78.webp",
     "backFile": "assets/caps/cheetos-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "cheetos-84",
@@ -314,7 +328,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/84-Australian-Football-Chester-Cheetah.png",
     "file": "assets/caps/cheetos-84.webp",
     "backFile": "assets/caps/cheetos-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "cheetos-90",
@@ -323,7 +339,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/75DPI/90-Ghetto-Blaster-Chester-Cheetah.png",
     "file": "assets/caps/cheetos-90.webp",
     "backFile": "assets/caps/cheetos-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Australia/Series%201%20-%20Green%20folder/61-100%20Chester%20Cheetah/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "dbz-1",
@@ -332,7 +350,8 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/01-Freeza.png",
     "file": "assets/caps/dbz-1.webp",
     "backFile": "assets/caps/dbz-1-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/01-Freeza-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/01-Freeza-%28back%29.png",
+    "material": "plastic"
   },
   {
     "id": "dbz-3",
@@ -341,7 +360,8 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/03-Ginew.png",
     "file": "assets/caps/dbz-3.webp",
     "backFile": "assets/caps/dbz-3-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/03-Ginew-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/03-Ginew-%28back%29.png",
+    "material": "plastic"
   },
   {
     "id": "dbz-5",
@@ -350,7 +370,8 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/05-Dodoria.png",
     "file": "assets/caps/dbz-5.webp",
     "backFile": "assets/caps/dbz-5-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/05-Dodoria-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/05-Dodoria-%28back%29.png",
+    "material": "plastic"
   },
   {
     "id": "dbz-7",
@@ -359,7 +380,8 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/07-Saibamans.png",
     "file": "assets/caps/dbz-7.webp",
     "backFile": "assets/caps/dbz-7-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/07-Saibamans-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/Spain/Dragonball%20Z/Series%201/300DPI/07-Saibamans-%28back%29.png",
+    "material": "plastic"
   },
   {
     "id": "sonic-1",
@@ -422,7 +444,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/01-Bugs-Bunny.png",
     "file": "assets/caps/spacejam-1.webp",
     "backFile": "assets/caps/spacejam-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "spacejam-4",
@@ -431,7 +455,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/04-Tweety-Pie.png",
     "file": "assets/caps/spacejam-4.webp",
     "backFile": "assets/caps/spacejam-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "spacejam-7",
@@ -440,7 +466,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/07-Daffy-Duck.png",
     "file": "assets/caps/spacejam-7.webp",
     "backFile": "assets/caps/spacejam-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "spacejam-10",
@@ -449,7 +477,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/10-Lola-Bunny.png",
     "file": "assets/caps/spacejam-10.webp",
     "backFile": "assets/caps/spacejam-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "spacejam-12",
@@ -458,7 +488,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/12-Tazmanian-Devil.png",
     "file": "assets/caps/spacejam-12.webp",
     "backFile": "assets/caps/spacejam-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "spacejam-18",
@@ -467,7 +499,9 @@
     "source": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/18-Michael-Jordan.png",
     "file": "assets/caps/spacejam-18.webp",
     "backFile": "assets/caps/spacejam-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Other/Danone%20Space%20Jam/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "notched silhouette does not fit the circular cap mesh"
   },
   {
     "id": "batman-1",
@@ -507,7 +541,9 @@
     "file": "assets/caps/batman-4.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/34-Batman.html",
     "backFile": "assets/caps/batman-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "batman-5",
@@ -527,7 +563,9 @@
     "file": "assets/caps/batman-6.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/34-Batman.html",
     "backFile": "assets/caps/batman-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "batman-7",
@@ -547,7 +585,9 @@
     "file": "assets/caps/batman-8.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/34-Batman.html",
     "backFile": "assets/caps/batman-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "batman-9",
@@ -567,7 +607,9 @@
     "file": "assets/caps/batman-10.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/34-Batman.html",
     "backFile": "assets/caps/batman-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "batman-11",
@@ -577,7 +619,9 @@
     "file": "assets/caps/batman-11.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/34-Batman.html",
     "backFile": "assets/caps/batman-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Batman/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "batman-12",
@@ -597,7 +641,9 @@
     "file": "assets/caps/power-rangers-1.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/Avimage/62-Power-Rangers.html",
     "backFile": "assets/caps/power-rangers-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "power-rangers-2",
@@ -627,7 +673,9 @@
     "file": "assets/caps/power-rangers-4.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/Avimage/62-Power-Rangers.html",
     "backFile": "assets/caps/power-rangers-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "power-rangers-5",
@@ -657,7 +705,9 @@
     "file": "assets/caps/power-rangers-7.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/Avimage/62-Power-Rangers.html",
     "backFile": "assets/caps/power-rangers-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "power-rangers-8",
@@ -667,7 +717,9 @@
     "file": "assets/caps/power-rangers-8.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/Avimage/62-Power-Rangers.html",
     "backFile": "assets/caps/power-rangers-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "power-rangers-9",
@@ -677,7 +729,9 @@
     "file": "assets/caps/power-rangers-9.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/Avimage/62-Power-Rangers.html",
     "backFile": "assets/caps/power-rangers-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "power-rangers-10",
@@ -687,7 +741,9 @@
     "file": "assets/caps/power-rangers-10.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/Avimage/62-Power-Rangers.html",
     "backFile": "assets/caps/power-rangers-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "power-rangers-11",
@@ -707,7 +763,9 @@
     "file": "assets/caps/power-rangers-12.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/World-POG-Federation-WPF/Avimage/62-Power-Rangers.html",
     "backFile": "assets/caps/power-rangers-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/pogs/Avimage/Power%20Rangers/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "digimon-1",
@@ -757,7 +815,9 @@
     "file": "assets/caps/digimon-5.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/Panini-Caps/1272-Digimon.html",
     "backFile": "assets/caps/digimon-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Panini%20Caps/Digimon/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Panini%20Caps/Digimon/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "digimon-6",
@@ -777,7 +837,9 @@
     "file": "assets/caps/digimon-7.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/Panini-Caps/1272-Digimon.html",
     "backFile": "assets/caps/digimon-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Panini%20Caps/Digimon/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Panini%20Caps/Digimon/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "digimon-8",
@@ -787,7 +849,9 @@
     "file": "assets/caps/digimon-8.webp",
     "collectionSource": "https://www.milkcapmania.co.uk/Panini-Caps/1272-Digimon.html",
     "backFile": "assets/caps/digimon-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Panini%20Caps/Digimon/300DPI/Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Panini%20Caps/Digimon/300DPI/Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "digimon-9",
@@ -915,7 +979,9 @@
     "series": "streetfighter",
     "source": "https://static1.milkcapmania.co.uk/Img/World%20Flip%20Federation/Street%20Fighter%20II/300DPI/455-Vega-%28red%29.png",
     "file": "assets/caps/streetfighter-11.webp",
-    "collectionSource": "https://www.milkcapmania.co.uk/World-Flip-Federation/487-Street-Fighter-II.html"
+    "collectionSource": "https://www.milkcapmania.co.uk/World-Flip-Federation/487-Street-Fighter-II.html",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "streetfighter-12",
@@ -923,7 +989,9 @@
     "series": "streetfighter",
     "source": "https://static1.milkcapmania.co.uk/Img/World%20Flip%20Federation/Street%20Fighter%20II/300DPI/456-Balrog-%28blue%29.png",
     "file": "assets/caps/streetfighter-12.webp",
-    "collectionSource": "https://www.milkcapmania.co.uk/World-Flip-Federation/487-Street-Fighter-II.html"
+    "collectionSource": "https://www.milkcapmania.co.uk/World-Flip-Federation/487-Street-Fighter-II.html",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "mad-monster-1",
@@ -1034,7 +1102,9 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2001-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2001-02",
@@ -1045,7 +1115,9 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2001-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2001-03",
@@ -1056,7 +1128,9 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2001-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2001-04",
@@ -1067,7 +1141,9 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2001-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2001-05",
@@ -1078,7 +1154,9 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2001-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2001-06",
@@ -1089,7 +1167,9 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2001-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2001-07",
@@ -1100,7 +1180,9 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2001-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2001-11",
@@ -1111,7 +1193,9 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2001-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2001-13",
@@ -1122,11 +1206,13 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/450-Green-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2001-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/01-%D0%A2%D0%BE%D0%B0-%D0%A2%D0%B0%D1%83-%28Tahu%29-%28back%29.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2001-15",
-    "name": "Bionicle 2001 · Борок Парак (Pahrak)",
+    "name": "Bionicle · Pahrak",
     "series": "bionicle-2001",
     "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/15-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%9F%D0%B0%D1%80%D0%B0%D0%BA-%28Pahrak%29.png",
     "file": "assets/caps/bionicle-2001-15.webp",
@@ -1137,7 +1223,7 @@
   },
   {
     "id": "bionicle-2001-16",
-    "name": "Bionicle 2001 · Борок Нувок (Nuhvok)",
+    "name": "Bionicle · Nuhvok",
     "series": "bionicle-2001",
     "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/16-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%9D%D1%83%D0%B2%D0%BE%D0%BA-%28Nuhvok%29.png",
     "file": "assets/caps/bionicle-2001-16.webp",
@@ -1148,7 +1234,7 @@
   },
   {
     "id": "bionicle-2001-18",
-    "name": "Bionicle 2001 · Борок Галок (Gahlok)",
+    "name": "Bionicle · Gahlok",
     "series": "bionicle-2001",
     "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/18-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%93%D0%B0%D0%BB%D0%BE%D0%BA-%28Gahlok%29.png",
     "file": "assets/caps/bionicle-2001-18.webp",
@@ -1159,7 +1245,7 @@
   },
   {
     "id": "bionicle-2001-20",
-    "name": "Bionicle 2001 · Борок Танок (Tаhnok)",
+    "name": "Bionicle · Tahnok",
     "series": "bionicle-2001",
     "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/20-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%A2%D0%B0%D0%BD%D0%BE%D0%BA-%28T%D0%B0hnok%29.png",
     "file": "assets/caps/bionicle-2001-20.webp",
@@ -1170,7 +1256,7 @@
   },
   {
     "id": "bionicle-2001-21",
-    "name": "Bionicle 2001 · Борок Танок (Tahnok)",
+    "name": "Bionicle · Tahnok-Kal",
     "series": "bionicle-2001",
     "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/21-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%A2%D0%B0%D0%BD%D0%BE%D0%BA-%28Tahnok%29.png",
     "file": "assets/caps/bionicle-2001-21.webp",
@@ -1181,7 +1267,7 @@
   },
   {
     "id": "bionicle-2001-23",
-    "name": "Bionicle 2001 · Борок Корак (Kohrak)",
+    "name": "Bionicle · Kohrak",
     "series": "bionicle-2001",
     "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/23-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%9A%D0%BE%D1%80%D0%B0%D0%BA-%28Kohrak%29.png",
     "file": "assets/caps/bionicle-2001-23.webp",
@@ -1192,7 +1278,7 @@
   },
   {
     "id": "bionicle-2001-24",
-    "name": "Bionicle 2001 · Борок Левак (Lehvak)",
+    "name": "Bionicle · Lehvak",
     "series": "bionicle-2001",
     "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Green%20back/300DPI/24-%D0%91%D0%BE%D1%80%D0%BE%D0%BA-%D0%9B%D0%B5%D0%B2%D0%B0%D0%BA-%28Lehvak%29.png",
     "file": "assets/caps/bionicle-2001-24.webp",
@@ -1210,11 +1296,13 @@
     "collectionSource": "https://www.milkcapmania.co.uk/Cheetos/Lego-Bionicle/771-Blue-back.html",
     "material": "cardboard",
     "backFile": "assets/caps/bionicle-2003-back.webp",
-    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Blue%20back/300DPI/130-%D0%9C%D0%B0%D1%81%D0%BA%D0%B0-%D0%9A%D1%81%D0%B0-%D0%9A%D0%B0%D0%BB-%28Xa-Kal%29-Back.png"
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Blue%20back/300DPI/130-%D0%9C%D0%B0%D1%81%D0%BA%D0%B0-%D0%9A%D1%81%D0%B0-%D0%9A%D0%B0%D0%BB-%28Xa-Kal%29-Back.png",
+    "enabled": false,
+    "qualityIssue": "visual review: heavy wear, soft detail or noisy scan at full viewer size"
   },
   {
     "id": "bionicle-2003-147",
-    "name": "Bionicle 2003 · Такуа и Певку (Takua & Pewku)",
+    "name": "Bionicle · Tahu & Pewku",
     "series": "bionicle-2003",
     "source": "https://static1.milkcapmania.co.uk/Img/Cheetos/Lego%20Bionicle/Blue%20back/300DPI/147-%D0%A2%D0%B0%D0%BA%D1%83%D0%B0-%D0%B8-%D0%9F%D0%B5%D0%B2%D0%BA%D1%83-%28Takua-%26-Pewku%29.png",
     "file": "assets/caps/bionicle-2003-147.webp",
@@ -1333,7 +1421,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "bakugan-roks-2",
@@ -1349,7 +1439,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "bakugan-roks-3",
@@ -1365,7 +1457,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "bakugan-roks-4",
@@ -1381,7 +1475,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "bakugan-roks-5",
@@ -1397,7 +1493,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "bakugan-roks-6",
@@ -1413,7 +1511,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "bakugan-roks-7",
@@ -1429,7 +1529,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "bakugan-roks-8",
@@ -1445,7 +1547,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "bakugan-roks-9",
@@ -1461,7 +1565,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "bakugan-roks-10",
@@ -1477,7 +1583,9 @@
     "source": "https://www.ebay.com/itm/256867054361",
     "collectionSource": "https://www.ebay.com/itm/256867054361",
     "material": "plastic",
-    "rimColor": "#38608a"
+    "rimColor": "#38608a",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-1",
@@ -1493,7 +1601,9 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-2",
@@ -1509,7 +1619,9 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-3",
@@ -1525,7 +1637,9 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-4",
@@ -1541,7 +1655,9 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-5",
@@ -1557,7 +1673,9 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-6",
@@ -1573,7 +1691,9 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-7",
@@ -1589,7 +1709,9 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-8",
@@ -1605,7 +1727,9 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-9",
@@ -1621,7 +1745,9 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   },
   {
     "id": "simpsons-2006-10",
@@ -1637,6 +1763,8 @@
     "source": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "collectionSource": "https://www.mercadolibre.com.mx/sabritas-tazos-classic-simpsons-del-2006-precioxpieza/up/MLMU934271457",
     "material": "cardboard",
-    "rimColor": "#d5ccb9"
+    "rimColor": "#d5ccb9",
+    "enabled": false,
+    "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
   }
 ]

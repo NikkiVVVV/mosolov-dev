@@ -106,34 +106,34 @@ html .toss,html .toss.charging,html .adjust,html #chooseSlammer{background:linea
 html body,html button,html .toss,html .adjust,.album-header h2{font-family:"IBM Plex Mono",monospace}
 html .controls .toss{font-weight:500;letter-spacing:-.4px}
 
-/* Won caps stay in one sheet: a dark 3D stage and a separate scrolling tray. */
-#album{inset:auto 0 0;margin:0 auto;width:min(560px,100%);height:min(780px,calc(100svh - max(24px,env(safe-area-inset-top))));max-width:100%;max-height:calc(100svh - max(24px,env(safe-area-inset-top)));padding:0;border:1px solid #ffffff24;border-bottom:0;border-radius:28px 28px 0 0;overflow:hidden;background:#17151ff2;color:#f3effa;box-shadow:0 -12px 60px #09061133;backdrop-filter:blur(24px);flex-direction:column;isolation:isolate}
+/* Won caps stay in one sheet: a light 3D stage and a separate scrolling tray. */
+#album{inset:auto 0 0;margin:0 auto;width:min(560px,100%);height:min(780px,calc(100svh - max(24px,env(safe-area-inset-top))));max-width:100%;max-height:calc(100svh - max(24px,env(safe-area-inset-top)));padding:0;border:0;border-bottom:0;border-radius:28px 28px 0 0;overflow:hidden;background:#f5f4f1;color:#29262f;box-shadow:0 -8px 40px #1b15221c;flex-direction:column;isolation:isolate}
 #album[open]{display:flex;animation:album-enter .28s cubic-bezier(.2,.75,.2,1)}
-#album::backdrop{background:#090b146b;backdrop-filter:blur(8px)}
+#album::backdrop{background:#090b1447;backdrop-filter:blur(6px)}
 @keyframes album-enter{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
 #albumGrab{height:24px;flex:none;display:grid;place-items:center;touch-action:none;cursor:grab}
-#albumGrab span{width:32px;height:4px;border-radius:4px;background:#b7b0c74d}
+#albumGrab span{width:32px;height:4px;border-radius:4px;background:#c8c4cc}
 #album .album-header{height:44px;min-height:44px;flex:none;display:grid;grid-template-columns:64px minmax(0,1fr) 64px;align-items:center;margin:0;padding:0 16px;gap:4px}
-#album .album-header h2{font:500 14px/20px "IBM Plex Mono",monospace;text-align:center;white-space:nowrap;margin:0;color:#f3effa}
-#album #closeAlbum{width:44px;height:44px;padding:0;display:grid;place-items:center;border:0;border-radius:12px;color:#e9e2f5;background:none;touch-action:manipulation}
-#album #closeAlbum:hover{background:#ffffff0c}
-#albumPosition{justify-self:end;font:500 12px/16px "IBM Plex Mono",monospace;color:#aaa3b8;white-space:nowrap}
+#album .album-header h2{font:500 14px/20px "IBM Plex Mono",monospace;text-align:center;white-space:nowrap;margin:0;color:#302c37}
+#album #closeAlbum{width:44px;height:44px;padding:0;display:grid;place-items:center;border:0;border-radius:12px;color:#655d70;background:none;touch-action:manipulation}
+#album #closeAlbum:hover{background:#36244108}
+#albumPosition{justify-self:end;font:500 12px/16px "IBM Plex Mono",monospace;color:#716a7a;white-space:nowrap}
 #albumPreview{position:relative;flex:1 1 auto;height:min(40svh,360px);min-height:172px;max-height:360px;display:grid;place-items:center;touch-action:none;overflow:hidden}
 #albumPreview>.showcase-canvas{position:relative;inset:auto;left:auto;top:auto;transform:none!important;max-width:100%;max-height:100%;display:block;pointer-events:auto;cursor:grab}
 #albumPreview>.showcase-canvas:active{cursor:grabbing}
-#albumName{flex:none;min-height:40px;padding:0 24px 16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font:500 16px/24px "IBM Plex Mono",monospace;color:#e7e0f2}
-#albumGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:12px;align-content:start;align-items:start;flex:1 1 160px;min-height:0;max-height:none;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;padding:16px 20px max(28px,calc(env(safe-area-inset-bottom) + 12px));scroll-padding-block:16px;border-top:1px solid #ffffff0d;scrollbar-width:thin;scrollbar-color:#74648270 transparent;mask-image:linear-gradient(transparent,#000 16px,#000 calc(100% - 24px),transparent);-webkit-mask-image:linear-gradient(transparent,#000 16px,#000 calc(100% - 24px),transparent)}
+#albumName{flex:none;min-height:40px;padding:0 24px 16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font:500 16px/24px "IBM Plex Mono",monospace;color:#3c3446}
+#albumGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:12px;align-content:start;align-items:start;flex:1 1 160px;min-height:0;max-height:none;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;padding:16px 20px max(28px,calc(env(safe-area-inset-bottom) + 12px));scroll-padding-block:16px;border-top:1px solid #2d203a12;scrollbar-width:thin;scrollbar-color:#92879b66 transparent;mask-image:linear-gradient(transparent,#000 16px,#000 calc(100% - 24px),transparent);-webkit-mask-image:linear-gradient(transparent,#000 16px,#000 calc(100% - 24px),transparent)}
 #albumGrid button{position:relative;width:100%;min-width:0;max-width:88px;justify-self:center;aspect-ratio:1;padding:6px;display:grid;place-items:center;border:2px solid transparent;border-radius:50%;background:none;cursor:pointer;touch-action:manipulation;transition:border-color .16s,transform .16s}
-#albumGrid button:before{content:'';position:absolute;inset:6px;border-radius:50%;background:#ffffff08;border:1px solid #ffffff0a}
+#albumGrid button:before{content:'';position:absolute;inset:6px;border-radius:50%;background:#4a365308;border:1px solid #4a36530c}
 #albumGrid button img{position:relative;display:block;width:100%;height:100%;aspect-ratio:1;object-fit:contain;border-radius:50%;opacity:0;transition:opacity .18s}
-#albumGrid button[data-loaded=true] img{opacity:.8}
-#albumGrid button[aria-pressed=true]{border-color:#be97ff}
+#albumGrid button[data-loaded=true] img{opacity:1}
+#albumGrid button[aria-pressed=true]{border-color:#8b60c7}
 #albumGrid button[aria-pressed=true] img,#albumGrid button:hover img{opacity:1}
 #albumGrid button:active{transform:scale(.94)}
-#album button:focus-visible,#albumPreview>.showcase-canvas:focus-visible{outline:2px solid #d1b8ff;outline-offset:2px}
-html #showcase[data-mode=inspect]::before{background:#0a1018;backdrop-filter:blur(5px)}
-html #showcase[data-mode=inspect]{color:#f4eefb}
-html #showcase[data-mode=inspect] #showcaseBack{color:#f4eefb;background:#211c2b9c;border-color:#ffffff26}
+#album button:focus-visible,#albumPreview>.showcase-canvas:focus-visible{outline:2px solid #8053b8;outline-offset:2px}
+html #showcase[data-mode=inspect]::before{background:#f1f0ec;backdrop-filter:blur(5px)}
+html #showcase[data-mode=inspect]{color:#302c37}
+html #showcase[data-mode=inspect] #showcaseBack{color:#51445e;background:#f5f4f1e6;border-color:#4a365326}
 @media(max-height:540px){#albumPreview{min-height:112px;height:35svh;max-height:180px}#albumName{min-height:28px;padding-bottom:4px;font-size:14px;line-height:20px}#albumGrab{height:16px}#albumGrid{grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px;padding-top:8px}}
 @media(prefers-reduced-motion:reduce){#album[open]{animation:none}#albumGrid button,#albumGrid button img{transition:none}}
 
@@ -144,4 +144,4 @@ html #showcase[data-mode=inspect] #showcaseBack{color:#f4eefb;background:#211c2b
  .controls .toss{height:76px;border-radius:16px}
 }
 
-#albumPreview>.showcase-canvas:focus-visible{outline:1px solid #d1b8ff80;outline-offset:-4px;border-radius:16px}
+#albumPreview>.showcase-canvas:focus-visible{outline:1px solid #876aa580;outline-offset:-4px;border-radius:16px}
