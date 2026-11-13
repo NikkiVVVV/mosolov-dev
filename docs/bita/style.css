@@ -32,8 +32,8 @@
 
 html #showcase[data-mode=reward]::before{background:#0a1018;backdrop-filter:blur(5px)}
 
-/* Start in light; manual theme control stays independent of charge. */
-main::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,#333733 5%,#222622 60%,#151815);opacity:var(--scene-dark,0);pointer-events:none;will-change:opacity}
+/* Start in light; hold darkens the scene, release returns the chosen theme. */
+main::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,#151a22 5%,#0b0e14 65%,#05070b);opacity:var(--scene-dark,0);pointer-events:none;will-change:opacity}
 .toss,.toss.charging{color:#434741;background:linear-gradient(#fafaf8,#e5e7e3);border-color:#fff;box-shadow:0 4px 12px #424b3410,inset 0 -1px 2px #66705515}
 html[data-theme=dark] .toss,html[data-theme=dark] .toss.charging{color:#ecedea;background:linear-gradient(#464849,#2b2d2e);border-color:#5b5d5e;box-shadow:0 5px 14px #0005,inset 0 1px 1px #ffffff18}
 html .toss::before,html .toss::after{content:none}
@@ -53,3 +53,12 @@ html:not([data-intro=done]) .controls,html:not([data-intro=done]) #slammerTool,h
 
 @media(prefers-reduced-motion:reduce){#packHint svg{animation:none}.jelly-content{will-change:auto}.charge-fx{display:none}}
 button[data-jelly-ready=true]{position:relative}
+
+/* The pack has an opaque theme-matched pass, including its fade-out. */
+html:not([data-intro=done]) #stage{background:#f8f8f6}
+html[data-theme=dark]:not([data-intro=done]) #stage{background:#191b1a}
+
+/* Frosted violet glass keeps the current control sizes and native labels. */
+html .toss,html .toss.charging,html .adjust,html .theme,html #chooseSlammer{color:#fff;background:linear-gradient(145deg,#6430c1,#9250e2 65%,#c79aee);border-color:#ddbcff;box-shadow:0 5px 16px #7739d72b,inset 0 1px 2px #eddaff80}
+html .controls button:focus-visible,html #theme:focus-visible,html #chooseSlammer:focus-visible{outline:2px solid #a77bed;outline-offset:5px}
+#slammerSlot::-webkit-slider-thumb{background:#a37adf}#slammerSlot::-moz-range-thumb{background:#a37adf}

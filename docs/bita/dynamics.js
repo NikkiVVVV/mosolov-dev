@@ -1,5 +1,5 @@
-import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-flow18';
-import {capProfile,slammerProfile} from './physical-profiles.js?v=20261113-flow18';
+import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-glass19';
+import {capProfile,slammerProfile} from './physical-profiles.js?v=20261113-glass19';
 import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
 export async function createWorld({extent=3.12}={}){
