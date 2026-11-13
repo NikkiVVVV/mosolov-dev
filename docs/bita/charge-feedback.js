@@ -20,14 +20,14 @@ export function createChargeFeedback(button){
   if(!shape)return;const target=reduced.matches?0:power;presence+=(target-presence)*(1-Math.exp(-dt/(target>presence?.09:.14)));
   if(!power&&presence<.002){presence=0;if(dirty){renderer.clear();dirty=false}return}if(reduced.matches)return;dirty=true;time+=Math.min(dt,.05)*(1.2+power*3.3);
   for(let i=sparks.length-1;i>=0;i--)if(time-sparks[i].born>sparks[i].life)sparks.splice(i,1);
-  if(power>.12&&sparks.length<ARCS&&Math.random()<dt*(2+power*power*24)){
+  if(power>.12&&sparks.length<ARCS&&Math.random()<dt*(2+power*power*34)){
    let spark;
-   if(power>.48&&Math.random()<power*.8){const i=Math.floor(Math.random()*shape.edges.length/2),ax=shape.edges[i*2],ay=shape.edges[i*2+1],cx=shape.pad+shape.logoWidth/2,cy=shape.pad+shape.logoHeight/2;let nx=(ax-cx)/(shape.logoWidth/2),ny=(ay-cy)/(shape.logoHeight/2);const length=Math.hypot(nx,ny)||1;nx/=length;ny/=length;const reach=shape.logoWidth*(.12+power*.17);spark={ax,ay,bx:ax+nx*reach,by:ay+ny*reach,bow:(Math.random()-.5)*reach*.5,seed:1+Math.random()*60,born:time,life:.35+Math.random()*.35}}
+   if(power>.48&&Math.random()<power*.95){const i=Math.floor(Math.random()*shape.edges.length/2),ax=shape.edges[i*2],ay=shape.edges[i*2+1],cx=shape.pad+shape.logoWidth/2,cy=shape.pad+shape.logoHeight/2;let nx=(ax-cx)/(shape.logoWidth/2),ny=(ay-cy)/(shape.logoHeight/2);const length=Math.hypot(nx,ny)||1;nx/=length;ny/=length;const reach=shape.logoWidth*(ny>.35?.12+power*.1:.14+power*.2);spark={ax,ay,bx:ax+nx*reach,by:ay+ny*reach,bow:(Math.random()-.5)*reach*.5,seed:1+Math.random()*60,born:time,life:.35+Math.random()*.35}}
    else spark=spawnArc(shape,time,null);
    if(spark)sparks.push(spark)
   }
   for(let i=0;i<ARCS;i++){const p=sparks[i],o=i*4;if(!p){arcs[o+1]=0;continue}ends[o]=ox+p.ax*fit;ends[o+1]=oy+p.ay*fit;ends[o+2]=ox+p.bx*fit;ends[o+3]=oy+p.by*fit;arcs[o]=p.bow*fit;arcs[o+1]=Math.sin(Math.PI*Math.min(1,(time-p.born)/p.life))*presence;arcs[o+2]=p.seed}
-  uniforms.uTime.value=time;uniforms.uPresence.value=Math.sqrt(presence);uniforms.uIntensity.value=.25+power*power*1.1;uniforms.uGlow.value=.35+power*.55;uniforms.uThickness.value=.6+power*.6;uniforms.uStrands.value=1+Math.floor(power*4);uniforms.uBend.value=.16+power*power*.9;uniforms.uCrackle.value=.6+power*2;
+  uniforms.uTime.value=time;uniforms.uPresence.value=Math.sqrt(presence);uniforms.uIntensity.value=.3+power*power*1.35;uniforms.uGlow.value=.4+power*.65;uniforms.uThickness.value=.65+power*.7;uniforms.uStrands.value=1+Math.floor(power*4);uniforms.uBend.value=.16+power*power*.9;uniforms.uCrackle.value=.6+power*2;
   const ambient=Number(document.documentElement.style.getPropertyValue('--scene-dark'))||0;uniforms.uInk.value=1-ambient;renderer.render(scene,camera);
  },destroy(){observer.disconnect();field?.dispose();glow?.dispose();mesh.geometry.dispose();material.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove()}};
 }

@@ -32,7 +32,7 @@
 
 html #showcase[data-mode=reward]::before{background:#0a1018;backdrop-filter:blur(5px)}
 
-/* The selected theme stays saved; charge temporarily absorbs the scene light. */
+/* Start in light; manual theme control stays independent of charge. */
 main::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,#333733 5%,#222622 60%,#151815);opacity:var(--scene-dark,0);pointer-events:none;will-change:opacity}
 .toss,.toss.charging{color:#434741;background:linear-gradient(#fafaf8,#e5e7e3);border-color:#fff;box-shadow:0 4px 12px #424b3410,inset 0 -1px 2px #66705515}
 html[data-theme=dark] .toss,html[data-theme=dark] .toss.charging{color:#ecedea;background:linear-gradient(#464849,#2b2d2e);border-color:#5b5d5e;box-shadow:0 5px 14px #0005,inset 0 1px 1px #ffffff18}
@@ -48,8 +48,8 @@ html:not([data-intro=done]) .controls,html:not([data-intro=done]) #slammerTool,h
 #openPack{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(68vw,280px);height:55svh;border:0;background:transparent;cursor:grab;touch-action:none;-webkit-touch-callout:none;pointer-events:auto}
 #openPack:active{cursor:grabbing}#openPack:focus-visible{outline:1px solid #a1b4cd;outline-offset:12px;border-radius:8px}
 #packHint{position:absolute;left:50%;top:25%;transform:translate(-50%,-50%);width:64px;height:16px;filter:drop-shadow(0 0 4px #597ed8);pointer-events:none}
-#packHint svg{width:64px;height:16px;fill:none;stroke:#f6fbff;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;animation:tear-hint 1.9s ease-in-out infinite}
+#packHint svg{width:64px;height:16px;fill:none;stroke:#f6fbff;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;}
 #packIntro[data-opening=true] #packHint{display:none}#packIntro[data-waiting=true] #packHint{opacity:.5}
-@keyframes tear-hint{0%,100%{opacity:.35;transform:translateX(-8px)}55%{opacity:.9;transform:translateX(8px)}}
+
 @media(prefers-reduced-motion:reduce){#packHint svg{animation:none}.jelly-content{will-change:auto}.charge-fx{display:none}}
 button[data-jelly-ready=true]{position:relative}

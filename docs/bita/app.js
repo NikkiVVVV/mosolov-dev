@@ -1,20 +1,20 @@
-import {PHYSICS_RATE} from './physics-scale.js?v=20261113-pack17';
-import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-pack17';
-import {makeCapDeck} from './cap-deck.js?v=20261113-pack17';
+import {PHYSICS_RATE} from './physics-scale.js?v=20261113-flow18';
+import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-flow18';
+import {makeCapDeck} from './cap-deck.js?v=20261113-flow18';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-pack17';
-import {createShowcase} from './showcase.js?v=20261113-pack17';
-import {createChargeFeedback} from './charge-feedback.js?v=20261113-pack17';
-import {createJellyButtons} from './jelly-buttons.js?v=20261113-pack17';
-import {createPackIntro} from './pack-intro.js?v=20261113-pack17';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-flow18';
+import {createShowcase} from './showcase.js?v=20261113-flow18';
+import {createChargeFeedback} from './charge-feedback.js?v=20261113-flow18';
+import {createJellyButtons} from './jelly-buttons.js?v=20261113-flow18';
+import {createPackIntro} from './pack-intro.js?v=20261113-flow18';
 const CHARGE_MS=7000;
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
-let introFinished=false,atmosphere=Number(localStorage.getItem('bita-theme')==='dark');
+let introFinished=false,atmosphere=0;
 const jellyButtons=createJellyButtons(document.querySelectorAll('.controls button,#theme,#chooseSlammer'),{getThemeMix:()=>atmosphere});
 const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.VSMShadowMap;renderer.shadowMap.autoUpdate=false;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.92;stage.appendChild(renderer.domElement);
 const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-2,2,3,-3,1,24);
-const packIntro=createPackIntro({renderer,host:stage,getGameCamera:()=>camera,getEnvironment:()=>scene.environment});
+const packIntro=createPackIntro({renderer,host:stage,getEnvironment:()=>scene.environment});
 const hemi=new THREE.HemisphereLight(0xffffff,0xc2bcb0,1.6);scene.add(hemi);
 const key=new THREE.DirectionalLight(0xfffcf4,2.4);key.position.set(0,9,.25);key.castShadow=true;key.shadow.mapSize.set(innerWidth<=640?512:1024,innerWidth<=640?512:1024);Object.assign(key.shadow.camera,{left:-4.5,right:4.5,top:4.5,bottom:-4.5,near:.1,far:20});key.shadow.radius=1.5;key.shadow.blurSamples=8;key.shadow.normalBias=.002;key.shadow.bias=-.00003;scene.add(key);
 const fill=new THREE.DirectionalLight(0xdbe7ff,.65);fill.position.set(4,4,-3);scene.add(fill);
@@ -23,14 +23,14 @@ for(const [x,y,z,sx,sy,sz,p]of[[-4,4,3,2,7,1,4],[4,2,1,1,6,3,2],[0,7,-2,6,1,4,3]
 const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(studio,.025).texture;pmrem.dispose();studio.traverse(o=>{if(o.isMesh){o.geometry.dispose();o.material.dispose()}});
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.ShadowMaterial({opacity:.07,color:0x000000}));floor.rotation.x=-Math.PI/2;floor.position.y=-.005;floor.receiveShadow=true;scene.add(floor);
 let hasHit=false;const flexed=new Set();
-let dark=localStorage.getItem('bita-theme')==='dark';
+let dark=false;
 function applyTheme(){atmosphere=Number(dark);document.documentElement.style.setProperty('--scene-dark',atmosphere);document.documentElement.dataset.theme=dark?'dark':'light';$('theme').setAttribute('aria-pressed',String(dark));$('theme').setAttribute('aria-label',dark?'Включить светлую тему':'Включить тёмную тему');hemi.intensity=dark?.85:1.6;key.intensity=dark?3:2.4;key.position.set(dark?.15:0,9,.25);fill.intensity=dark?1.1:.65;floor.material.opacity=dark?.11:.07;document.querySelector('meta[name="theme-color"]').content=dark?'#191b1a':'#f8f8f6'}
-applyTheme();$('theme').onclick=async e=>{const change=()=>{dark=!dark;localStorage.setItem('bita-theme',dark?'dark':'light');applyTheme();renderer.shadowMap.needsUpdate=true;if(introFinished)renderer.render(scene,camera)};if(!document.startViewTransition||matchMedia('(prefers-reduced-motion:reduce)').matches)return change();const x=e.clientX,y=e.clientY,r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));const transition=document.startViewTransition(change);try{await transition.ready}catch{return}document.documentElement.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${r}px at ${x}px ${y}px)`]},{duration:480,easing:'ease-out',pseudoElement:'::view-transition-new(root)'})};
-function updateAtmosphere(dt,power){const t=clamp((power-.04)/.96,0,1),target=dark?1:t*t*(3-2*t);atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/(charge?.26:.6)));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.07,.11,atmosphere)}
+applyTheme();$('theme').onclick=async e=>{const change=()=>{dark=!dark;applyTheme();renderer.shadowMap.needsUpdate=true;if(introFinished)renderer.render(scene,camera)};if(!document.startViewTransition||matchMedia('(prefers-reduced-motion:reduce)').matches)return change();const x=e.clientX,y=e.clientY,r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));const transition=document.startViewTransition(change);try{await transition.ready}catch{return}document.documentElement.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${r}px at ${x}px ${y}px)`]},{duration:480,easing:'ease-out',pseudoElement:'::view-transition-new(root)'})};
+function updateAtmosphere(dt){const target=Number(dark);atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/.3));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.07,.11,atmosphere)}
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
-const manifest=await fetch('assets/caps/manifest.json?v=20261113-pack17').then(r=>r.json());
+const manifest=await fetch('assets/caps/manifest.json?v=20261113-flow18').then(r=>r.json());
 const imageCache=new Map();
-function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-pack17'}));return imageCache.get(path)}
+function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-flow18'}));return imageCache.get(path)}
 async function capImage(entry){const image=await loadImage(entry.file);if(!entry.imageRect)return image;const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');ctx.drawImage(image,...entry.imageRect,0,0,256,256);const result=new Image();result.src=c.toDataURL('image/png');await result.decode();return result}
 const images=Array(manifest.length),reverseImages=Array(manifest.length);
 await document.fonts.ready;
@@ -99,7 +99,7 @@ const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
 function resize(){renderer.setSize(stage.clientWidth,stage.clientHeight)}new ResizeObserver(resize).observe(stage);resize();
 const collection=[];
 try{const saved=JSON.parse(localStorage.getItem('bita-collection-v3')||'[]');for(const id of saved){const i=manifest.findIndex(e=>e.id===id);if(i>=0)collection.push(i)}}catch{}
-function controls(){const locked=!introFinished||!['ready','result'].includes(state)||performance.now()<assemblingUntil;const tool=$('slammerTool'),stowed=!['ready','charging'].includes(state);tool.hidden=false;tool.dataset.stowed=String(stowed);tool.inert=stowed;tool.setAttribute('aria-hidden',String(stowed));$('chooseSlammer').disabled=locked||Boolean(slammerMove);$('slammerSlot').disabled=locked||!slammerEnabled;$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=locked||Boolean(slammerMove)||count<=1;$('plus').disabled=locked||Boolean(slammerMove)||(count>=MAX_STACK||!readyDeck.length);strike.disabled=Boolean(slammerMove)||(locked&&state!=='charging')||(state==='ready'&&caps.some(c=>performance.now()-c.born<750));}
+function controls(){const locked=!introFinished||!['ready','result'].includes(state)||performance.now()<assemblingUntil;const tool=$('slammerTool'),stowed=!['ready','charging'].includes(state);tool.hidden=false;tool.dataset.stowed=String(stowed);tool.inert=stowed;tool.setAttribute('aria-hidden',String(stowed));$('chooseSlammer').disabled=locked||Boolean(slammerMove);$('slammerSlot').disabled=locked||!slammerEnabled;$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=locked||Boolean(slammerMove)||count<=1;$('plus').disabled=locked||Boolean(slammerMove)||(count>=MAX_STACK||!readyDeck.length);strike.disabled=Boolean(slammerMove)||(locked&&state!=='charging')||(state==='ready'&&caps.some(c=>performance.now()-c.born<600));}
 function renderCollection(){const fan=$('collectionFan');fan.replaceChildren();for(const i of collection.slice(-3)){const img=new Image();img.alt='';fan.append(img);ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{})}$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label','Открыть выбитые фишки');}
 function showCollection(){const grid=$('albumGrid');grid.replaceChildren();for(const i of collection){const img=new Image();img.alt=manifest[i].name;img.loading='lazy';ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{});const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`Рассмотреть ${manifest[i].name}`);b.append(img);b.onclick=async()=>{await ensureCap(i);$('album').close();showcase.inspect({index:i})};grid.append(b)}$('albumCount').textContent=collection.length;$('album').showModal()}
 $('collectionToggle').onclick=showCollection;$('closeAlbum').onclick=()=>$('album').close();$('album').onclick=e=>{if(e.target!==$('album'))return;const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()};renderCollection();
@@ -154,11 +154,11 @@ state='result';count=caps.filter(c=>!c.won).length;renderCollection();controls()
 let previous=performance.now(),acc=0,lastFrame=0;
 function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=state==='ready'||state==='result'||state==='inspection';if(idle&&!jellyButtons.active()&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.1);previous=now;const t=now/1000;
  showcase.update(now,dt);if(charge&&now-charge.start>=CHARGE_MS)overload();if(state==='ready')controls();
- updateAtmosphere(dt,charge?clamp((now-charge.start)/CHARGE_MS,0,1):0);jellyButtons.update(dt);chargeFeedback.update(now,dt);
+ updateAtmosphere(dt);jellyButtons.update(dt);chargeFeedback.update(now,dt);
  if(['ready','charging'].includes(state)){
   const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0;if(charge)setChargeVisual(p);
   for(const [i,c]of caps.entries()){
-   const age=(now-c.born)/750,progress=clamp(age,0,1),drop=1-progress,bounce=age>1?.018*Math.sin((age-1)*22)*Math.exp(-(age-1)*9):0,jitter=p*p*.052,bob=0;
+   const age=(now-c.born)/600,progress=clamp(age,0,1),drop=1-progress,bounce=age>1?.018*Math.sin((age-1)*22)*Math.exp(-(age-1)*9):0,jitter=p*p*.052,bob=0;
    const gap=capInsertionOffset(i,slammerSlot,slammerEnabled)+(slotOpened&&i>=slammerSlot?.14:0);c.gapOffset??=gap;c.gapOffset+=(gap-c.gapOffset)*(1-Math.exp(-dt*24));
    const x=c.position.x+drop*drop*1.6+Math.sin(t*56)*jitter,y=c.position.y+c.gapOffset+.8*(1-progress*progress)+bounce+bob+chargeLift(p)+Math.sin(t*65)*jitter*.7,z=c.position.z+Math.cos(t*61)*jitter*.6;
    let target=new THREE.Vector3(x,y,z);if(c.assemble){const a=clamp((now-c.assemble.start)/750,0,1),e=a*a*(3-2*a);target.lerpVectors(new THREE.Vector3(c.assemble.p.x,c.assemble.p.y,c.assemble.p.z),target,e);target.y+=Math.sin(a*Math.PI)*.12;if(a===1)c.assemble=null}c.body.setNextKinematicTranslation(target);const q=new THREE.Quaternion(c.rotation.x,c.rotation.y,c.rotation.z,c.rotation.w);if(jitter){const w=new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.sin(t*67)*jitter*.6,0,Math.cos(t*59)*jitter*.6));q.premultiply(w)}if(c.assemble){const a=clamp((now-c.assemble.start)/750,0,1);q.slerpQuaternions(c.assemble.q,q.clone(),a*a*(3-2*a))}c.body.setNextKinematicRotation(q);
@@ -181,7 +181,7 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  // velocities are restored immediately; this does not select winning sides.
  const displayPass=true,displaySaved=displayPass?pieces().filter(c=>!c.collected).map(c=>({body:c.body,p:c.body.translation()})):null;
  if(displaySaved)separateDiscs(world,pieces(),{stableOrder:true});
- for(const c of pieces()){const p=c.body.translation(),q=c.body.rotation();c.mesh.position.set(p.x,p.y,p.z);c.mesh.quaternion.set(q.x,q.y,q.z,q.w);c.mesh.visible=!c.collected}
+ for(const c of pieces()){const p=c.body.translation(),q=c.body.rotation();c.mesh.position.set(p.x,p.y,p.z);c.mesh.quaternion.set(q.x,q.y,q.z,q.w);c.mesh.visible=!c.collected&&(c.isSlammer||now>=c.born)}
  if(displaySaved){for(const {body,p}of displaySaved)if(body.translation().y!==p.y)body.setTranslation(p,false);world.propagateModifiedBodyPositionsToColliders()}
  if(state==='scattering'){const moving=pieces().some(c=>{const v=c.body.linvel(),w=c.body.angvel();return discIsMoving(c.body)});still=!moving&&physicsTime-impactAt>1/PHYSICS_RATE?still+dt:0;if(still>.5/PHYSICS_RATE)finish()}
  if(!pointers.size&&idle){orbitYaw+=orbitVelocity;orbitVelocity*=.87;if(state==='ready'&&Math.abs(orbitVelocity)<.0001)orbitYaw+=dt*.022}
@@ -212,6 +212,14 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  frame.shadowHeight=shadowHeight;frame.shadowAtmosphere=atmosphere;
  if(introFinished)renderer.render(scene,camera);
 }
-reset(5,false);requestAnimationFrame(frame);packIntro.setReady(caps.map(c=>c.mesh)).then(()=>{introFinished=true;controls();backgroundCaps()});
+reset(5,false);requestAnimationFrame(frame);packIntro.setReady(caps.map(c=>c.mesh)).then(()=>{
+ const now=performance.now();
+ for(const [i,c]of caps.entries()){
+  c.born=now+i*75;
+  const target={x:c.position.x+1.6,y:c.position.y+capInsertionOffset(i,slammerSlot,slammerEnabled)+.8,z:c.position.z};
+  c.body.setTranslation(target,true);c.body.setNextKinematicTranslation(target);c.mesh.position.copy(target);c.mesh.visible=i===0;
+ }
+ introFinished=true;renderer.shadowMap.needsUpdate=true;controls();backgroundCaps();
+});
 
 async function backgroundCaps(){while(true){await new Promise(r=>setTimeout(r,1500));if(!deck.length&&readyDeck.length<10)deck=makeCapDeck(manifest);if(deck.length){await loadBatch();controls()}}}

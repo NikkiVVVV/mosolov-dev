@@ -1,5 +1,5 @@
-import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-pack17';
-import {capProfile,slammerProfile} from './physical-profiles.js?v=20261113-pack17';
+import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-flow18';
+import {capProfile,slammerProfile} from './physical-profiles.js?v=20261113-flow18';
 import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
 export async function createWorld({extent=3.12}={}){
@@ -157,13 +157,13 @@ export function fanStack(bodies,power,contactConfirmed=false,released=null){
  const touches=contactConfirmed||p.y-support<.025||bodies.some(other=>other!==body&&body.collider(0).contactCollider(other.collider(0),.012));
  if(!touches||body.linvel().y>2.5*RATE)return;released?.add(body.collider(0).handle);
  const a=2*Math.atan2(q.z,q.x)+i*2.399963+p.x*7+p.z*11,dx=Math.cos(a),dz=Math.sin(a),mass=body.mass(),k=(.95+power*.45)*(body.bitaProfile?.flex??1);
- body.applyImpulseAtPoint({x:dx*mass*1.3*k*RATE,y:mass*(3.2*k*RATE-Math.min(0,body.linvel().y)),z:dz*mass*1.3*k*RATE},{x:p.x+dz*.42,y:p.y,z:p.z-dx*.42},true);body.applyTorqueImpulse({x:dz*mass*.65*k*RATE,y:0,z:-dx*mass*.65*k*RATE},true);affected++;
+ body.applyImpulseAtPoint({x:dx*mass*1.3*k*RATE,y:mass*(3.2*k*RATE-Math.min(0,body.linvel().y)),z:dz*mass*1.3*k*RATE},{x:p.x+dz*.42,y:p.y,z:p.z-dx*.42},true);body.applyTorqueImpulse({x:dz*mass*.82*k*RATE,y:0,z:-dx*mass*.82*k*RATE},true);affected++;
  });return affected;
 }
 // Kept for old callers; rigid contact handles the later tumbling.
 export function turnStack(){return 0}
 
-export function chargeLift(power){return .85*Math.max(0,Math.min(1,power))**2}
+export function chargeLift(power){return 1.5*Math.max(0,Math.min(1,power))**1.8}
 
 export const MAX_STACK=25;
 export const SLAMMER_HEIGHT=.08;
