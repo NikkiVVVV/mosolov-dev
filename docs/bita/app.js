@@ -1,8 +1,8 @@
-import {makeCapDeck} from './cap-deck.js?v=20261113-heat14';
+import {makeCapDeck} from './cap-deck.js?v=20261113-edge15';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-heat14';
-import {createShowcase} from './showcase.js?v=20261113-heat14';
-import {createChargeFeedback} from './charge-feedback.js?v=20261113-heat14';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-edge15';
+import {createShowcase} from './showcase.js?v=20261113-edge15';
+import {createChargeFeedback} from './charge-feedback.js?v=20261113-edge15';
 const CHARGE_MS=7000;
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
 const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
@@ -20,9 +20,9 @@ let dark=localStorage.getItem('bita-theme')==='dark';
 function applyTheme(){document.documentElement.dataset.theme=dark?'dark':'light';$('theme').setAttribute('aria-pressed',String(dark));$('theme').setAttribute('aria-label',dark?'Включить светлую тему':'Включить тёмную тему');hemi.intensity=dark?.85:1.6;key.intensity=dark?3:2.4;key.position.set(dark?.15:0,9,.25);fill.intensity=dark?1.1:.65;floor.material.opacity=dark?.35:.20;document.querySelector('meta[name="theme-color"]').content=dark?'#191b1a':'#f8f8f6'}
 applyTheme();$('theme').onclick=async e=>{const change=()=>{dark=!dark;localStorage.setItem('bita-theme',dark?'dark':'light');applyTheme();renderer.render(scene,camera)};if(!document.startViewTransition||matchMedia('(prefers-reduced-motion:reduce)').matches)return change();const x=e.clientX,y=e.clientY,r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));const transition=document.startViewTransition(change);try{await transition.ready}catch{return}document.documentElement.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${r}px at ${x}px ${y}px)`]},{duration:480,easing:'ease-out',pseudoElement:'::view-transition-new(root)'})};
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
-const manifest=await fetch('assets/caps/manifest.json?v=20261113-heat14').then(r=>r.json());
+const manifest=await fetch('assets/caps/manifest.json?v=20261113-edge15').then(r=>r.json());
 const imageCache=new Map();
-function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-heat14'}));return imageCache.get(path)}
+function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-edge15'}));return imageCache.get(path)}
 async function capImage(entry){const image=await loadImage(entry.file);if(!entry.imageRect)return image;const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');ctx.drawImage(image,...entry.imageRect,0,0,256,256);const result=new Image();result.src=c.toDataURL('image/png');await result.decode();return result}
 const images=Array(manifest.length),reverseImages=Array(manifest.length);
 await document.fonts.ready;
@@ -159,7 +159,7 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
   if(!overloaded&&state==='scattering'&&slammerContact&&slammerAt===-1)slammerAt=physicsTime;if(slammerAt>0&&physicsTime>=slammerAt){slammerResponse(caps.map(c=>c.body),slammer.body,slammerSlot,caps[0].power);slammerAt=-2}
   if(edgeAt>=0&&physicsTime>=edgeAt){fanStack(caps.map(c=>c.body),caps[0].power);edgeAt=-1}
   if(twistAt>=0&&physicsTime>=twistAt){turnStack(caps.map(c=>c.body),caps[0].power);twistAt=-1}
-  if(state==='scattering'){const elapsed=physicsTime-impactAt;if(!overloaded&&elapsed<.12)fanStack(caps.map(c=>c.body),caps[0].power,false,flexed);for(const c of pieces()){enforceTable(c.body,c.isSlammer?SLAMMER_RADIUS:.53,c.isSlammer?SLAMMER_HEIGHT:(c.height??STACK_DISC_HEIGHT));sleepRestingBody(c.body,c.rest,elapsed,1/240);if(elapsed>4){c.body.setAngularDamping(4);c.body.setLinearDamping(1.8)}}sleepRestingGroup(pieces().map(c=>c.body),groupRest,elapsed,1/240)}acc-=1/240;
+  if(state==='scattering'){const elapsed=physicsTime-impactAt;if(!overloaded&&elapsed<.12)fanStack(caps.map(c=>c.body),caps[0].power,false,flexed);for(const c of pieces()){enforceTable(c.body,c.isSlammer?SLAMMER_RADIUS:.53,c.isSlammer?SLAMMER_HEIGHT:(c.height??STACK_DISC_HEIGHT));sleepRestingBody(c.body,c.rest,elapsed,1/240);if(elapsed>4){c.body.setAngularDamping(discCanRest(c.body)?4:1.6);c.body.setLinearDamping(1.8)}}sleepRestingGroup(pieces().map(c=>c.body),groupRest,elapsed,1/240)}acc-=1/240;
  }
  // Keep displayed faces disjoint between physics ticks. The physics poses and
  // velocities are restored immediately; this does not select winning sides.
@@ -167,7 +167,7 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  if(displaySaved)separateDiscs(world,pieces(),{stableOrder:true});
  for(const c of pieces()){const p=c.body.translation(),q=c.body.rotation();c.mesh.position.set(p.x,p.y,p.z);c.mesh.quaternion.set(q.x,q.y,q.z,q.w);c.mesh.visible=!c.collected}
  if(displaySaved){for(const {body,p}of displaySaved)if(body.translation().y!==p.y)body.setTranslation(p,false);world.propagateModifiedBodyPositionsToColliders()}
- if(state==='scattering'){const moving=pieces().some(c=>{const v=c.body.linvel(),w=c.body.angvel();return Math.hypot(v.x,v.y,v.z)>.2||Math.hypot(w.x,w.y,w.z)>1.3});still=!moving&&physicsTime-impactAt>1?still+dt:0;if(still>.5)finish()}
+ if(state==='scattering'){const moving=pieces().some(c=>{const v=c.body.linvel(),w=c.body.angvel();return !discCanRest(c.body)||Math.hypot(v.x,v.y,v.z)>.2||Math.hypot(w.x,w.y,w.z)>1.3});still=!moving&&physicsTime-impactAt>1?still+dt:0;if(still>.5)finish()}
  if(!pointers.size&&idle){orbitYaw+=orbitVelocity;orbitVelocity*=.87;if(state==='ready'&&Math.abs(orbitVelocity)<.0001)orbitYaw+=dt*.022}
  const spreading=['scattering','inspection','collecting','result'].includes(state),air=state==='airborne';
  const progress=spreading?clamp((physicsTime-impactAt)/1.35,0,1):0,smooth=progress*progress*(3-2*progress);

@@ -78,3 +78,6 @@ Automatic sequential prizes, header icon without count, larger bottom-sheet imag
 
 ## 2026-11-12 · /bita v8
 118 designs: added selected Batman, Power Rangers, Digimon, Street Fighter II and Mad Monster Light (The Mask excluded). WebP copies and shared reverse textures; originals retained locally. Contact tolerances, cylinder shapes and CCD refined; smaller flight timestep, reduced idle stepping, speed limits. Non-intersecting display poses with restoration of physical trajectories, velocity and orientation; residual separation before freezing result. Added contact and display regressions up to 40 discs. Browser connection unavailable during this update; numerical tests and public file verification used.
+
+## /bita · 2026-11-13, v15
+Фишки не фиксируются на ребре: проверка наклона перед завершением раунда и sleep, сопротивление качению, выход из подпирания границей. Наборы и сохранения прежние. Проверены 27 стартов на ребре и четыре у границ, 24 удара 4–25, смешанные материалы и восемь слабых ударов. Версия кэша 20261113-edge15. Концепты новых упаковок остаются только в исходном проекте.

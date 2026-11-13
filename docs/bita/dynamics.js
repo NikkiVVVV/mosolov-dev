@@ -5,7 +5,7 @@ export async function createWorld({extent=3.12}={}){
  await RAPIER.init();
  const world=new RAPIER.World({x:0,y:-12,z:0});world.timestep=1/240;world.numSolverIterations=16;world.integrationParameters.maxCcdSubsteps=8;world.integrationParameters.normalizedAllowedLinearError=.00015;world.integrationParameters.normalizedPredictionDistance=.003;
  world.tableColliderHandle=world.createCollider(RAPIER.ColliderDesc.cuboid(4,.5,4).setTranslation(0,-.5,0).setFriction(.55).setRestitution(.18)).handle;
- for(const [x,z,hx,hz] of [[-extent,0,.1,4],[extent,0,.1,4],[0,-extent,4,.1],[0,extent,4,.1]])world.createCollider(RAPIER.ColliderDesc.cuboid(hx,10,hz).setTranslation(x,9.9,z).setRestitution(.28));
+ world.bitaWalls=[];for(const [x,z,hx,hz] of [[-extent,0,.1,4],[extent,0,.1,4],[0,-extent,4,.1],[0,extent,4,.1]]){const collider=world.createCollider(RAPIER.ColliderDesc.cuboid(hx,10,hz).setTranslation(x,9.9,z).setRestitution(.28));world.bitaWalls.push({collider,x:-Math.sign(x),z:-Math.sign(z)})}
  return world;
 }
 export function discCollider(radius,height){
@@ -43,13 +43,50 @@ export function releaseTwist(bodies,power){
  });
 }
 export function faceUp(body){const q=body.rotation();return 1-2*(q.x*q.x+q.z*q.z)>.65}
+// A stationary edge is not a completed landing. Moderate slopes over other
+// caps are allowed; a nearly vertical disc must keep simulating.
+export function discCanRest(body){const q=body.rotation();return Math.abs(1-2*(q.x*q.x+q.z*q.z))>=.94}
 // Thin discs can keep a tiny contact wobble in a rigid solver. Sleep only when
 // their measured pose stays still for half a second, never at a flight apex.
 export function sleepRestingBody(body,record,elapsed,dt){
+ if(!body.isDynamic())return;
+ const pose=body.rotation(),ny=1-2*(pose.x*pose.x+pose.z*pose.z),v=body.linvel(),spin=body.angvel();
+ if(!discCanRest(body)){
+  if(body.isSleeping())body.wakeUp();
+  const shape=body.collider(0).shape,p=body.translation(),support=Math.abs(ny)*shape.halfHeight+shape.radius*Math.sqrt(Math.max(0,1-ny*ny));
+  // A thin cardboard/plastic rim loses energy as it rolls. An ideal rigid
+  // cylinder has no rolling resistance and can otherwise travel indefinitely.
+  const onTable=p.y-support<.02;
+  body.setLinearDamping(onTable?2.4:(body.bitaProfile?.linearDamping??.35));
+  body.setAngularDamping(onTable?1.6:(body.bitaProfile?.angularDamping??.8));
+  const nx=2*(pose.x*pose.y-pose.w*pose.z),nz=2*(pose.y*pose.z+pose.w*pose.x),rate=spin.z*nx-spin.x*nz;
+  if(Math.abs(rate)>.015)record.lastTilt=rate;
+  record.wallCooldown=Math.max(0,(record.wallCooldown||0)-dt);
+  const wall=body.bitaWalls?.find(w=>{const c=body.collider(0).contactCollider(w.collider,.008);return c&&c.distance<.006});
+  if(wall&&elapsed>.35&&!record.wallCooldown&&v.x*wall.x+v.z*wall.z<.1){
+   body.applyImpulseAtPoint({x:wall.x*body.mass()*2,y:0,z:wall.z*body.mass()*2},{x:p.x,y:p.y+.15,z:p.z},true);
+   record.wallCooldown=.45;
+  }
+  const slow=Math.hypot(v.x,v.y,v.z)<.22&&Math.hypot(spin.x,spin.y,spin.z)<.85;
+  record.edgeTime=elapsed>.35&&slow?(record.edgeTime||0)+dt:0;
+  if(record.edgeTime>.16){
+   // Real cardboard rims are not ideal cylinders. A tiny contact disturbance
+   // breaks the solver's exact edge balance, then gravity completes the fall.
+   if(!wall){
+    const sign=Math.abs(ny)>.02?Math.sign(ny):Math.sign(record.lastTilt||ny||Math.sin(nx*12.9+nz*7.3+body.mass()*1000)||1);
+    const impulse=body.mass()*.035;
+    body.applyTorqueImpulse({x:-nz*sign*impulse,y:0,z:nx*sign*impulse},true);
+    body.applyImpulse({x:-nx*sign*body.mass()*.1,y:0,z:-nz*sign*body.mass()*.1},true);
+   }
+   record.edgeTime=0;
+  }
+  record.time=0;record.p=null;return;
+ }
+ record.edgeTime=0;
  if(elapsed<2||body.isSleeping())return;
  record.time=(record.time||0)+dt;
  if(record.time<.5)return;
- record.time=0;const p=body.translation(),q=body.rotation(),v=body.linvel();
+ record.time=0;const p=body.translation(),q=body.rotation();
  if(record.p){
   const distance=Math.hypot(p.x-record.p.x,p.y-record.p.y,p.z-record.p.z);
   const dot=Math.min(1,Math.abs(q.x*record.q.x+q.y*record.q.y+q.z*record.q.z+q.w*record.q.w));
@@ -74,7 +111,7 @@ export function sleepRestingGroup(bodies,record,elapsed,dt){
  const stable=record.poses&&poses.every(({p,q},i)=>{
   const old=record.poses[i],v=bodies[i].linvel();
   const dot=Math.min(1,Math.abs(q.x*old.q.x+q.y*old.q.y+q.z*old.q.z+q.w*old.q.w));
-  return p.y>.001&&p.y<1&&Math.hypot(p.x-old.p.x,p.y-old.p.y,p.z-old.p.z)<.07&&2*Math.acos(dot)<.24&&Math.hypot(v.x,v.y,v.z)<.65;
+  return discCanRest(bodies[i])&&p.y>.001&&p.y<1&&Math.hypot(p.x-old.p.x,p.y-old.p.y,p.z-old.p.z)<.07&&2*Math.acos(dot)<.24&&Math.hypot(v.x,v.y,v.z)<.65;
  });
  record.poses=poses;if(stable)bodies.forEach(b=>b.sleep());return Boolean(stable);
 }
@@ -84,7 +121,7 @@ export const HOVER_HEIGHT=0;
 export const STACK_LAYER_STEP=.034;
 export function createStackBody(world,index,random=Math.random,material='cardboard',id=index){
  const profile=capProfile(material,id),height=profile.height;
- const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setCcdEnabled(true).setSoftCcdPrediction(.12));
+ const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setCanSleep(false).setCcdEnabled(true).setSoftCcdPrediction(.12));
  world.createCollider(discCollider(.53,height).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setContactSkin(.0015).setMass(profile.mass).setFriction(profile.friction).setRestitution(profile.restitution),body);
  const x=[0,.09,-.065,.055][index%4]+(random()-.5)*.055,z=[0,-.045,.055,-.025][index%4]+(random()-.5)*.055;
  const ax=Math.PI+(random()-.5)*.008,ay=random()*Math.PI*2,az=(random()-.5)*.008;
@@ -92,7 +129,7 @@ export function createStackBody(world,index,random=Math.random,material='cardboa
  const rotation={x:s1*c2*c3+c1*s2*s3,y:c1*s2*c3-s1*c2*s3,z:c1*c2*s3+s1*s2*c3,w:c1*c2*c3-s1*s2*s3};
  const position={x,y:HOVER_HEIGHT+.014+index*STACK_LAYER_STEP,z};
  body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased,true);body.setTranslation(position,true);body.setRotation(rotation,true);
- body.bitaProfile=profile;return {body,position,rotation,height,profile};
+ body.bitaProfile=profile;body.bitaWalls=world.bitaWalls;return {body,position,rotation,height,profile};
 }
 export function throwStack(bodies,power){
  for(const [i,body] of bodies.entries()){
@@ -134,9 +171,9 @@ export function slammerY(slot){return HOVER_HEIGHT+SLAMMER_HEIGHT/2+.004+slot*ST
 export function capInsertionOffset(index,slot,enabled=true){return enabled&&index>=slot?SLAMMER_HEIGHT+.018:0}
 export function createSlammerBody(world,slot,design='chupa-blue'){
  const profile=slammerProfile(design);
- const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setTranslation(0,slammerY(slot),0).setCcdEnabled(true).setSoftCcdPrediction(.1));
+ const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setCanSleep(false).setTranslation(0,slammerY(slot),0).setCcdEnabled(true).setSoftCcdPrediction(.1));
  const collider=world.createCollider(discCollider(SLAMMER_RADIUS,SLAMMER_HEIGHT).setMass(profile.mass).setFriction(profile.friction).setRestitution(profile.restitution).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS),body);
- body.bitaProfile=profile;return {body,collider,profile,position:{x:0,y:slammerY(slot),z:0},rotation:{x:0,y:0,z:0,w:1}};
+ body.bitaProfile=profile;body.bitaWalls=world.bitaWalls;return {body,collider,profile,position:{x:0,y:slammerY(slot),z:0},rotation:{x:0,y:0,z:0,w:1}};
 }
 export function slammerWeights(count,slot){
  if(slot>=count)return Array(count).fill(0);
