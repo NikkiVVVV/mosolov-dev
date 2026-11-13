@@ -1,0 +1,5 @@
+IBM Plex Mono — Medium 500
+https://github.com/IBM/plex
+https://github.com/google/fonts/tree/main/ofl/ibmplexmono
+SIL Open Font License 1.1; original OFL.txt included.
+Downloaded 2026-11-13.

@@ -1,5 +1,5 @@
-import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-glass19';
-import {capProfile,slammerProfile} from './physical-profiles.js?v=20261113-glass19';
+import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-arcade22';
+import {capProfile,slammerProfile} from './physical-profiles.js?v=20261113-arcade22';
 import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
 export async function createWorld({extent=3.12}={}){
@@ -157,7 +157,7 @@ export function fanStack(bodies,power,contactConfirmed=false,released=null){
  const touches=contactConfirmed||p.y-support<.025||bodies.some(other=>other!==body&&body.collider(0).contactCollider(other.collider(0),.012));
  if(!touches||body.linvel().y>2.5*RATE)return;released?.add(body.collider(0).handle);
  const a=2*Math.atan2(q.z,q.x)+i*2.399963+p.x*7+p.z*11,dx=Math.cos(a),dz=Math.sin(a),mass=body.mass(),k=(.95+power*.45)*(body.bitaProfile?.flex??1);
- body.applyImpulseAtPoint({x:dx*mass*1.3*k*RATE,y:mass*(3.2*k*RATE-Math.min(0,body.linvel().y)),z:dz*mass*1.3*k*RATE},{x:p.x+dz*.42,y:p.y,z:p.z-dx*.42},true);body.applyTorqueImpulse({x:dz*mass*.82*k*RATE,y:0,z:-dx*mass*.82*k*RATE},true);affected++;
+ body.applyImpulseAtPoint({x:dx*mass*1.3*k*RATE,y:mass*(4.2*k*RATE-Math.min(0,body.linvel().y)),z:dz*mass*1.3*k*RATE},{x:p.x+dz*.30,y:p.y,z:p.z-dx*.30},true);body.applyTorqueImpulse({x:dz*mass*.65*k*RATE,y:0,z:-dx*mass*.65*k*RATE},true);affected++;
  });return affected;
 }
 // Kept for old callers; rigid contact handles the later tumbling.
@@ -203,6 +203,6 @@ export function separateDiscs(world,entries,{stableOrder=false}={}){
  }
  world.propagateModifiedBodyPositionsToColliders();return corrections;
 }
-export function limitDiscSpeed(body){const w=body.angvel(),spin=Math.hypot(w.x,w.y,w.z);if(spin>36*RATE)body.setAngvel({x:w.x*36*RATE/spin,y:w.y*36*RATE/spin,z:w.z*36*RATE/spin},false);const v=body.linvel(),speed=Math.hypot(v.x,v.y,v.z);if(speed>12*RATE)body.setLinvel({x:v.x*12*RATE/speed,y:v.y*12*RATE/speed,z:v.z*12*RATE/speed},false)}
+export function limitDiscSpeed(body){const w=body.angvel(),spin=Math.hypot(w.x,w.y,w.z);if(spin>48)body.setAngvel({x:w.x*48/spin,y:w.y*48/spin,z:w.z*48/spin},false);const v=body.linvel(),speed=Math.hypot(v.x,v.y,v.z);if(speed>12*RATE)body.setLinvel({x:v.x*12*RATE/speed,y:v.y*12*RATE/speed,z:v.z*12*RATE/speed},false)}
 
 export function discIsMoving(body){const v=body.linvel(),w=body.angvel();return !discCanRest(body)||Math.hypot(v.x,v.y,v.z)>.2*RATE||Math.hypot(w.x,w.y,w.z)>1.3*RATE}

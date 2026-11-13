@@ -10,10 +10,10 @@ export function createTableDots(scene){
    void main(){
     vec2 cell=(fract(vTable/.28+.5)-.5)*.28;
     float distanceToDot=length(cell),aa=max(fwidth(distanceToDot),.0001);
-    float dotAlpha=1.0-smoothstep(.007-aa,.007+aa,distanceToDot);
+    float dotAlpha=1.0-smoothstep(.010-aa,.010+aa,distanceToDot);
     float fade=1.0-smoothstep(4.0,9.0,length(vTable));
     vec3 ink=mix(vec3(.38,.40,.43),vec3(.40,.44,.53),uDark);
-    gl_FragColor=vec4(ink,dotAlpha*fade*mix(.16,.14,uDark)*uPresence);
+    gl_FragColor=vec4(ink,dotAlpha*fade*mix(.27,.22,uDark)*uPresence);
    }`,
   transparent:true,depthWrite:false,toneMapped:false
  });

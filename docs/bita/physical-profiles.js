@@ -1,4 +1,4 @@
-import {PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-glass19';
+import {PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-arcade22';
 // Stable differences between physical objects, never between winning sides.
 export function capProfile(material='cardboard',id='default'){
  let hash=2166136261;for(const c of String(id))hash=Math.imul(hash^c.charCodeAt(0),16777619)>>>0;

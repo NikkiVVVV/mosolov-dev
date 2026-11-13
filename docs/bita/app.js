@@ -1,13 +1,13 @@
-import {createTableDots} from './table-dots.js?v=20261113-table21';
-import {PHYSICS_RATE} from './physics-scale.js?v=20261113-table21';
-import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-table21';
-import {makeCapDeck} from './cap-deck.js?v=20261113-table21';
+import {createTableDots} from './table-dots.js?v=20261113-arcade22';
+import {PHYSICS_RATE} from './physics-scale.js?v=20261113-arcade22';
+import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-arcade22';
+import {makeCapDeck} from './cap-deck.js?v=20261113-arcade22';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-table21';
-import {createShowcase} from './showcase.js?v=20261113-table21';
-import {createChargeFeedback} from './charge-feedback.js?v=20261113-table21';
-import {createJellyButtons} from './jelly-buttons.js?v=20261113-table21';
-import {createPackIntro} from './pack-intro.js?v=20261113-table21';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-arcade22';
+import {createShowcase} from './showcase.js?v=20261113-arcade22';
+import {createChargeFeedback} from './charge-feedback.js?v=20261113-arcade22';
+import {createJellyButtons} from './jelly-buttons.js?v=20261113-arcade22';
+import {createPackIntro} from './pack-intro.js?v=20261113-arcade22';
 const CHARGE_MS=7000;
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
 let introFinished=false,atmosphere=0;
@@ -29,12 +29,12 @@ document.documentElement.dataset.theme='light';
 document.querySelector('meta[name="theme-color"]').content='#f1f1ee';
 function updateAtmosphere(dt){const elapsed=charge?performance.now()-charge.start:0,t=clamp(elapsed/2400,0,1),target=t**.72;atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/(charge?.12:.4)));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.07,.11,atmosphere)}
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
-const manifest=await fetch('assets/caps/manifest.json?v=20261113-table21').then(r=>r.json());
+const manifest=await fetch('assets/caps/manifest.json?v=20261113-arcade22').then(r=>r.json());
 const imageCache=new Map();
-function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-table21'}));return imageCache.get(path)}
+function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-arcade22'}));return imageCache.get(path)}
 async function capImage(entry){const image=await loadImage(entry.file);if(!entry.imageRect)return image;const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');ctx.drawImage(image,...entry.imageRect,0,0,256,256);const result=new Image();result.src=c.toDataURL('image/png');await result.decode();return result}
 const images=Array(manifest.length),reverseImages=Array(manifest.length);
-await Promise.all([document.fonts.load('400 24px "Golos Text"'),document.fonts.load('500 24px "Golos Text"'),document.fonts.load('600 18px "Manrope"')]);
+await Promise.all([document.fonts.load('400 24px "Golos Text"'),document.fonts.load('500 24px "Golos Text"'),document.fonts.load('500 18px "IBM Plex Mono"')]);
 await document.fonts.ready;
 function arcText(c,text,r,y,spacing){c.save();c.translate(256,y);c.fillStyle='#fff8df';c.font='500 43px "Golos Text",sans-serif';c.textAlign='center';for(let i=0;i<text.length;i++){c.save();c.rotate((i-(text.length-1)/2)*spacing);c.fillText(text[i],0,-r);c.restore()}c.restore()}
 function backTexture(entry,i){if(entry.series==='batman')return texture(c=>{c.fillStyle='#26343e';c.fillRect(0,0,512,512);c.strokeStyle='#d2b55c';c.lineWidth=6;c.beginPath();c.ellipse(256,256,194,88,0,0,Math.PI*2);c.stroke();c.fillStyle='#dfc96b';c.font='500 57px "Golos Text"';c.textAlign='center';c.textBaseline='middle';c.fillText('BATMAN',256,260)});if(entry.blankBack||entry.series==='bakugan-roks'||entry.series==='simpsons-2006')return texture(c=>{
@@ -92,7 +92,7 @@ for(let i=0;i<slammerManifest.length;i++){const b=document.createElement('button
 $('closeSlammer').onclick=()=>$('slammerPicker').close();
 
 let overloaded=false,assemblingUntil=0,reframeUntil=0,lastPower=0,resetQueued=false;
-function setStrikeLabel(text){strike.setAttribute('aria-label',text==='Restack'?'Restack. Gather the caps':'Strike. Hold for a stronger strike');const label=$('strikeLabel');if(label.textContent===text)return;label.textContent=text;label.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'})}
+function setStrikeLabel(text){strike.setAttribute('aria-label',text==='restack'?'restack. Gather the caps':'strike. Hold for a stronger strike');const label=$('strikeLabel');if(label.textContent===text)return;label.textContent=text;label.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'})}
 let caps=[],count=5,state='ready',charge=null,physicsTime=0,flightStart=0,impactAt=0,impactElevation=.43,edgeAt=-1,twistAt=-1,groupRest={},still=0;
 let orbitYaw=-.18,orbitElevation=.43,orbitVelocity=0,viewWidth=2.65,viewElevation=.43,viewTarget=new THREE.Vector3(0,.18,0),viewYaw=-.18;
 function nextCap(){return readyDeck.shift()}
@@ -108,7 +108,7 @@ function showCollection(){const grid=$('albumGrid');grid.replaceChildren();for(c
 $('collectionToggle').onclick=showCollection;$('closeAlbum').onclick=()=>$('album').close();$('album').onclick=e=>{if(e.target!==$('album'))return;const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()};renderCollection();
 function addCap(drop=true,chosen=null){const i=caps.length,index=chosen??nextCap();if(!Number.isInteger(index)||!images[index]||!frontMats[index].map)return null;const physical=createStackBody(world,i,Math.random,manifest[index].material,manifest[index].id);const item={...physical,index,mesh:makeCap(index,i*.91),born:drop?performance.now():-10000,rest:{},won:false};caps.push(item);count=caps.length;if(drop){item.body.setTranslation({x:1.6,y:physical.position.y+.8,z:physical.position.z},true);item.body.setRotation(physical.rotation,true)}return item}
 function removeCap(c){scene.remove(c.mesh);c.mesh.traverse(o=>{if(o.isMesh)o.geometry.dispose()});world.removeRigidBody(c.body)}
-function reset(n=count,drop=true,indices=null){if(!indices&&!readyDeck.length){if(!resetQueued){resetQueued=true;setTimeout(()=>{resetQueued=false;reset(n,drop,indices)},300)}return}caps.forEach(removeCap);caps=[];count=clamp(n||5,1,MAX_STACK);hasHit=false;flexed.clear();overloaded=false;setStrikeLabel('Strike');state='ready';stage.setAttribute('aria-label','Drag to rotate the stack');$('announcer').textContent='';$('markers').replaceChildren();edgeAt=twistAt=-1;groupRest={};still=0;const desired=indices?count:Math.min(count,readyDeck.length);for(let i=0;i<desired;i++){const item=addCap(drop,indices?.[i]);if(drop&&item)item.born=performance.now()+i*70}count=caps.length;setupSlammer();renderCollection();controls()}
+function reset(n=count,drop=true,indices=null){if(!indices&&!readyDeck.length){if(!resetQueued){resetQueued=true;setTimeout(()=>{resetQueued=false;reset(n,drop,indices)},300)}return}caps.forEach(removeCap);caps=[];count=clamp(n||5,1,MAX_STACK);hasHit=false;flexed.clear();overloaded=false;setStrikeLabel('strike');state='ready';stage.setAttribute('aria-label','Drag to rotate the stack');$('announcer').textContent='';$('markers').replaceChildren();edgeAt=twistAt=-1;groupRest={};still=0;const desired=indices?count:Math.min(count,readyDeck.length);for(let i=0;i<desired;i++){const item=addCap(drop,indices?.[i]);if(drop&&item)item.born=performance.now()+i*70}count=caps.length;setupSlammer();renderCollection();controls()}
 function restackRemaining(drop=true){const remaining=caps.filter(c=>!c.won),indices=remaining.map(c=>c.index),saved=new Map(remaining.map(c=>[c.index,{p:{...c.mesh.position},q:c.mesh.quaternion.clone()}])),oldBit=slammer?{p:{...slammer.mesh.position},q:slammer.mesh.quaternion.clone()}:null;reset(indices.length||5,false,indices.length?indices:null);const now=performance.now();assemblingUntil=now+750;reframeUntil=now+900;lastPower=0;for(const c of caps){const from=saved.get(c.index);if(from)c.assemble={...from,start:now}}if(slammer&&oldBit)slammer.assemble={...oldBit,start:now};controls()}
 // Queue presses during a strike/reveal; keep native +/- controls responsive.
 let pendingAdjustment=0,adjustmentLoading=false;
@@ -146,7 +146,7 @@ function cancel(){if(!charge)return;charge=null;state='ready';strike.classList.r
 const chargeFeedback=createChargeFeedback(strike);
 function setChargeVisual(p){chargeFeedback.setPower(Math.min(1,p*CHARGE_MS/2000))}
 function release(){if(!charge)return;if(performance.now()-charge.start>=CHARGE_MS)return overload();const power=clamp((performance.now()-charge.start)/CHARGE_MS,.15,1);lastPower=power;charge=null;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;still=0;groupRest={};slammerContact=false;slammerAt=-1;strikeStackDown(pieces().map(c=>c.body),power);pieces().forEach(c=>{c.power=power;c.rest={}});controls()}
-function overload(){if(!charge)return;lastPower=1;charge=null;overloaded=true;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;groupRest={};still=0;slammerContact=false;slammerAt=-2;strikeStackDown(pieces().map(c=>c.body),.1);pieces().forEach((c,i)=>{const angle=i*2.399963;c.power=.1;c.rest={};c.body.setLinvel({x:Math.cos(angle)*(1.6+i*.02)*PHYSICS_RATE,y:-.7*PHYSICS_RATE,z:Math.sin(angle)*(1.6+i*.02)*PHYSICS_RATE},true);c.body.setAngvel({x:Math.cos(angle)*3*PHYSICS_RATE,y:Math.sin(angle)*2*PHYSICS_RATE,z:Math.sin(angle)*3*PHYSICS_RATE},true)});setStrikeLabel('Restack');controls()}
+function overload(){if(!charge)return;lastPower=1;charge=null;overloaded=true;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;groupRest={};still=0;slammerContact=false;slammerAt=-2;strikeStackDown(pieces().map(c=>c.body),.1);pieces().forEach((c,i)=>{const angle=i*2.399963;c.power=.1;c.rest={};c.body.setLinvel({x:Math.cos(angle)*(1.6+i*.02)*PHYSICS_RATE,y:-.7*PHYSICS_RATE,z:Math.sin(angle)*(1.6+i*.02)*PHYSICS_RATE},true);c.body.setAngvel({x:Math.cos(angle)*3*PHYSICS_RATE,y:Math.sin(angle)*2*PHYSICS_RATE,z:Math.sin(angle)*3*PHYSICS_RATE},true)});setStrikeLabel('restack');controls()}
 strike.addEventListener('pointerdown',begin);strike.addEventListener('pointerup',release);strike.addEventListener('pointercancel',cancel);
 strike.addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)&&!e.repeat){e.preventDefault();begin(e)}});strike.addEventListener('keyup',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();release()}});window.addEventListener('blur',cancel);
 const pointers=new Map();let lastGesture=null,dragging=null;
@@ -168,10 +168,10 @@ renderer.domElement.addEventListener('pointermove',e=>{
 });
 function endGesture(e){if(dragging?.pointerId===e.pointerId){const c=dragging.cap,p=c.body.translation();if(dragging.moved){const support=supportHeight(c),others=pieces().filter(o=>o!==c&&!o.collected&&Math.hypot(o.body.translation().x-p.x,o.body.translation().z-p.z)<1.12);const y=Math.max(support,...others.map(o=>o.body.translation().y+supportHeight(o)+support+.002));c.body.setTranslation({x:p.x,y,z:p.z},true)}parkBody(c.body);dragging=null;renderer.shadowMap.needsUpdate=true;}pointers.delete(e.pointerId);if(!pointers.size)lastGesture=null;}
 renderer.domElement.addEventListener('pointerup',endGesture);renderer.domElement.addEventListener('pointercancel',endGesture);
-function impact(plastic=false){if(state!=='airborne')return;hasHit=true;setStrikeLabel('Restack');state='scattering';renderCollection();impactAt=physicsTime;impactElevation=viewElevation;edgeAt=-1;twistAt=-1;const p=caps[0].power;if(!overloaded)fanStack(caps.map(c=>c.body),p,false,flexed);sound(p,plastic);lastMaterialSound=physicsTime;navigator.vibrate?.(12)}
+function impact(plastic=false){if(state!=='airborne')return;hasHit=true;setStrikeLabel('restack');state='scattering';renderCollection();impactAt=physicsTime;impactElevation=viewElevation;edgeAt=-1;twistAt=-1;const p=caps[0].power;if(!overloaded)fanStack(caps.map(c=>c.body),p,false,flexed);sound(p,plastic);lastMaterialSound=physicsTime;navigator.vibrate?.(12)}
 function parkBody(body){const p=body.translation(),q=body.rotation();body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased,true);body.setTranslation(p,true);body.setRotation(q,true);body.setNextKinematicTranslation(p);body.setNextKinematicRotation(q)}
 function projectCap(c){return c.mesh.position.clone().project(camera)}
-function finish(){separateDiscs(world,pieces());stage.setAttribute('aria-label','Drag caps across the table');pieces().forEach(c=>{c.won=!overloaded&&!c.isSlammer&&faceUp(c.body);parkBody(c.body)});const won=caps.filter(c=>c.won).sort((a,b)=>projectCap(b).y-projectCap(a).y);$('markers').replaceChildren();setStrikeLabel('Restack');
+function finish(){separateDiscs(world,pieces());stage.setAttribute('aria-label','Drag caps across the table');pieces().forEach(c=>{c.won=!overloaded&&!c.isSlammer&&faceUp(c.body);parkBody(c.body)});const won=caps.filter(c=>c.won).sort((a,b)=>projectCap(b).y-projectCap(a).y);$('markers').replaceChildren();setStrikeLabel('restack');
 if(!won.length){state='result';$('announcer').textContent=overloaded?'Too much power. The stack scattered':'No caps flipped';renderCollection();controls();return}
 state='inspection';won.forEach((c,i)=>c.rank=i+1);$('announcer').textContent=`Flipped: ${won.length}`;collectWinners();}
 async function collectWinners(){if(state!=='inspection'||dragging)return;state='collecting';renderCollection();controls();$('markers').replaceChildren();const won=caps.filter(c=>c.won).sort((a,b)=>a.rank-b.rank);
