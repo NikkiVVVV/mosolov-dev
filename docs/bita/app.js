@@ -1,13 +1,14 @@
-import {createTableDots} from './table-dots.js?v=20261113-arcade22';
-import {PHYSICS_RATE} from './physics-scale.js?v=20261113-arcade22';
-import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-arcade22';
-import {makeCapDeck} from './cap-deck.js?v=20261113-arcade22';
+import {createCollectionSheet} from './collection-sheet.js?v=20261113-album23';
+import {createTableDots} from './table-dots.js?v=20261113-album23';
+import {PHYSICS_RATE} from './physics-scale.js?v=20261113-album23';
+import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-album23';
+import {makeCapDeck} from './cap-deck.js?v=20261113-album23';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-arcade22';
-import {createShowcase} from './showcase.js?v=20261113-arcade22';
-import {createChargeFeedback} from './charge-feedback.js?v=20261113-arcade22';
-import {createJellyButtons} from './jelly-buttons.js?v=20261113-arcade22';
-import {createPackIntro} from './pack-intro.js?v=20261113-arcade22';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-album23';
+import {createShowcase} from './showcase.js?v=20261113-album23';
+import {createChargeFeedback} from './charge-feedback.js?v=20261113-album23';
+import {createJellyButtons} from './jelly-buttons.js?v=20261113-album23';
+import {createPackIntro} from './pack-intro.js?v=20261113-album23';
 const CHARGE_MS=7000;
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
 let introFinished=false,atmosphere=0;
@@ -17,17 +18,17 @@ renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=
 const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-2,2,3,-3,1,24);
 const packIntro=createPackIntro({renderer,host:stage,getEnvironment:()=>scene.environment});
 const hemi=new THREE.HemisphereLight(0xffffff,0xc2bcb0,1.6);scene.add(hemi);
-const key=new THREE.DirectionalLight(0xfffcf4,2.4);key.position.set(0,9,.25);key.castShadow=true;key.shadow.mapSize.set(innerWidth<=640?512:1024,innerWidth<=640?512:1024);Object.assign(key.shadow.camera,{left:-4.5,right:4.5,top:4.5,bottom:-4.5,near:.1,far:20});key.shadow.radius=1.5;key.shadow.blurSamples=8;key.shadow.normalBias=.002;key.shadow.bias=-.00003;scene.add(key);
+const key=new THREE.DirectionalLight(0xfffcf4,2.4);key.position.set(0,9,.8);key.castShadow=true;key.shadow.mapSize.set(innerWidth<=640?512:1024,innerWidth<=640?512:1024);Object.assign(key.shadow.camera,{left:-3.25,right:3.25,top:3.25,bottom:-3.25,near:.1,far:20});key.shadow.radius=1.5;key.shadow.blurSamples=8;key.shadow.normalBias=.0015;key.shadow.bias=-.00008;scene.add(key);
 const fill=new THREE.DirectionalLight(0xdbe7ff,.65);fill.position.set(4,4,-3);scene.add(fill);
 const studio=new THREE.Scene();studio.background=new THREE.Color(0x777777);
 for(const [x,y,z,sx,sy,sz,p]of[[-4,4,3,2,7,1,4],[4,2,1,1,6,3,2],[0,7,-2,6,1,4,3]]){const m=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),new THREE.MeshBasicMaterial({color:new THREE.Color().setScalar(p)}));m.position.set(x,y,z);studio.add(m)}
 const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(studio,.025).texture;pmrem.dispose();studio.traverse(o=>{if(o.isMesh){o.geometry.dispose();o.material.dispose()}});
-const floor=new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.ShadowMaterial({opacity:.07,color:0x000000}));floor.rotation.x=-Math.PI/2;floor.position.y=-.005;floor.receiveShadow=true;floor.renderOrder=-1;scene.add(floor);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.ShadowMaterial({opacity:.10,color:0x000000}));floor.rotation.x=-Math.PI/2;floor.position.y=-.005;floor.receiveShadow=true;floor.renderOrder=-1;scene.add(floor);
 const tableDots=createTableDots(scene);
 let hasHit=false;const flexed=new Set();
 document.documentElement.dataset.theme='light';
 document.querySelector('meta[name="theme-color"]').content='#f1f1ee';
-function updateAtmosphere(dt){const elapsed=charge?performance.now()-charge.start:0,t=clamp(elapsed/2400,0,1),target=t**.72;atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/(charge?.12:.4)));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.07,.11,atmosphere)}
+function updateAtmosphere(dt){const elapsed=charge?performance.now()-charge.start:0,t=clamp(elapsed/2400,0,1),target=t**.72;atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/(charge?.12:.4)));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.10,.13,atmosphere)}
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
 const manifest=await fetch('assets/caps/manifest.json?v=20261113-arcade22').then(r=>r.json());
 const imageCache=new Map();
@@ -92,7 +93,7 @@ for(let i=0;i<slammerManifest.length;i++){const b=document.createElement('button
 $('closeSlammer').onclick=()=>$('slammerPicker').close();
 
 let overloaded=false,assemblingUntil=0,reframeUntil=0,lastPower=0,resetQueued=false;
-function setStrikeLabel(text){strike.setAttribute('aria-label',text==='restack'?'restack. Gather the caps':'strike. Hold for a stronger strike');const label=$('strikeLabel');if(label.textContent===text)return;label.textContent=text;label.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'})}
+function setStrikeLabel(text){text=text.toLowerCase();strike.setAttribute('aria-label',text==='restack'?'restack. Gather the caps':'strike. Hold for a stronger strike');const label=$('strikeLabel');if(label.textContent===text)return;label.textContent=text;label.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'})}
 let caps=[],count=5,state='ready',charge=null,physicsTime=0,flightStart=0,impactAt=0,impactElevation=.43,edgeAt=-1,twistAt=-1,groupRest={},still=0;
 let orbitYaw=-.18,orbitElevation=.43,orbitVelocity=0,viewWidth=2.65,viewElevation=.43,viewTarget=new THREE.Vector3(0,.18,0),viewYaw=-.18;
 function nextCap(){return readyDeck.shift()}
@@ -104,8 +105,9 @@ const collection=[];
 try{const saved=JSON.parse(localStorage.getItem('bita-collection-v3')||'[]');for(const id of saved){const i=manifest.findIndex(e=>e.id===id);if(i>=0)collection.push(i)}}catch{}
 function controls(){const locked=!introFinished||!['ready','result'].includes(state)||performance.now()<assemblingUntil;const tool=$('slammerTool'),stowed=!['ready','charging'].includes(state);tool.hidden=false;tool.dataset.stowed=String(stowed);tool.inert=stowed;tool.setAttribute('aria-hidden',String(stowed));$('chooseSlammer').disabled=locked||Boolean(slammerMove);$('slammerSlot').disabled=locked||!slammerEnabled;$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=!introFinished;$('plus').disabled=!introFinished;strike.disabled=Boolean(slammerMove)||(locked&&state!=='charging')||(state==='ready'&&caps.some(c=>performance.now()-c.born<800));}
 function renderCollection(){const fan=$('collectionFan');fan.dataset.count=Math.min(3,collection.length);fan.replaceChildren();for(const i of collection.slice(-3)){const img=new Image();img.alt='';fan.append(img);ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{})}$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label','Open won caps');}
-function showCollection(){const grid=$('albumGrid');grid.replaceChildren();for(const i of collection){const img=new Image();img.alt=manifest[i].name;img.loading='lazy';ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{});const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`Inspect ${manifest[i].name}`);b.append(img);b.onclick=async()=>{await ensureCap(i);$('album').close();showcase.inspect({index:i})};grid.append(b)}$('albumCount').textContent=collection.length;$('album').showModal()}
-$('collectionToggle').onclick=showCollection;$('closeAlbum').onclick=()=>$('album').close();$('album').onclick=e=>{if(e.target!==$('album'))return;const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()};renderCollection();
+const collectionSheet=createCollectionSheet({getItems:()=>collection,ensureItem:i=>ensureCap(i),imageFor:i=>images[i].src,nameFor:i=>manifest[i].name,inspect:(i,host)=>showcase.inspect({index:i},host),stopInspect:()=>showcase.stopInspect()});
+function showCollection(){collectionSheet.open()}
+$('collectionToggle').onclick=showCollection;renderCollection();
 function addCap(drop=true,chosen=null){const i=caps.length,index=chosen??nextCap();if(!Number.isInteger(index)||!images[index]||!frontMats[index].map)return null;const physical=createStackBody(world,i,Math.random,manifest[index].material,manifest[index].id);const item={...physical,index,mesh:makeCap(index,i*.91),born:drop?performance.now():-10000,rest:{},won:false};caps.push(item);count=caps.length;if(drop){item.body.setTranslation({x:1.6,y:physical.position.y+.8,z:physical.position.z},true);item.body.setRotation(physical.rotation,true)}return item}
 function removeCap(c){scene.remove(c.mesh);c.mesh.traverse(o=>{if(o.isMesh)o.geometry.dispose()});world.removeRigidBody(c.body)}
 function reset(n=count,drop=true,indices=null){if(!indices&&!readyDeck.length){if(!resetQueued){resetQueued=true;setTimeout(()=>{resetQueued=false;reset(n,drop,indices)},300)}return}caps.forEach(removeCap);caps=[];count=clamp(n||5,1,MAX_STACK);hasHit=false;flexed.clear();overloaded=false;setStrikeLabel('strike');state='ready';stage.setAttribute('aria-label','Drag to rotate the stack');$('announcer').textContent='';$('markers').replaceChildren();edgeAt=twistAt=-1;groupRest={};still=0;const desired=indices?count:Math.min(count,readyDeck.length);for(let i=0;i<desired;i++){const item=addCap(drop,indices?.[i]);if(drop&&item)item.born=performance.now()+i*70}count=caps.length;setupSlammer();renderCollection();controls()}
@@ -179,7 +181,7 @@ try{localStorage.setItem('bita-collection-v3',JSON.stringify([...collection,...w
 for(const [i,c]of won.entries()){c.collected=true;c.mesh.visible=false;const r=$('collectionFan').getBoundingClientRect();await showcase.award({index:c.index},{target:{x:r.right-18,y:r.y+r.height/2},index:i,total:won.length});collection.push(c.index);renderCollection()}
 state='result';count=caps.filter(c=>!c.won).length;renderCollection();controls();}
 let previous=performance.now(),acc=0,lastFrame=0;
-function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=state==='ready'||state==='result'||state==='inspection';if(idle&&!jellyButtons.active()&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.1);previous=now;const t=now/1000;
+function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=state==='ready'||state==='result'||state==='inspection';if(idle&&!showcase.active()&&!jellyButtons.active()&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.1);previous=now;const t=now/1000;
  showcase.update(now,dt);if(pendingAdjustment)flushAdjustments();if(charge&&now-charge.start>=CHARGE_MS)overload();if(state==='ready')controls();
  updateAtmosphere(dt);tableDots.update(dt,atmosphere,introFinished);jellyButtons.update(dt);chargeFeedback.update(now,dt);
  if(['ready','charging'].includes(state)){
@@ -232,12 +234,12 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
    c.label.style.left=`${x}px`;c.label.style.top=`${y}px`;used.push({x,y});
   }
  }
- const shadowHeight=pieces().length?pieces().reduce((total,c)=>total+Math.max(0,c.mesh.position.y),0)/pieces().length:0;
- key.shadow.radius=1+Math.min(1,shadowHeight/1.1)*6;
- floor.material.opacity=lerp(.07,.11,atmosphere)*(1-Math.min(.35,shadowHeight*.25));
+ const shadowCasters=pieces().filter(c=>!c.collected&&c.mesh.visible),shadowHeight=shadowCasters.length?Math.max(0,Math.min(...shadowCasters.map(c=>c.mesh.position.y-supportHeight(c)))):0;
+ key.shadow.radius=.7+Math.min(1,shadowHeight/1.1)*6;
+ floor.material.opacity=lerp(.10,.13,atmosphere)*(1-Math.min(.35,shadowHeight*.25));
  if(['charging','airborne','scattering','collecting'].includes(state)||dragging||slammerMove||performance.now()<assemblingUntil||Math.abs((frame.shadowHeight??-1)-shadowHeight)>.002||Math.abs((frame.shadowAtmosphere??-1)-atmosphere)>.004||caps.some(c=>now-c.born<1000))renderer.shadowMap.needsUpdate=true;
  frame.shadowHeight=shadowHeight;frame.shadowAtmosphere=atmosphere;
- if(introFinished)renderer.render(scene,camera);
+ if(introFinished&&!collectionSheet.isOpen())renderer.render(scene,camera);
 }
 reset(5,false);requestAnimationFrame(frame);packIntro.setReady(caps.map(c=>c.mesh)).then(()=>{
  const now=performance.now();
