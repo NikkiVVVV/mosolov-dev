@@ -75,3 +75,6 @@ html .controls button:focus-visible,html #theme:focus-visible,html #chooseSlamme
  .controls .adjust{width:64px;height:64px;font-size:26px;border-radius:20px}
  .controls .toss{height:64px;min-width:0;flex:1;font-size:17px;border-radius:20px}
 }
+
+/* Decorative canvas overflow must never create a focus-scroll container. */
+html,body,main{overflow:clip}

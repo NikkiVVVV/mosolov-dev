@@ -1,12 +1,12 @@
-import {PHYSICS_RATE} from './physics-scale.js?v=20261113-mobile20';
-import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-mobile20';
-import {makeCapDeck} from './cap-deck.js?v=20261113-mobile20';
+import {PHYSICS_RATE} from './physics-scale.js?v=20261113-mobile20a';
+import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-mobile20a';
+import {makeCapDeck} from './cap-deck.js?v=20261113-mobile20a';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-mobile20';
-import {createShowcase} from './showcase.js?v=20261113-mobile20';
-import {createChargeFeedback} from './charge-feedback.js?v=20261113-mobile20';
-import {createJellyButtons} from './jelly-buttons.js?v=20261113-mobile20';
-import {createPackIntro} from './pack-intro.js?v=20261113-mobile20';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-mobile20a';
+import {createShowcase} from './showcase.js?v=20261113-mobile20a';
+import {createChargeFeedback} from './charge-feedback.js?v=20261113-mobile20a';
+import {createJellyButtons} from './jelly-buttons.js?v=20261113-mobile20a';
+import {createPackIntro} from './pack-intro.js?v=20261113-mobile20a';
 const CHARGE_MS=7000;
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
 let introFinished=false,atmosphere=0;
@@ -27,9 +27,9 @@ document.documentElement.dataset.theme='light';
 document.querySelector('meta[name="theme-color"]').content='#f1f1ee';
 function updateAtmosphere(dt){const elapsed=charge?performance.now()-charge.start:0,t=clamp(elapsed/2400,0,1),target=t**.72;atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/(charge?.12:.4)));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.07,.11,atmosphere)}
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
-const manifest=await fetch('assets/caps/manifest.json?v=20261113-mobile20').then(r=>r.json());
+const manifest=await fetch('assets/caps/manifest.json?v=20261113-mobile20a').then(r=>r.json());
 const imageCache=new Map();
-function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-mobile20'}));return imageCache.get(path)}
+function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-mobile20a'}));return imageCache.get(path)}
 async function capImage(entry){const image=await loadImage(entry.file);if(!entry.imageRect)return image;const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');ctx.drawImage(image,...entry.imageRect,0,0,256,256);const result=new Image();result.src=c.toDataURL('image/png');await result.decode();return result}
 const images=Array(manifest.length),reverseImages=Array(manifest.length);
 await document.fonts.ready;
