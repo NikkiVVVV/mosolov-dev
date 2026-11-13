@@ -17,3 +17,35 @@
 .showcase-canvas{pointer-events:auto}#showcase{color:#454b40}html[data-theme=dark] #showcase{color:#e0e4dc}
 /* Quiet header prize stack and a thumb-sized layer pointer. */
 #collectionToggle{top:max(12px,env(safe-area-inset-top));bottom:auto;left:50%;width:48px;height:44px;min-height:44px;padding:4px;transform:translateX(-50%);border:0;background:none;box-shadow:none;opacity:1}#collectionFan{position:relative;width:40px;height:36px;display:block}#collectionFan img{position:absolute;left:2px;top:0;width:36px;height:36px;margin:0;border:1px solid #ffffffa0;box-shadow:0 2px 5px #28302120}#collectionFan img:nth-child(1){transform:translateX(-4px) rotate(-12deg)}#collectionFan img:nth-child(2){transform:translateX(0) rotate(-4deg)}#collectionFan img:last-child{transform:translateX(4px) rotate(4deg)}#collectionFan:empty:before{content:'';position:absolute;inset:2px;border:1px solid #a7ac9e80;border-radius:50%;box-shadow:-3px 2px 0 #d2d5ca60}#slammerTool{left:12px;right:auto;top:calc(50% - 100px);width:40px;gap:12px}#chooseSlammer{width:40px;height:40px;border-radius:12px}#chooseSlammer img{width:32px;height:32px}#slammerSlot{width:28px;height:144px;padding:0;margin:0;background:transparent}#slammerSlot::-webkit-slider-runnable-track{width:1px;background:#a2a79e35}#slammerSlot::-webkit-slider-thumb{width:24px;height:24px;margin-left:-11px;background:#9ca394;border:0;border-radius:0;box-shadow:none;clip-path:polygon(8% 22%,54% 22%,92% 50%,54% 78%,8% 78%)}#slammerSlot::-moz-range-track{width:1px;background:#a2a79e35}#slammerSlot::-moz-range-thumb{width:24px;height:24px;background:#9ca394;border:0;border-radius:0;clip-path:polygon(8% 22%,54% 22%,92% 50%,54% 78%,8% 78%)}#albumGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-height:60svh}#album{max-height:80svh}.album-header{margin-bottom:12px;min-height:24px}#strikeLabel{display:inline-block;pointer-events:none}#showcaseTitle,#showcaseStep{display:none!important}
+
+/* Hide the insertion tool for the entire result, then return with the stack. */
+#slammerTool{transition:transform .36s cubic-bezier(.2,.7,.2,1),opacity .22s}
+#slammerTool[data-stowed=true]{transform:translateX(-84px);opacity:0;pointer-events:none}
+.impact-glint{position:absolute;left:50%;top:0;width:64px;height:64px;opacity:0;pointer-events:none;z-index:2;transform:translate(-50%,-50%)}
+.impact-glint i{position:absolute;inset:0;background:#fefcf4;filter:drop-shadow(0 0 3px #666b5a55);clip-path:polygon(50% 0,57% 40%,100% 50%,57% 57%,50% 100%,43% 57%,0 50%,43% 40%)}
+.impact-glint i:nth-child(2){inset:18px -24px 18px 72px;transform:rotate(24deg)}
+.impact-glint i:nth-child(3){inset:24px 72px 12px -20px;transform:rotate(-30deg)}
+.controls .toss{overflow:visible}
+@media(prefers-reduced-motion:reduce){#slammerTool{transition:none}.impact-glint{display:none}}
+
+.toss:before{border-radius:inherit;clip-path:inset(0 round 16px)}
+
+html #showcase[data-mode=reward]::before{background:#0a1018;backdrop-filter:blur(5px)}
+
+/* A charge track inside the existing button: the selected slammer is its marker. */
+.toss.charging::before{background:var(--charge-fill,#c8daed);opacity:1}
+.charge-label{position:absolute;inset:0;display:grid;place-items:center;color:#fff;pointer-events:none;opacity:0;clip-path:inset(0 calc((1 - var(--charge,0))*100%) 0 0)}
+.toss.charging[data-level=strong] .charge-label,.toss.charging[data-level=edge] .charge-label{opacity:1}
+.charge-ticks{position:absolute;left:14px;right:14px;bottom:7px;display:flex;justify-content:space-between;pointer-events:none;opacity:.35}
+.charge-ticks i{width:3px;height:3px;border-radius:50%;background:#7a8994}
+.charging .charge-ticks i{background:#adbed2}
+.charge-thumb{position:absolute;bottom:-4px;left:calc(10px + var(--charge,0)*(100% - 20px));width:20px;height:20px;border-radius:50%;transform:translateX(-50%);box-shadow:0 1px 3px #192f4933;pointer-events:none;opacity:0;z-index:2}
+.charging .charge-thumb{opacity:1}
+.charge-pixels{position:absolute;right:6px;top:8px;width:1px;height:1px;pointer-events:none;opacity:0}
+.charging[data-level=edge] .charge-pixels{opacity:1}
+.charge-pixels i{position:absolute;width:4px;height:4px;border-radius:1px;background:#b6d3ec;}
+.charge-pixels i:nth-child(3n){background:#d9b8ce}.charge-pixels i:nth-child(4n){background:#f0d8b8}
+@keyframes charge-pixel{0%{opacity:0;transform:translate(0,6px) scale(.7)}30%{opacity:.8}100%{opacity:0;transform:translate(16px,-24px) scale(.4)}}
+@media(prefers-reduced-motion:reduce){.charge-pixels{display:none}.charge-thumb{transition:none}}
+
+.charging[data-level=edge] .charge-pixels i{animation:charge-pixel .8s ease-out infinite;animation-delay:calc(var(--i)*-.13s)}
