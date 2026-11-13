@@ -78,3 +78,25 @@ html .controls button:focus-visible,html #theme:focus-visible,html #chooseSlamme
 
 /* Decorative canvas overflow must never create a focus-scroll container. */
 html,body,main{overflow:clip}
+
+@font-face{font-family:Manrope;src:url('assets/fonts/manrope/Manrope-Variable.ttf') format('truetype');font-weight:400 600;font-style:normal;font-display:swap}
+html body,html button,html .toss,html .adjust,.album-header h2{font-family:Manrope,-apple-system,BlinkMacSystemFont,sans-serif}
+html .toss,html .toss.charging,html .adjust,html #chooseSlammer{background:linear-gradient(145deg,#7050b7,#8b6dc9 65%,#bfacdf);border-color:#d9cdf0;box-shadow:0 4px 12px #785bae24,inset 0 1px 2px #eee4fa80}
+#packIntro{--pack-height:min(60svh,calc((100vw - 64px)*1.5))}
+#packPlaceholder{height:var(--pack-height);width:auto;aspect-ratio:2/3;opacity:0}
+ #packPlaceholder[data-loaded=true]{animation:pack-arrive .6s ease-out both}
+@keyframes pack-arrive{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){#packPlaceholder[data-loaded=true]{animation:none;opacity:1}}
+#collectionToggle{width:72px;min-width:72px}
+#collectionFan{width:64px;height:36px}
+#collectionFan img:nth-child(1){transform:translateX(0) rotate(-12deg)}
+#collectionFan img:nth-child(2){transform:translateX(14px) rotate(-4deg)}
+#collectionFan img:last-child{transform:translateX(28px) rotate(4deg)}
+#collectionFan img:only-child{transform:translateX(28px)}
+#collectionFan[data-count="2"] img:first-child{transform:translateX(14px) rotate(-8deg)}
+#collectionFan:empty:before{inset:auto;left:28px;top:0;width:36px;height:36px}
+@media(max-width:640px){
+ .controls{width:calc(100% - 24px);max-width:404px;gap:4px}
+ .controls .adjust{width:72px;height:72px;font-size:28px;font-weight:500}
+ .controls .toss{height:72px;font-size:18px;line-height:24px;font-weight:600;letter-spacing:0}
+}

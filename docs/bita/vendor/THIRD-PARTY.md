@@ -9,3 +9,7 @@ The compiled JellyBody simulation and curve tracing are preserved in jelly-body.
 Source: https://github.com/DavidHDev/react-bits/tree/main/src/content/Animations/ElectricLogo (2026-11-13).
 MIT + Commons Clause, Copyright (c) 2026 David Haz. See react-bits-LICENSE.md.
 Original shape tracing, arc generation, GLSL and constants in electric-logo-core.js. charge-feedback.js replaces the React/OGL host with Three.js, controls intensity on hold and does no work at rest. Used as part of this game, not redistributed as a standalone component library.
+
+## Manrope
+Google Fonts upstream: https://github.com/google/fonts/tree/main/ofl/manrope .
+Unmodified variable TrueType font; SIL Open Font License 1.1, copyright 2018 The Manrope Project Authors. Font and complete license are in assets/fonts/manrope/.

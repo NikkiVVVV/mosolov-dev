@@ -4,8 +4,8 @@ function glassTexture(width,height,dpr){
  const canvas=document.createElement('canvas');canvas.width=Math.ceil(width*dpr);canvas.height=Math.ceil(height*dpr);const context=canvas.getContext('2d'),image=context.createImageData(canvas.width,canvas.height);
  for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++){
   const nx=(x/canvas.width-.5)*2,ny=(y/canvas.height-.5)*2,edge=Math.max(Math.abs(nx)**5,Math.abs(ny)**4),bloom=Math.exp(-(nx*nx*1.4+(ny-.5)**2*1.7)),noise=((Math.imul(x+17,y+131)*1597334677>>>0)%1024)/1024-.5;
-  const light=36*bloom-18*edge+noise*17,at=(y*canvas.width+x)*4;
-  image.data[at]=105+light;image.data[at+1]=46+light*.8;image.data[at+2]=212+light*.75;image.data[at+3]=255;
+  const light=36*bloom-18*edge+noise*12,at=(y*canvas.width+x)*4;
+  image.data[at]=113+light;image.data[at+1]=78+light*.8;image.data[at+2]=196+light*.75;image.data[at+3]=255;
  }
  context.putImageData(image,0,0);return canvas;
 }
@@ -25,8 +25,8 @@ export function createJellyButtons(buttons,{getThemeMix=()=>0}={}){
    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width+pad*2,height+pad*2);ctx.save();ctx.translate(pad+width/2,pad+height/2);
    const depth=body.state.clickDepth,scale=1-depth*.025;ctx.translate(0,depth*1.5);ctx.scale(scale,scale);
    traceSmoothPath(ctx,body.getSurfacePoints().map(p=>body.projectPoint(p)));
-   ctx.shadowColor=`rgba(116,54,227,${.2+theme*.18})`;ctx.shadowBlur=14;ctx.shadowOffsetY=5;ctx.fillStyle='#7737dc';ctx.fill();
-   ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.lineWidth=6;ctx.strokeStyle=theme>.5?'#c498ff20':'#bca2e53d';ctx.stroke();
+   ctx.shadowColor=`rgba(112,80,172,${.14+theme*.16})`;ctx.shadowBlur=10;ctx.shadowOffsetY=5;ctx.fillStyle='#7958b9';ctx.fill();
+   ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.lineWidth=4;ctx.strokeStyle=theme>.5?'#c4b0df20':'#c0afd63d';ctx.stroke();
    ctx.save();ctx.clip();
    // Refract the static grain in narrow overlapping strips around the press.
    // The membrane and the glass surface deform together; no new WebGL context.
@@ -35,10 +35,10 @@ export function createJellyButtons(buttons,{getThemeMix=()=>0}={}){
     const y=-height/2+i*band,wave=Math.sin((y-press[1])*.12)*Math.exp(-Math.abs(y-press[1])/(height*.7))*depth*2.4;
     ctx.drawImage(glass,0,i*glass.height/strips,glass.width,glass.height/strips+1,-width/2-6+wave,y,width+12,band+1);
    }
-   const glow=ctx.createRadialGradient(width*.2,height*.48,1,width*.1,height*.48,width*.8);glow.addColorStop(0,'#f1d4ff65');glow.addColorStop(.55,'#b46bff20');glow.addColorStop(1,'#6d2bff00');ctx.fillStyle=glow;ctx.fillRect(-width/2,-height/2,width,height);
+   const glow=ctx.createRadialGradient(width*.2,height*.48,1,width*.1,height*.48,width*.8);glow.addColorStop(0,'#f1d4ff65');glow.addColorStop(.55,'#ae8bd920');glow.addColorStop(1,'#7255ab00');ctx.fillStyle=glow;ctx.fillRect(-width/2,-height/2,width,height);
    const rim=ctx.createLinearGradient(0,-height/2,0,height/2);rim.addColorStop(0,'#e5caffb0');rim.addColorStop(.25,'#d3a7ff18');rim.addColorStop(.65,'#e2afff18');rim.addColorStop(1,'#ead0ffd9');ctx.strokeStyle=rim;ctx.lineWidth=5;ctx.stroke();
    const caustic=ctx.createRadialGradient(press[0],press[1],0,press[0],press[1],width*.55);caustic.addColorStop(0,`rgba(249,224,255,${.05+depth*.2})`);caustic.addColorStop(1,'#e5b6ff00');ctx.fillStyle=caustic;ctx.fillRect(-width/2,-height/2,width,height);ctx.restore();
-   ctx.strokeStyle='#e8d1ff91';ctx.lineWidth=1;ctx.stroke();ctx.restore();
+   ctx.strokeStyle='#e4d9f191';ctx.lineWidth=1;ctx.stroke();ctx.restore();
    content.style.color='#fff';content.style.textShadow='0 1px 3px #40127735';content.style.transform=`translateY(${depth*1.5}px) scale(${scale})`;dirty=false;
   }
   function local(e){const r=button.getBoundingClientRect();return [e.clientX-r.left-r.width/2,e.clientY-r.top-r.height/2]}
