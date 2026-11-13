@@ -19,7 +19,7 @@ function geometry(top){const points=[],uvs=[],step=top?20:48;
 export function createPackIntro({renderer,host,getEnvironment}){
  const overlay=document.getElementById('packIntro'),button=document.getElementById('openPack'),placeholder=document.getElementById('packPlaceholder'),hint=document.getElementById('packHint');
  const savedClearColor=new THREE.Color();renderer.getClearColor(savedClearColor);const savedClearAlpha=renderer.getClearAlpha();
- const scene=new THREE.Scene();scene.background=new THREE.Color(0xf8f8f6);
+ const scene=new THREE.Scene();scene.background=new THREE.Color(0xf1f1ee);
  const camera=new THREE.OrthographicCamera(-1,1,2,-2,.1,24),group=new THREE.Group();scene.add(group);camera.position.set(0,0,6);
  const hemi=new THREE.HemisphereLight(0xffffff,0x687080,1.8),key=new THREE.DirectionalLight(0xffffff,2);key.position.set(-2,4,5);scene.add(hemi,key);
  const front=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.52,metalness:.08,transparent:true,depthWrite:false,opacity:0});
@@ -34,7 +34,7 @@ export function createPackIntro({renderer,host,getEnvironment}){
  let resolve;const done=new Promise(r=>resolve=r),reduced=matchMedia('(prefers-reduced-motion:reduce)');
  function resize(){const aspect=host.clientWidth/host.clientHeight;viewHeight=Math.max(3.8,2/aspect);camera.left=-viewHeight*aspect/2;camera.right=-camera.left;camera.top=viewHeight/2;camera.bottom=-camera.top;camera.updateProjectionMatrix();renderer.setSize(host.clientWidth,host.clientHeight);const k=host.clientHeight/viewHeight;placeholder.style.height=SH*k+'px';placeholder.style.width=SW*k+'px';button.style.width=SW*.82*k+'px';button.style.height=SH*.94*k+'px';hint.style.top=host.clientHeight/2-cutY*k+'px'}
  const observer=new ResizeObserver(resize);observer.observe(host);resize();
- function fail(){if(!active||opening)return;overlay.dataset.error='true';button.disabled=false;hint.hidden=false;button.setAttribute('aria-label','Повторить загрузку');hint.innerHTML='<svg viewBox="0 0 24 24"><path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/></svg>'}
+ function fail(){if(!active||opening)return;overlay.dataset.error='true';button.disabled=false;hint.hidden=false;button.setAttribute('aria-label','Retry loading');hint.innerHTML='<svg viewBox="0 0 24 24"><path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/></svg>'}
  window.addEventListener('unhandledrejection',fail);
  button.addEventListener('click',()=>{if(overlay.dataset.error==='true')location.reload()});
  new THREE.TextureLoader().load('assets/pack/prism.webp',texture=>{texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;front.map=top.material.map=texture;front.opacity=top.material.opacity=1;foil.opacity=topGroup.children[1].material.opacity=1;front.needsUpdate=top.material.needsUpdate=true;textureReady=true;placeholder.remove();if(overlay.dataset.waiting==='true'&&ready)open()},undefined,()=>{placeholder.hidden=false;fail()});
@@ -50,7 +50,7 @@ export function createPackIntro({renderer,host,getEnvironment}){
  function frame(now){if(!active)return;raf=requestAnimationFrame(frame);const dt=Math.min(.05,(now-previous)/1000);previous=now;if(document.hidden)return;
   const dark=document.documentElement.dataset.theme==='dark';hemi.intensity=dark?1.5:1.8;key.intensity=dark?2.3:2;scene.environment=getEnvironment?.()??null;
   // An opaque intro pass avoids transparent-canvas black flashes on mobile.
-  const background=dark?0x191b1a:0xf8f8f6;scene.background.set(background);renderer.setRenderTarget(null);renderer.setClearColor(background,1);
+  const background=dark?0x191b1a:0xf1f1ee;scene.background.set(background);renderer.setRenderTarget(null);renderer.setClearColor(background,1);
   if(!opening){
    curl+=(progress-curl)*(1-Math.exp(-dt/.14));
    group.rotation.y=reduced.matches?0:Math.sin(now*.0005)*.035-curl*.025;group.rotation.z=reduced.matches?0:Math.sin(now*.00035)*.012;group.position.y=reduced.matches?0:Math.sin(now*.0007)*.018;
@@ -65,10 +65,11 @@ export function createPackIntro({renderer,host,getEnvironment}){
    line.material.opacity=spark.material.opacity=0;
    const p=bodyGeo.attributes.position;for(let i=0;i<p.count;i++){const y=bases[i*3+1],topness=clamp((y+SH*.35)/(SH*.7),0,1);p.setXYZ(i,bases[i*3],y,topness**4*Math.sin((bases[i*3]+.8)*2.7)*Math.sin(curl*Math.PI*.5)*.14)}p.needsUpdate=true;bodyGeo.computeVertexNormals();
    for(let i=0;i<contents.length;i++){
-    const item=contents[i],u=clamp((t-.85-i*.08)/.95,0,1),v=1-u;
-    const from=new THREE.Vector3((i-2)*.035,cutY-.24,.05+i*.015),control=new THREE.Vector3(.5+i*.08,cutY+.85+i*.06,.3),to=new THREE.Vector3(camera.right+.8+i*.1,camera.top+.8,.3);
-    item.clone.visible=t>.85+i*.08&&u<1;
+    const item=contents[i],u=clamp((t-.55-i*.08)/1.15,0,1),v=1-u;
+    const from=new THREE.Vector3((i-2)*.035,cutY-.52,-.24-i*.015),control=new THREE.Vector3(.5+i*.08,cutY+.85+i*.06,-.24),to=new THREE.Vector3(camera.right+.8+i*.1,camera.top+.8,.3);
+    item.clone.visible=t>.55+i*.08&&u<1;
     item.clone.position.copy(from).multiplyScalar(v*v).addScaledVector(control,2*v*u).addScaledVector(to,u*u);
+    item.clone.position.z=-.24+ease((u-.65)/.35)*.5;
     item.clone.scale.setScalar(lerp(.43,.54,u));
     item.clone.quaternion.setFromEuler(new THREE.Euler(Math.PI/2+u*2.5,(i-2)*.08+u*2.1,(i-2)*-.14+u*.85));
    }

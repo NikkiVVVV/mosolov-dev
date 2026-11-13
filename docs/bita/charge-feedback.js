@@ -13,7 +13,7 @@ export function createChargeFeedback(button){
  const reduced=matchMedia('(prefers-reduced-motion:reduce)'),sparks=[];let power=0,presence=0,time=0,width=1,height=1,shape,fit=1,ox=0,oy=0,dirty=false,field,glow,sector=0;
  function texture(data,w,h,format,internal){const t=new THREE.DataTexture(data,w,h,format,THREE.FloatType);t.internalFormat=internal;t.minFilter=t.magFilter=THREE.LinearFilter;t.generateMipmaps=false;t.flipY=false;t.unpackAlignment=1;t.needsUpdate=true;return t}
  function resize(){const bw=button.clientWidth,bh=button.clientHeight;if(!bw||!bh)return;width=bw+224;height=bh+224;renderer.setSize(width,height,false);canvas.style.width=width+'px';canvas.style.height=height+'px';
-  const mask=document.createElement('canvas');mask.width=bw*2;mask.height=bh*2;const c=mask.getContext('2d');c.fillStyle='#fff';c.beginPath();c.roundRect(1,1,mask.width-2,mask.height-2,30);c.fill();shape=traceShape(mask);if(!shape)return;field?.dispose();glow?.dispose();
+  const mask=document.createElement('canvas');mask.width=bw*2;mask.height=bh*2;const c=mask.getContext('2d');c.fillStyle='#fff';c.beginPath();c.roundRect(1,1,mask.width-2,mask.height-2,(parseFloat(getComputedStyle(button).borderRadius)||16)*2);c.fill();shape=traceShape(mask);if(!shape)return;field?.dispose();glow?.dispose();
   field=texture(shape.field,shape.width,shape.height,THREE.RedFormat,'R16F');glow=texture(shape.glow,shape.glowWidth,shape.glowHeight,THREE.RGFormat,'RG16F');uniforms.tFieldFrom.value=uniforms.tFieldTo.value=field;uniforms.tGlowFrom.value=uniforms.tGlowTo.value=glow;
   fit=bw/shape.logoWidth;ox=width/2-(shape.pad+shape.logoWidth/2)*fit;oy=height/2-(shape.pad+shape.logoHeight/2)*fit;uniforms.uMapFrom.value=uniforms.uMapTo.value=[ox,oy,fit,shape.glowOffset];uniforms.uSizeFrom.value=uniforms.uSizeTo.value=[shape.width,shape.height,shape.glowWidth,shape.glowHeight];uniforms.uResolution.value=[width,height];uniforms.uUnit.value=bw/100;dirty=true;
  }
@@ -28,7 +28,9 @@ export function createChargeFeedback(button){
     const angle=sector++*2.399963+(Math.random()-.5)*.22,nx=Math.cos(angle),ny=Math.sin(angle),cx=shape.pad+shape.logoWidth/2,cy=shape.pad+shape.logoHeight/2;
     let edge=0,best=-Infinity;
     for(let i=0;i<shape.edges.length;i+=2){const dx=(shape.edges[i]-cx)/(shape.logoWidth/2),dy=(shape.edges[i+1]-cy)/(shape.logoHeight/2),score=(dx*nx+dy*ny)/(Math.hypot(dx,dy)||1);if(score>best){best=score;edge=i}}
-    const ax=shape.edges[edge],ay=shape.edges[edge+1],reach=shape.logoWidth*(ny>.35?.12+power*.10:.18+power*.35);
+    const ax=shape.edges[edge],ay=shape.edges[edge+1],box=button.getBoundingClientRect(),sx=box.left+(ax-shape.pad)*fit,sy=box.top+(ay-shape.pad)*fit;
+    const horizontal=nx>0?(innerWidth-8-sx)/nx:nx<0?(8-sx)/nx:Infinity,vertical=ny>0?(innerHeight-8-sy)/ny:ny<0?(8-sy)/ny:Infinity;
+    const reach=Math.max(0,Math.min(88,box.width*(.18+power*.35),horizontal,vertical))/fit;
     spark={ax,ay,bx:ax+nx*reach,by:ay+ny*reach,bow:(Math.random()-.5)*reach*.6,seed:1+Math.random()*60,born:time,life:.45+Math.random()*.4};
    }else spark=spawnArc(shape,time,null);
    if(spark)sparks.push(spark)

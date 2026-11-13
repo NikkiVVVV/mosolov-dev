@@ -1,16 +1,16 @@
-import {PHYSICS_RATE} from './physics-scale.js?v=20261113-glass19';
-import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-glass19';
-import {makeCapDeck} from './cap-deck.js?v=20261113-glass19';
+import {PHYSICS_RATE} from './physics-scale.js?v=20261113-mobile20';
+import {slammerPath,SLAMMER_MOVE_MS} from './slammer-motion.js?v=20261113-mobile20';
+import {makeCapDeck} from './cap-deck.js?v=20261113-mobile20';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-glass19';
-import {createShowcase} from './showcase.js?v=20261113-glass19';
-import {createChargeFeedback} from './charge-feedback.js?v=20261113-glass19';
-import {createJellyButtons} from './jelly-buttons.js?v=20261113-glass19';
-import {createPackIntro} from './pack-intro.js?v=20261113-glass19';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-mobile20';
+import {createShowcase} from './showcase.js?v=20261113-mobile20';
+import {createChargeFeedback} from './charge-feedback.js?v=20261113-mobile20';
+import {createJellyButtons} from './jelly-buttons.js?v=20261113-mobile20';
+import {createPackIntro} from './pack-intro.js?v=20261113-mobile20';
 const CHARGE_MS=7000;
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
 let introFinished=false,atmosphere=0;
-const jellyButtons=createJellyButtons(document.querySelectorAll('.controls button,#theme,#chooseSlammer'),{getThemeMix:()=>atmosphere});
+const jellyButtons=createJellyButtons(document.querySelectorAll('.controls button,#chooseSlammer'),{getThemeMix:()=>atmosphere});
 const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.VSMShadowMap;renderer.shadowMap.autoUpdate=false;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.92;stage.appendChild(renderer.domElement);
 const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-2,2,3,-3,1,24);
@@ -23,14 +23,13 @@ for(const [x,y,z,sx,sy,sz,p]of[[-4,4,3,2,7,1,4],[4,2,1,1,6,3,2],[0,7,-2,6,1,4,3]
 const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(studio,.025).texture;pmrem.dispose();studio.traverse(o=>{if(o.isMesh){o.geometry.dispose();o.material.dispose()}});
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.ShadowMaterial({opacity:.07,color:0x000000}));floor.rotation.x=-Math.PI/2;floor.position.y=-.005;floor.receiveShadow=true;scene.add(floor);
 let hasHit=false;const flexed=new Set();
-let dark=false;
-function applyTheme(){atmosphere=Number(dark);document.documentElement.style.setProperty('--scene-dark',atmosphere);document.documentElement.dataset.theme=dark?'dark':'light';$('theme').setAttribute('aria-pressed',String(dark));$('theme').setAttribute('aria-label',dark?'Включить светлую тему':'Включить тёмную тему');hemi.intensity=dark?.85:1.6;key.intensity=dark?3:2.4;key.position.set(dark?.15:0,9,.25);fill.intensity=dark?1.1:.65;floor.material.opacity=dark?.11:.07;document.querySelector('meta[name="theme-color"]').content=dark?'#191b1a':'#f8f8f6'}
-applyTheme();$('theme').onclick=async e=>{const change=()=>{dark=!dark;applyTheme();renderer.shadowMap.needsUpdate=true;if(introFinished)renderer.render(scene,camera)};if(!document.startViewTransition||matchMedia('(prefers-reduced-motion:reduce)').matches)return change();const x=e.clientX,y=e.clientY,r=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));const transition=document.startViewTransition(change);try{await transition.ready}catch{return}document.documentElement.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${r}px at ${x}px ${y}px)`]},{duration:480,easing:'ease-out',pseudoElement:'::view-transition-new(root)'})};
-function updateAtmosphere(dt){const power=charge?clamp((performance.now()-charge.start)/CHARGE_MS,0,1):0,t=clamp((power-.02)/.86,0,1),target=dark?1:t*t*(3-2*t);atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/(charge?.18:.5)));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.07,.11,atmosphere)}
+document.documentElement.dataset.theme='light';
+document.querySelector('meta[name="theme-color"]').content='#f1f1ee';
+function updateAtmosphere(dt){const elapsed=charge?performance.now()-charge.start:0,t=clamp(elapsed/2400,0,1),target=t**.72;atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/(charge?.12:.4)));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.07,.11,atmosphere)}
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
-const manifest=await fetch('assets/caps/manifest.json?v=20261113-glass19').then(r=>r.json());
+const manifest=await fetch('assets/caps/manifest.json?v=20261113-mobile20').then(r=>r.json());
 const imageCache=new Map();
-function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-glass19'}));return imageCache.get(path)}
+function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-mobile20'}));return imageCache.get(path)}
 async function capImage(entry){const image=await loadImage(entry.file);if(!entry.imageRect)return image;const c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d');ctx.drawImage(image,...entry.imageRect,0,0,256,256);const result=new Image();result.src=c.toDataURL('image/png');await result.decode();return result}
 const images=Array(manifest.length),reverseImages=Array(manifest.length);
 await document.fonts.ready;
@@ -80,17 +79,17 @@ function makeSlammer(){const g=new THREE.Group(),e=slammerManifest[slammerDesign
 const pieces=()=>slammer?[...caps,slammer]:caps;
 const showcase=createShowcase({makeModel:item=>{const m=makeCap(item.index,0);scene.remove(m);return m},nameFor:item=>manifest[item.index].name,onBack:()=>showCollection()});
 function setupSlammer(){if(slammer)removeCap(slammer);slammer=null;slammerSlot=Math.min(slammerSlot,count);if(slammerEnabled)slammer={...createSlammerBody(world,slammerSlot,slammerManifest[slammerDesign].id),mesh:makeSlammer(),isSlammer:true,rest:{},born:-10000};$('slammerSlot').max=count;$('slammerSlot').value=slammerSlot;updateSlammerUI()}
-function updateSlammerUI(){$('slammerSlot').disabled=!slammerEnabled;$('slammerSlot').setAttribute('aria-valuetext',slammerEnabled?`Слой ${slammerSlot} из ${count}`:'Без биты');$('slammerImage').src=slammerManifest[slammerDesign].frontFile}
+function updateSlammerUI(){$('slammerSlot').disabled=!slammerEnabled;$('slammerSlot').setAttribute('aria-valuetext',slammerEnabled?`Layer ${slammerSlot} of ${count}`:'No slammer');$('slammerImage').src=slammerManifest[slammerDesign].frontFile}
 $('slammerSlot').onpointerdown=()=>{if(state==='result')restackRemaining(false);slotOpened=true};
 function moveSlammer(slot,design=slammerDesign){if(!slammer)return;slammerMove={start:performance.now(),from:{...slammer.body.translation()},q:slammer.mesh.quaternion.clone(),design,swapped:design===slammerDesign};slammerSlot=slot;updateSlammerUI();controls()}
 $('slammerSlot').oninput=e=>moveSlammer(+e.target.value);
 $('slammerSlot').onchange=()=>slotOpened=false;window.addEventListener('pointerup',()=>slotOpened=false);window.addEventListener('pointercancel',()=>slotOpened=false);
 $('chooseSlammer').onclick=()=>$('slammerPicker').showModal();
-for(let i=0;i<slammerManifest.length;i++){const b=document.createElement('button');b.type='button';if(i<0)b.textContent='Без биты';else{const img=new Image();img.src=slammerManifest[i].frontFile;img.alt=slammerManifest[i].name;b.append(img)}b.onclick=()=>{slammerEnabled=i>=0;$('slammerPicker').close();if(state==='result'){if(i>=0)slammerDesign=i;restackRemaining(false)}else if(i>=0)moveSlammer(slammerSlot,i)};b.setAttribute('aria-label',i<0?'Без биты':slammerManifest[i].name);$('slammerOptions').append(b)}
+for(let i=0;i<slammerManifest.length;i++){const b=document.createElement('button');b.type='button';if(i<0)b.textContent='No slammer';else{const img=new Image();img.src=slammerManifest[i].frontFile;img.alt=slammerManifest[i].name;b.append(img)}b.onclick=()=>{slammerEnabled=i>=0;$('slammerPicker').close();if(state==='result'){if(i>=0)slammerDesign=i;restackRemaining(false)}else if(i>=0)moveSlammer(slammerSlot,i)};b.setAttribute('aria-label',i<0?'No slammer':slammerManifest[i].name);$('slammerOptions').append(b)}
 $('closeSlammer').onclick=()=>$('slammerPicker').close();
 
 let overloaded=false,assemblingUntil=0,reframeUntil=0,lastPower=0,resetQueued=false;
-function setStrikeLabel(text){strike.setAttribute('aria-label',text+'. Удерживайте для сильного удара');const label=$('strikeLabel');if(label.textContent===text)return;label.textContent=text;label.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'})}
+function setStrikeLabel(text){strike.setAttribute('aria-label',text==='Again'?'Again. Gather the caps':'Hit. Hold for a stronger hit');const label=$('strikeLabel');if(label.textContent===text)return;label.textContent=text;label.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'})}
 let caps=[],count=5,state='ready',charge=null,physicsTime=0,flightStart=0,impactAt=0,impactElevation=.43,edgeAt=-1,twistAt=-1,groupRest={},still=0;
 let orbitYaw=-.18,orbitElevation=.43,orbitVelocity=0,viewWidth=2.65,viewElevation=.43,viewTarget=new THREE.Vector3(0,.18,0),viewYaw=-.18;
 function nextCap(){return readyDeck.shift()}
@@ -99,16 +98,40 @@ const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
 function resize(){renderer.setSize(stage.clientWidth,stage.clientHeight)}new ResizeObserver(resize).observe(stage);resize();
 const collection=[];
 try{const saved=JSON.parse(localStorage.getItem('bita-collection-v3')||'[]');for(const id of saved){const i=manifest.findIndex(e=>e.id===id);if(i>=0)collection.push(i)}}catch{}
-function controls(){const locked=!introFinished||!['ready','result'].includes(state)||performance.now()<assemblingUntil;const tool=$('slammerTool'),stowed=!['ready','charging'].includes(state);tool.hidden=false;tool.dataset.stowed=String(stowed);tool.inert=stowed;tool.setAttribute('aria-hidden',String(stowed));$('chooseSlammer').disabled=locked||Boolean(slammerMove);$('slammerSlot').disabled=locked||!slammerEnabled;$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=locked||Boolean(slammerMove)||count<=1;$('plus').disabled=locked||Boolean(slammerMove)||(count>=MAX_STACK||!readyDeck.length);strike.disabled=Boolean(slammerMove)||(locked&&state!=='charging')||(state==='ready'&&caps.some(c=>performance.now()-c.born<800));}
-function renderCollection(){const fan=$('collectionFan');fan.replaceChildren();for(const i of collection.slice(-3)){const img=new Image();img.alt='';fan.append(img);ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{})}$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label','Открыть выбитые фишки');}
-function showCollection(){const grid=$('albumGrid');grid.replaceChildren();for(const i of collection){const img=new Image();img.alt=manifest[i].name;img.loading='lazy';ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{});const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`Рассмотреть ${manifest[i].name}`);b.append(img);b.onclick=async()=>{await ensureCap(i);$('album').close();showcase.inspect({index:i})};grid.append(b)}$('albumCount').textContent=collection.length;$('album').showModal()}
+function controls(){const locked=!introFinished||!['ready','result'].includes(state)||performance.now()<assemblingUntil;const tool=$('slammerTool'),stowed=!['ready','charging'].includes(state);tool.hidden=false;tool.dataset.stowed=String(stowed);tool.inert=stowed;tool.setAttribute('aria-hidden',String(stowed));$('chooseSlammer').disabled=locked||Boolean(slammerMove);$('slammerSlot').disabled=locked||!slammerEnabled;$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=!introFinished;$('plus').disabled=!introFinished;strike.disabled=Boolean(slammerMove)||(locked&&state!=='charging')||(state==='ready'&&caps.some(c=>performance.now()-c.born<800));}
+function renderCollection(){const fan=$('collectionFan');fan.replaceChildren();for(const i of collection.slice(-3)){const img=new Image();img.alt='';fan.append(img);ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{})}$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label','Open won caps');}
+function showCollection(){const grid=$('albumGrid');grid.replaceChildren();for(const i of collection){const img=new Image();img.alt=manifest[i].name;img.loading='lazy';ensureCap(i).then(()=>img.src=images[i].src).catch(()=>{});const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`Inspect ${manifest[i].name}`);b.append(img);b.onclick=async()=>{await ensureCap(i);$('album').close();showcase.inspect({index:i})};grid.append(b)}$('albumCount').textContent=collection.length;$('album').showModal()}
 $('collectionToggle').onclick=showCollection;$('closeAlbum').onclick=()=>$('album').close();$('album').onclick=e=>{if(e.target!==$('album'))return;const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()};renderCollection();
 function addCap(drop=true,chosen=null){const i=caps.length,index=chosen??nextCap();if(!Number.isInteger(index)||!images[index]||!frontMats[index].map)return null;const physical=createStackBody(world,i,Math.random,manifest[index].material,manifest[index].id);const item={...physical,index,mesh:makeCap(index,i*.91),born:drop?performance.now():-10000,rest:{},won:false};caps.push(item);count=caps.length;if(drop){item.body.setTranslation({x:1.6,y:physical.position.y+.8,z:physical.position.z},true);item.body.setRotation(physical.rotation,true)}return item}
 function removeCap(c){scene.remove(c.mesh);c.mesh.traverse(o=>{if(o.isMesh)o.geometry.dispose()});world.removeRigidBody(c.body)}
-function reset(n=count,drop=true,indices=null){if(!indices&&!readyDeck.length){if(!resetQueued){resetQueued=true;setTimeout(()=>{resetQueued=false;reset(n,drop,indices)},300)}return}caps.forEach(removeCap);caps=[];count=clamp(n||5,1,MAX_STACK);hasHit=false;flexed.clear();overloaded=false;setStrikeLabel('Бить');state='ready';stage.setAttribute('aria-label','Вращайте всю стопку пальцем');$('announcer').textContent='';$('markers').replaceChildren();edgeAt=twistAt=-1;groupRest={};still=0;const desired=indices?count:Math.min(count,readyDeck.length);for(let i=0;i<desired;i++){const item=addCap(drop,indices?.[i]);if(drop&&item)item.born=performance.now()+i*70}count=caps.length;setupSlammer();renderCollection();controls()}
+function reset(n=count,drop=true,indices=null){if(!indices&&!readyDeck.length){if(!resetQueued){resetQueued=true;setTimeout(()=>{resetQueued=false;reset(n,drop,indices)},300)}return}caps.forEach(removeCap);caps=[];count=clamp(n||5,1,MAX_STACK);hasHit=false;flexed.clear();overloaded=false;setStrikeLabel('Hit');state='ready';stage.setAttribute('aria-label','Drag to rotate the stack');$('announcer').textContent='';$('markers').replaceChildren();edgeAt=twistAt=-1;groupRest={};still=0;const desired=indices?count:Math.min(count,readyDeck.length);for(let i=0;i<desired;i++){const item=addCap(drop,indices?.[i]);if(drop&&item)item.born=performance.now()+i*70}count=caps.length;setupSlammer();renderCollection();controls()}
 function restackRemaining(drop=true){const remaining=caps.filter(c=>!c.won),indices=remaining.map(c=>c.index),saved=new Map(remaining.map(c=>[c.index,{p:{...c.mesh.position},q:c.mesh.quaternion.clone()}])),oldBit=slammer?{p:{...slammer.mesh.position},q:slammer.mesh.quaternion.clone()}:null;reset(indices.length||5,false,indices.length?indices:null);const now=performance.now();assemblingUntil=now+750;reframeUntil=now+900;lastPower=0;for(const c of caps){const from=saved.get(c.index);if(from)c.assemble={...from,start:now}}if(slammer&&oldBit)slammer.assemble={...oldBit,start:now};controls()}
-$('plus').onclick=()=>{if(state==='result'&&!caps.some(c=>!c.won)){reset(1);return}if(state==='result')restackRemaining();if(state==='ready'&&performance.now()>=assemblingUntil&&count<MAX_STACK&&readyDeck.length){addCap(true);$('slammerSlot').max=count;updateSlammerUI();controls()}};
-$('minus').onclick=()=>{if(state==='result')restackRemaining();if(state==='ready'&&performance.now()>=assemblingUntil&&count>1){removeCap(caps.pop());count=caps.length;slammerSlot=Math.min(slammerSlot,count);$('slammerSlot').max=count;$('slammerSlot').value=slammerSlot;updateSlammerUI();controls()}};
+// Queue presses during a strike/reveal; keep native +/- controls responsive.
+let pendingAdjustment=0,adjustmentLoading=false;
+function requestAdjustment(delta){if(!introFinished)return;pendingAdjustment=clamp(pendingAdjustment+delta,-MAX_STACK,MAX_STACK);flushAdjustments()}
+function loadAdjustmentCaps(){if(adjustmentLoading)return;adjustmentLoading=true;if(!deck.length)deck=makeCapDeck(manifest);loadBatch().finally(()=>{adjustmentLoading=false;controls()})}
+function flushAdjustments(){
+ if(!pendingAdjustment||!introFinished||!['ready','result'].includes(state)||slammerMove||performance.now()<assemblingUntil)return;
+ if(state==='result'){
+  if(!caps.some(c=>!c.won)){
+   if(!readyDeck.length){loadAdjustmentCaps();return}
+   reset(1);pendingAdjustment-=Math.sign(pendingAdjustment);
+  }else restackRemaining(false);
+ }
+ while(pendingAdjustment){
+  if(pendingAdjustment>0){
+   if(count>=MAX_STACK){pendingAdjustment=0;break}
+   if(!readyDeck.length){loadAdjustmentCaps();break}
+   if(!addCap(true))break;pendingAdjustment--;
+  }else{
+   if(count<=1){pendingAdjustment=0;break}
+   removeCap(caps.pop());count=caps.length;pendingAdjustment++;
+  }
+ }
+ slammerSlot=Math.min(slammerSlot,count);$('slammerSlot').max=count;$('slammerSlot').value=slammerSlot;updateSlammerUI();controls();
+}
+$('plus').onclick=()=>requestAdjustment(1);
+$('minus').onclick=()=>requestAdjustment(-1);
 for(const id of['plus','minus']){let timer,repeat;const b=$(id),action=b.onclick;b.onclick=e=>{if(!repeat)action(e);repeat=false};b.addEventListener('pointerdown',()=>{repeat=false;timer=setTimeout(()=>{repeat=true;action();timer=setInterval(action,140)},350)});for(const type of['pointerup','pointercancel'])window.addEventListener(type,()=>{clearTimeout(timer);clearInterval(timer)});b.addEventListener('pointerleave',()=>{clearTimeout(timer);clearInterval(timer)})}
 let audio=null;function ensureAudio(){try{audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume()}catch{}}
 let lastMaterialSound=-10;
@@ -117,9 +140,9 @@ function sound(power,plastic=false,level=1){if(!audio||audio.state!=='running')r
 function begin(e){if(!introFinished||slammerMove)return;if(state==='result'){restackRemaining(false);return}if(state!=='ready'||performance.now()<assemblingUntil)return;ensureAudio();charge={start:performance.now(),power:0};orbitVelocity=0;state='charging';if(e.pointerId!==undefined)e.currentTarget.setPointerCapture?.(e.pointerId);strike.classList.add('charging');controls()}
 function cancel(){if(!charge)return;charge=null;state='ready';strike.classList.remove('charging');setChargeVisual(0);controls()}
 const chargeFeedback=createChargeFeedback(strike);
-function setChargeVisual(p){chargeFeedback.setPower(p)}
+function setChargeVisual(p){chargeFeedback.setPower(Math.min(1,p*CHARGE_MS/2000))}
 function release(){if(!charge)return;if(performance.now()-charge.start>=CHARGE_MS)return overload();const power=clamp((performance.now()-charge.start)/CHARGE_MS,.15,1);lastPower=power;charge=null;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;still=0;groupRest={};slammerContact=false;slammerAt=-1;strikeStackDown(pieces().map(c=>c.body),power);pieces().forEach(c=>{c.power=power;c.rest={}});controls()}
-function overload(){if(!charge)return;lastPower=1;charge=null;overloaded=true;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;groupRest={};still=0;slammerContact=false;slammerAt=-2;strikeStackDown(pieces().map(c=>c.body),.1);pieces().forEach((c,i)=>{const angle=i*2.399963;c.power=.1;c.rest={};c.body.setLinvel({x:Math.cos(angle)*(1.6+i*.02)*PHYSICS_RATE,y:-.7*PHYSICS_RATE,z:Math.sin(angle)*(1.6+i*.02)*PHYSICS_RATE},true);c.body.setAngvel({x:Math.cos(angle)*3*PHYSICS_RATE,y:Math.sin(angle)*2*PHYSICS_RATE,z:Math.sin(angle)*3*PHYSICS_RATE},true)});setStrikeLabel('Ещё раз');controls()}
+function overload(){if(!charge)return;lastPower=1;charge=null;overloaded=true;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;groupRest={};still=0;slammerContact=false;slammerAt=-2;strikeStackDown(pieces().map(c=>c.body),.1);pieces().forEach((c,i)=>{const angle=i*2.399963;c.power=.1;c.rest={};c.body.setLinvel({x:Math.cos(angle)*(1.6+i*.02)*PHYSICS_RATE,y:-.7*PHYSICS_RATE,z:Math.sin(angle)*(1.6+i*.02)*PHYSICS_RATE},true);c.body.setAngvel({x:Math.cos(angle)*3*PHYSICS_RATE,y:Math.sin(angle)*2*PHYSICS_RATE,z:Math.sin(angle)*3*PHYSICS_RATE},true)});setStrikeLabel('Again');controls()}
 strike.addEventListener('pointerdown',begin);strike.addEventListener('pointerup',release);strike.addEventListener('pointercancel',cancel);
 strike.addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)&&!e.repeat){e.preventDefault();begin(e)}});strike.addEventListener('keyup',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();release()}});window.addEventListener('blur',cancel);
 const pointers=new Map();let lastGesture=null,dragging=null;
@@ -141,19 +164,19 @@ renderer.domElement.addEventListener('pointermove',e=>{
 });
 function endGesture(e){if(dragging?.pointerId===e.pointerId){const c=dragging.cap,p=c.body.translation();if(dragging.moved){const support=supportHeight(c),others=pieces().filter(o=>o!==c&&!o.collected&&Math.hypot(o.body.translation().x-p.x,o.body.translation().z-p.z)<1.12);const y=Math.max(support,...others.map(o=>o.body.translation().y+supportHeight(o)+support+.002));c.body.setTranslation({x:p.x,y,z:p.z},true)}parkBody(c.body);dragging=null;renderer.shadowMap.needsUpdate=true;}pointers.delete(e.pointerId);if(!pointers.size)lastGesture=null;}
 renderer.domElement.addEventListener('pointerup',endGesture);renderer.domElement.addEventListener('pointercancel',endGesture);
-function impact(plastic=false){if(state!=='airborne')return;hasHit=true;setStrikeLabel('Ещё раз');state='scattering';renderCollection();impactAt=physicsTime;impactElevation=viewElevation;edgeAt=-1;twistAt=-1;const p=caps[0].power;if(!overloaded)fanStack(caps.map(c=>c.body),p,false,flexed);sound(p,plastic);lastMaterialSound=physicsTime;navigator.vibrate?.(12)}
+function impact(plastic=false){if(state!=='airborne')return;hasHit=true;setStrikeLabel('Again');state='scattering';renderCollection();impactAt=physicsTime;impactElevation=viewElevation;edgeAt=-1;twistAt=-1;const p=caps[0].power;if(!overloaded)fanStack(caps.map(c=>c.body),p,false,flexed);sound(p,plastic);lastMaterialSound=physicsTime;navigator.vibrate?.(12)}
 function parkBody(body){const p=body.translation(),q=body.rotation();body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased,true);body.setTranslation(p,true);body.setRotation(q,true);body.setNextKinematicTranslation(p);body.setNextKinematicRotation(q)}
 function projectCap(c){return c.mesh.position.clone().project(camera)}
-function finish(){separateDiscs(world,pieces());stage.setAttribute('aria-label','Перетаскивайте фишки по столу');pieces().forEach(c=>{c.won=!overloaded&&!c.isSlammer&&faceUp(c.body);parkBody(c.body)});const won=caps.filter(c=>c.won).sort((a,b)=>projectCap(b).y-projectCap(a).y);$('markers').replaceChildren();setStrikeLabel('Ещё раз');
-if(!won.length){state='result';$('announcer').textContent=overloaded?'Стопка рассыпалась от избытка силы':'Ни одна фишка не перевернулась';renderCollection();controls();return}
-state='inspection';won.forEach((c,i)=>c.rank=i+1);$('announcer').textContent=`Перевернулось: ${won.length}`;collectWinners();}
+function finish(){separateDiscs(world,pieces());stage.setAttribute('aria-label','Drag caps across the table');pieces().forEach(c=>{c.won=!overloaded&&!c.isSlammer&&faceUp(c.body);parkBody(c.body)});const won=caps.filter(c=>c.won).sort((a,b)=>projectCap(b).y-projectCap(a).y);$('markers').replaceChildren();setStrikeLabel('Again');
+if(!won.length){state='result';$('announcer').textContent=overloaded?'Too much power. The stack scattered':'No caps flipped';renderCollection();controls();return}
+state='inspection';won.forEach((c,i)=>c.rank=i+1);$('announcer').textContent=`Flipped: ${won.length}`;collectWinners();}
 async function collectWinners(){if(state!=='inspection'||dragging)return;state='collecting';renderCollection();controls();$('markers').replaceChildren();const won=caps.filter(c=>c.won).sort((a,b)=>a.rank-b.rank);
 try{localStorage.setItem('bita-collection-v3',JSON.stringify([...collection,...won.map(c=>c.index)].map(i=>manifest[i].id)))}catch{}
 for(const [i,c]of won.entries()){c.collected=true;c.mesh.visible=false;const r=$('collectionToggle').getBoundingClientRect();await showcase.award({index:c.index},{target:{x:r.x+r.width/2,y:r.y+r.height/2},index:i,total:won.length});collection.push(c.index);renderCollection()}
 state='result';count=caps.filter(c=>!c.won).length;renderCollection();controls();}
 let previous=performance.now(),acc=0,lastFrame=0;
 function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=state==='ready'||state==='result'||state==='inspection';if(idle&&!jellyButtons.active()&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.1);previous=now;const t=now/1000;
- showcase.update(now,dt);if(charge&&now-charge.start>=CHARGE_MS)overload();if(state==='ready')controls();
+ showcase.update(now,dt);if(pendingAdjustment)flushAdjustments();if(charge&&now-charge.start>=CHARGE_MS)overload();if(state==='ready')controls();
  updateAtmosphere(dt);jellyButtons.update(dt);chargeFeedback.update(now,dt);
  if(['ready','charging'].includes(state)){
   const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0;if(charge)setChargeVisual(p);
