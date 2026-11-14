@@ -1,13 +1,13 @@
 import {isPlayable,readOwnedCollection} from './cap-catalog.js?v=20261113-clean24';
 import {prepareFace,faceThumbnail} from './face-texture.js?v=20261113-clean24';
-import {createCollectionSheet} from './collection-sheet.js?v=20261113-clean24';
+import {createCollectionSheet} from './collection-sheet.js?v=20261114-carousel26';
 import {createTableDots} from './table-dots.js?v=20261113-clean24';
 import {PHYSICS_RATE} from './physics-scale.js?v=20261113-clean24';
 import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-placement.js?v=20261113-insert25';
 import {makeCapDeck} from './cap-deck.js?v=20261113-clean24';
 import * as THREE from './vendor/three.module.js';
 import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261113-clean24';
-import {createShowcase} from './showcase.js?v=20261113-clean24';
+import {createShowcase} from './showcase.js?v=20261114-carousel26';
 import {createChargeFeedback} from './charge-feedback.js?v=20261113-clean24';
 import {createJellyButtons} from './jelly-buttons.js?v=20261113-clean24';
 import {createPackIntro} from './pack-intro.js?v=20261113-clean24';
@@ -107,7 +107,8 @@ let storedCollection=null;try{storedCollection=localStorage.getItem('bita-collec
 const ownership=readOwnedCollection(storedCollection,manifest),collection=ownership.visible,ownedCapIds=ownership.ids;
 function controls(){const locked=!introFinished||!['ready','result'].includes(state)||performance.now()<assemblingUntil;updatePlacementUI();$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=!introFinished;$('plus').disabled=!introFinished;strike.disabled=slammerPlacement.active||(locked&&state!=='charging')||(state==='ready'&&caps.some(c=>performance.now()-c.born<800));}
 function renderCollection(){const fan=$('collectionFan');fan.dataset.count=Math.min(3,collection.length);fan.replaceChildren();for(const i of collection.slice(-3)){const img=new Image();img.alt='';fan.append(img);ensureCap(i).then(()=>img.src=thumbnailFor(i)).catch(()=>{})}$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label','Open won caps');}
-const collectionSheet=createCollectionSheet({getItems:()=>collection,ensureItem:i=>ensureCap(i),imageFor:i=>thumbnailFor(i),nameFor:i=>manifest[i].name,inspect:(i,host)=>showcase.inspect({index:i},host),stopInspect:()=>showcase.stopInspect()});
+const seriesNames={pokemon:'Pokémon',mk:'Mortal Kombat',turtles:'Teenage Mutant Ninja Turtles',sonic:'Sonic the Hedgehog',batman:'Batman','power-rangers':'Power Rangers',digimon:'Digimon',streetfighter:'Street Fighter II','mad-monster':'Mad Monster Light','bionicle-2001':'Bionicle · 2001','bionicle-2003':'Bionicle · 2003',dbz:'Dragon Ball Z',nintendo:'Nintendo',cheetos:'Cheetos',spacejam:'Space Jam','simpsons-2006':'The Simpsons','bakugan-roks':'Bakugan'};
+const collectionSheet=createCollectionSheet({getItems:()=>collection,ensureItem:i=>ensureCap(i),imageFor:i=>thumbnailFor(i),nameFor:i=>manifest[i].name,descriptionFor:i=>`${seriesNames[manifest[i].series]??manifest[i].series} · ${manifest[i].material==='plastic'?'Plastic cap':'Cardboard cap'}`,inspect:(i,host)=>showcase.inspect({index:i},host,{verticalOnly:true,fit:.96}),stopInspect:()=>showcase.stopInspect()});
 function showCollection(){collectionSheet.open()}
 $('collectionToggle').onclick=showCollection;renderCollection();
 function addCap(drop=true,chosen=null){const i=caps.length,index=chosen??nextCap();if(!Number.isInteger(index)||!isPlayable(manifest[index])||!images[index]||!frontMats[index].map)return null;const physical=createStackBody(world,i,Math.random,manifest[index].material,manifest[index].id);const item={...physical,index,mesh:makeCap(index,i*.91),born:drop?performance.now():-10000,rest:{},won:false};caps.push(item);count=caps.length;if(drop){item.body.setTranslation({x:1.6,y:physical.position.y+.8,z:physical.position.z},true);item.body.setRotation(physical.rotation,true)}return item}
