@@ -12,7 +12,7 @@ import * as THREE from './vendor/three.module.js';
 import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261114-impact38';
 import {createShowcase} from './showcase.js?v=20261114-reveal32';
 import {createChargeFeedback} from './charge-feedback.js?v=20261114-touch39';
-import {createPackIntro} from './pack-intro.js?v=20261113-clean24';
+import {createPackIntro} from './pack-intro.js?v=20261114-peek42';
 const CHARGE_MS=7000;
 const resultSplash=createResultSplash();
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');

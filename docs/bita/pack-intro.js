@@ -1,6 +1,7 @@
 import * as THREE from './vendor/three.module.js';
 const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp,ease=t=>{t=clamp(t,0,1);return t*t*(3-2*t)};
 const W=1024,H=1536,SW=1.7,SH=2.55,CUT=174;
+const PEEK_START=.22,PEEK_REST=.34;
 // Native mesh clipping uses the selected image unchanged. No baked background rectangle.
 const outline=[[116,84],[904,46],[909,81],[899,140],[886,156],[876,189],[884,236],[887,316],[875,485],[889,675],[878,842],[893,1012],[878,1167],[888,1367],[896,1468],[103,1452],[112,1401],[124,1331],[132,1221],[135,1142],[127,1022],[133,854],[137,686],[134,519],[132,350],[127,243]];
 function clip(poly,y,below){const result=[];for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length],ai=below?a[1]>=y:a[1]<=y,bi=below?b[1]>=y:b[1]<=y;if(ai)result.push(a);if(ai!==bi){const t=(y-a[1])/(b[1]-a[1]);result.push([lerp(a[0],b[0],t),y])}}return result}
@@ -44,24 +45,34 @@ export function createPackIntro({renderer,host,getEnvironment}){
  function fail(){if(!active||opening)return;overlay.dataset.error='true';button.disabled=false;hint.hidden=false;button.setAttribute('aria-label','Retry loading');hint.innerHTML='<svg viewBox="0 0 24 24"><path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/></svg>'}
  window.addEventListener('unhandledrejection',fail);
  button.addEventListener('click',()=>{if(overlay.dataset.error==='true')location.reload()});
- new THREE.TextureLoader().load('assets/pack/prism.webp',texture=>{texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;front.map=top.material.map=texture;front.opacity=top.material.opacity=1;foil.opacity=topGroup.children[1].material.opacity=1;front.needsUpdate=top.material.needsUpdate=true;textureReady=true;textureReadyAt=performance.now();revealFrom=reveal=Number(getComputedStyle(placeholder).opacity)||0;front.opacity=top.material.opacity=foil.opacity=topGroup.children[1].material.opacity=reveal;resize();scene.environment=getEnvironment?.()??null;renderer.setRenderTarget(null);renderer.setClearColor(0xf1f1ee,1);renderer.render(scene,camera);placeholder.style.visibility='hidden';if(overlay.dataset.waiting==='true'&&ready)open()},undefined,()=>{placeholder.hidden=false;placeholder.style.visibility='visible';fail()});
+ new THREE.TextureLoader().load('assets/pack/prism.webp',texture=>{texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=4;front.map=top.material.map=texture;front.opacity=top.material.opacity=1;foil.opacity=topGroup.children[1].material.opacity=1;front.needsUpdate=top.material.needsUpdate=true;textureReady=true;textureReadyAt=performance.now();if(progress<PEEK_START){progress=curl=reduced.matches?PEEK_REST:PEEK_START}deformStrip(curl);revealFrom=reveal=Number(getComputedStyle(placeholder).opacity)||0;front.opacity=top.material.opacity=foil.opacity=topGroup.children[1].material.opacity=reveal;resize();scene.environment=getEnvironment?.()??null;renderer.setRenderTarget(null);renderer.setClearColor(0xf1f1ee,1);renderer.render(scene,camera);placeholder.style.visibility='hidden';if(overlay.dataset.waiting==='true'&&ready)open()},undefined,()=>{placeholder.hidden=false;placeholder.style.visibility='visible';fail()});
  function open(){if(opening)return;if(!ready||!textureReady){overlay.dataset.waiting='true';return;}peelStart=curl;opening=performance.now();overlay.dataset.opening='true';hint.hidden=true;button.disabled=true;}
  function point(e){const r=button.getBoundingClientRect();return {x:e.clientX,y:e.clientY,width:r.width}}
  button.addEventListener('pointerdown',e=>{if(opening)return;const p=point(e);drag={...p,id:e.pointerId,startProgress:progress};button.setPointerCapture(e.pointerId)});
  button.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id||opening)return;const dx=drag.x-e.clientX;progress=clamp(drag.startProgress+dx/(drag.width*.65),0,1);overlay.style.setProperty('--tear',progress);if(progress>=.88&&ready)open()});
- function release(e){if(!drag||e.pointerId!==drag.id)return;if(progress>.64&&ready)open();else if(progress>.64)overlay.dataset.waiting='true';else progress=textureReady?.16:0;drag=null;}
- button.addEventListener('pointerup',release);button.addEventListener('pointercancel',()=>{drag=null;if(!opening)progress=textureReady?.16:0});
+ function release(e){if(!drag||e.pointerId!==drag.id)return;if(progress>.64&&ready)open();else if(progress>.64)overlay.dataset.waiting='true';else progress=textureReady?PEEK_REST:0;drag=null;}
+ button.addEventListener('pointerup',release);button.addEventListener('pointercancel',()=>{drag=null;if(!opening)progress=textureReady?PEEK_REST:0});
  button.addEventListener('keydown',e=>{if(e.code==='Enter'||e.code==='Space'){e.preventDefault();if(overlay.dataset.error==='true'){location.reload();return}progress=1;if(ready)open();else overlay.dataset.waiting='true'}});
  function finish(){active=false;window.removeEventListener('unhandledrejection',fail);cancelAnimationFrame(raf);observer.disconnect();overlay.hidden=true;document.documentElement.dataset.intro='done';
   bodyGeo.dispose();topGeo.dispose();front.map?.dispose();front.dispose();top.material.dispose();foil.dispose();topGroup.children[1].material.dispose();lineGeo.dispose();line.material.dispose();spark.geometry.dispose();spark.material.dispose();scene.clear();placeholder.remove();renderer.setRenderTarget(null);renderer.setClearColor(savedClearColor,savedClearAlpha);renderer.clear(true,true,true);resolve();}
+ // Pre-open and full tear use the same deforming strip, including the first draw.
+ // A tighter initial curl exposes the foil lip without detaching the top edge.
+ function deformStrip(value){
+  const positions=topGeo.attributes.position,tearX=lerp(.65,-.65,value),radius=lerp(.23,.5,ease((value-PEEK_REST)/(1-PEEK_REST)));
+  for(let i=0;i<positions.count;i++){
+   const x=topBases[i*3],y=topBases[i*3+1],released=Math.max(0,x-tearX),angle=released/radius;
+   positions.setXYZ(i,released?tearX+Math.sin(angle)*radius:x,y+released*.35*Math.sin(value*Math.PI*.5),released?radius*(1-Math.cos(angle))+.012:0);
+  }
+  positions.needsUpdate=true;topGeo.computeVertexNormals();
+ }
  function frame(now){if(!active)return;raf=requestAnimationFrame(frame);const dt=Math.min(.05,(now-previous)/1000);previous=now;if(document.hidden)return;
   const dark=document.documentElement.dataset.theme==='dark';hemi.intensity=dark?1.5:1.8;key.intensity=dark?2.3:2;scene.environment=getEnvironment?.()??null;
   // An opaque intro pass avoids transparent-canvas black flashes on mobile.
   const background=dark?0x191b1a:0xf1f1ee;scene.background.set(background);renderer.setRenderTarget(null);renderer.setClearColor(background,1);
   reveal=textureReady?lerp(revealFrom,1,ease((now-textureReadyAt)/420)):0;
   if(!opening){
-   if(!drag&&progress<.64){const tease=textureReady?.16*ease((now-textureReadyAt-350)/650):0;progress+=(tease-progress)*(1-Math.exp(-dt/.22));}
-   curl+=(progress-curl)*(1-Math.exp(-dt/.14));
+   if(!drag&&progress<.64){const tease=textureReady?PEEK_START+(PEEK_REST-PEEK_START)*ease((now-textureReadyAt-120)/650):0;progress=reduced.matches?PEEK_REST:progress+(tease-progress)*(1-Math.exp(-dt/.12));}
+   curl=reduced.matches?progress:curl+(progress-curl)*(1-Math.exp(-dt/.10));
    const life=textureReady?Math.max(0,now-textureReadyAt):0,motion=ease((life-400)/500);group.rotation.y=reduced.matches?0:Math.sin(life*.0005)*.025*motion-curl*.025;group.rotation.z=reduced.matches?0:Math.sin(life*.00035)*.008*motion;group.position.y=reduced.matches?0:Math.sin(life*.0007)*.012*motion;
    front.opacity=top.material.opacity=foil.opacity=topGroup.children[1].material.opacity=reveal;
    topGroup.position.set(0,0,0);topGroup.rotation.set(0,0,0);line.material.opacity=.23+progress*.65;spark.position.x=lerp(.62,-.62,drag||progress>.64?progress:(now%1600)/1600);spark.material.opacity=textureReady?(progress?.95:.55):0;
@@ -84,14 +95,7 @@ export function createPackIntro({renderer,host,getEnvironment}){
    }
    if(t>2.3){finish();return}
   }
-  // The torn strip curls continuously around its moving tear front. Its
-  // silver reverse becomes visible as it folds, rather than rotating rigidly.
-  const topPositions=topGeo.attributes.position,tearX=lerp(.65,-.65,curl),radius=.5;
-  for(let i=0;i<topPositions.count;i++){
-   const x=topBases[i*3],y=topBases[i*3+1],released=Math.max(0,x-tearX),angle=released/radius;
-   topPositions.setXYZ(i,released?tearX+Math.sin(angle)*radius:x,y+released*.35*Math.sin(curl*Math.PI*.5),released?radius*(1-Math.cos(angle))+.012:0);
-  }
-  topPositions.needsUpdate=true;topGeo.computeVertexNormals();
+  deformStrip(curl);
   renderer.render(scene,camera);
  }
  raf=requestAnimationFrame(frame);
