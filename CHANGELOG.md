@@ -173,3 +173,10 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 - Every strike press closes placement before checking the assembly guard. During assembly an open selector still accepts that press and closes without triggering an unsafe hit.
 - Strike gets an immediate 520 ms inner energy streak, plus a pulsing lower glow while charging. Color follows the chosen slammer; existing unrestricted whole-bar lightning remains. Reduced motion gets a short fade.
 - Placement tests and syntax checks pass. Browser 508×987: layer drag 2→5, short strike closes selector/guide, immediate strike during restack also closes both without an extra hit; no JS/GLSL errors.
+
+## 2026-11-14 · v36 · Bitcount aluminium console
+
+- Removed the slammer button. Three slammers remain peeking above the tray after intro, including after a strike. Tapping any disc opens the separated row and layer-placement mode; choosing another swaps the actual body/material. Strike collapses the row and hides the layer handle/guide.
+- Three-column minus / plus / strike console. Satin brushed aluminium adjust keys, dark anodized-metal strike, translucent frosted-plastic tray. Larger 76 px keys (68 px on narrow screens).
+- Actual Bitcount variable font, OFL, self-hosted WOFF2 subset (11,216 bytes), no font CDN requests. Per-character diode flicker on press and while charging; reduced motion disables flicker. Existing whole-tray lightning and result effects preserved.
+- Syntax and slammer-placement tests pass. Browser 508×987: visible collapsed row, tap to expand, purple selection, layer 2→5, 1.7 s strike and collapse with still-visible slammers; no JS/GLSL errors.

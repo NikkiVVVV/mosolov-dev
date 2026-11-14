@@ -201,3 +201,24 @@ html .controls #strike.charging::after{content:'';position:absolute;inset:0;z-in
 @keyframes strike-energy-breathe{from{filter:brightness(.8);scale:1}to{filter:brightness(1.4);scale:1.08}}
 @media(max-width:350px){html .controls #slammerButton,html .controls #strike{border-radius:16px;clip-path:inset(0 round 16px);-webkit-clip-path:inset(0 round 16px)}}
 @media(prefers-reduced-motion:reduce){html .controls #strike.charging::after{animation:none}}
+
+/* Bitcount diode labels and always-present slammers above a satin metal console. */
+@font-face{font-family:Bitcount;src:url('assets/fonts/bitcount/bitcount-controls.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
+html .controls{--key-height:76px;grid-template-columns:1fr 1fr 2.2fr;gap:8px;padding:12px;max-width:408px;border-radius:32px}
+html .controls::before{border-radius:32px;border:1px solid #ffffffec;background:linear-gradient(135deg,#ffffffa6,#e2e5e4b3 48%,#fafbf99c);box-shadow:inset 0 1px 1px #fff,inset 0 -1px 2px #b4baba35,0 8px 24px #333d3520;backdrop-filter:blur(20px) saturate(.8);-webkit-backdrop-filter:blur(20px) saturate(.8)}
+html .controls>.adjust{background:repeating-linear-gradient(0deg,#ffffff12 0 1px,#67737908 1px 2px),radial-gradient(ellipse at 24% 0,#ffffffd9,transparent 65%),linear-gradient(148deg,#fafcfb 0%,#dce1e2 48%,#c4cdd0 100%);border:1px solid #ffffffed;border-radius:24px;box-shadow:inset 0 1px 1px #fff,inset 0 -2px 2px #9ca8ae4d,0 3px 6px #27333212;color:#4b5554}
+html .controls #strike{border-radius:24px;clip-path:inset(0 round 24px);-webkit-clip-path:inset(0 round 24px);background:repeating-linear-gradient(0deg,#ffffff06 0 1px,#00000008 1px 2px),radial-gradient(ellipse at 25% 0,#5d62604d,transparent 65%),linear-gradient(150deg,#333b37,#161c19);border:1px solid #141b17;box-shadow:inset 0 1px 1px #78877a70,inset 0 -2px 2px #0003,0 3px 7px #18201924}
+html .controls .led-label,html .controls #strikeLabel{display:inline-flex;align-items:center;justify-content:center;gap:0;font-family:Bitcount,monospace;font-size:28px;font-weight:400;font-style:normal;font-variation-settings:'CRSV' 0,'ELSH' 0,'ELXP' 0;line-height:32px;letter-spacing:0;text-rendering:geometricPrecision}
+html .controls #strikeLabel{font-size:28px;line-height:32px;white-space:nowrap}
+.led-glyph{display:inline-block;white-space:pre}
+html .controls[data-level=building] .led-glyph,html .controls[data-level=strong] .led-glyph,html .controls[data-level=edge] .led-glyph{animation:led-voltage 780ms steps(1,end) infinite;animation-delay:calc(var(--led-i)*-67ms)}
+html .controls[data-level=strong] .led-glyph{animation-duration:500ms}html .controls[data-level=edge] .led-glyph{animation-duration:280ms}
+@keyframes led-voltage{0%,22%,26%,58%,63%,100%{opacity:1;filter:brightness(1);text-shadow:0 0 6px color-mix(in srgb,var(--energy,#479aff),transparent 70%)}24%{opacity:.48;filter:brightness(1.35)}60%{opacity:.7;filter:brightness(1.6)}}
+html .controls .slammer-picker{bottom:calc(100% - 24px);left:50%;width:320px;height:112px;transform:translateX(-50%);z-index:-1;pointer-events:auto}
+html .controls .slammer-picker button{width:84px;height:84px;left:calc(50% - 42px);top:28px;translate:calc(var(--slot)*52px) 14px;transform:scale(.95);animation:none;transition:translate .38s cubic-bezier(.2,.75,.2,1),transform .38s cubic-bezier(.2,.75,.2,1),top .38s;touch-action:manipulation}
+html .controls .slammer-picker button[aria-pressed=true]{translate:0 0;transform:scale(1.12);z-index:3}
+html .controls .slammer-picker[data-open=true] button{top:-12px;translate:calc(var(--slot)*108px) -28px;transform:scale(1);z-index:1}
+html .controls .slammer-picker[data-open=true] button[aria-pressed=true]{translate:0 -40px;transform:scale(1.12);z-index:3}
+html .controls .slammer-picker button:disabled{opacity:1;cursor:default}
+@media(max-width:350px){html .controls{--key-height:68px;gap:6px;padding:10px;border-radius:28px}html .controls::before{border-radius:28px}html .controls>.adjust,html .controls #strike{border-radius:20px}html .controls #strike{clip-path:inset(0 round 20px);-webkit-clip-path:inset(0 round 20px)}html .controls #strikeLabel{font-size:24px;line-height:28px}html .controls .slammer-picker[data-open=true] button{translate:calc(var(--slot)*94px) -28px}}
+@media(prefers-reduced-motion:reduce){html .controls .slammer-picker button{transition:none}html .controls .led-glyph{animation:none!important}}

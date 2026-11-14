@@ -19,3 +19,6 @@ Official airbnb/lottie-web SVG light player, MIT. See lottie-LICENSE.md. Vendore
 
 ## Burst stars animation
 Agnis Design, from Idle Box Factory. https://lottiefiles.com/free-animation/burst-stars-animation-s27HzIxQ2u . Lottie Simple License; see assets/effects/LICENSE.txt. Vector source retained; stroke colors adapted to the chosen slammer.
+
+## Bitcount
+Petr van Blokland / The Bitcount Project Authors. Source: https://github.com/google/fonts/tree/main/ofl/bitcount . SIL Open Font License 1.1, bundled in assets/fonts/bitcount/OFL.txt. Controls-only WOFF2 subset generated with fonttools, variable axes preserved; outlines unchanged.
