@@ -6,7 +6,7 @@ import {createCollectionSheet} from './collection-sheet.js?v=20261114-carousel40
 import {createTableDots} from './table-dots.js?v=20261113-clean24';
 import {PHYSICS_RATE} from './physics-scale.js?v=20261113-clean24';
 import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-placement.js?v=20261114-hud29';
-import {chargeFill,createWonRail} from './hud-progress.js?v=20261114-hud41';
+import {chargeFill,createWonRail} from './hud-progress.js?v=20261114-count44';
 import {makeCapDeck} from './cap-deck.js?v=20261113-clean24';
 import * as THREE from './vendor/three.module.js';
 import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261114-impact38';
