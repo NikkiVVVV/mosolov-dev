@@ -101,27 +101,27 @@ html body,html button,html .toss,html .adjust,.album-header h2{font-family:"IBM 
 html .controls .toss{font-weight:500;letter-spacing:-.4px}
 
 /* A light sheet with a single horizontal fan; no thumbnail grid below it. */
-#album{--cap-size:min(208px,52vw,32svh);--cap-step:clamp(58px,19vw,92px);display:none;flex-direction:column;inset:auto 0 0;width:min(520px,100%);max-width:100%;height:min(460px,80svh);max-height:calc(100svh - 24px);margin:0 auto;padding:0 0 max(24px,env(safe-area-inset-bottom));border:1px solid #ffffffd9;border-bottom:0;border-radius:28px 28px 0 0;background:#f4f4f0;color:#302e32;box-shadow:0 -8px 40px #17151c1a;overflow:hidden;isolation:isolate}
+#album{--cap-size:min(416px,calc(100vw - 40px),calc(92svh - 240px));--cap-step:calc(var(--cap-size)*.44);display:none;flex-direction:column;inset:auto 0 0;width:min(520px,100%);max-width:100%;height:min(760px,92svh);max-height:calc(100svh - 24px);margin:0 auto;padding:0 0 max(24px,env(safe-area-inset-bottom));border:1px solid #ffffffd9;border-bottom:0;border-radius:28px 28px 0 0;background:#f4f4f0;color:#302e32;box-shadow:0 -8px 40px #17151c1a;overflow:hidden;isolation:isolate}
 #album[open]{display:flex;animation:album-enter .28s cubic-bezier(.2,.75,.2,1)}
 #album::backdrop{background:#090b1447;backdrop-filter:blur(6px)}
 @keyframes album-enter{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
 #albumGrab{height:24px;flex:none;display:grid;place-items:center;touch-action:none;cursor:grab}#albumGrab span{width:32px;height:4px;border-radius:4px;background:#c6c7c1}
-#album .album-header{height:44px;min-height:44px;flex:none;display:grid;grid-template-columns:80px minmax(0,1fr) 80px;align-items:center;margin:0;padding:0 16px;gap:4px}
-#album .album-header h2{grid-column:2;font:500 14px/20px "IBM Plex Mono",monospace;text-align:center;white-space:nowrap;margin:0;color:#38363b}
-#albumPosition{grid-column:3;justify-self:end;font:500 12px/16px "IBM Plex Mono",monospace;color:#76737a;white-space:nowrap}
+#album .album-header{height:32px;min-height:32px;flex:none;display:grid;grid-template-columns:1fr;justify-content:stretch;place-items:center;margin:0;padding:0 16px}
+#albumPosition{font:500 12px/16px "IBM Plex Mono",monospace;color:#76737a;white-space:nowrap}
 #albumCarousel{position:relative;flex:1 1 auto;min-height:0;width:100%;perspective:760px;touch-action:none;cursor:grab;--carousel-drag:0px;outline:none}
 #albumCarousel:active{cursor:grabbing}#albumNeighbors{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}
-.album-cap-card{position:absolute;left:50%;top:50%;width:var(--cap-size);height:var(--cap-size);padding:0;border:0;border-radius:50%;background:transparent;pointer-events:auto;cursor:pointer;transform:translate(-50%,-50%) translateX(calc(var(--offset)*var(--cap-step) + var(--carousel-drag))) translateY(calc(var(--offset)*var(--offset)*4px)) rotateY(var(--yaw)) scale(var(--scale));transition:transform .28s cubic-bezier(.2,.7,.2,1),opacity .18s;opacity:0;box-shadow:-2px 1px 0 #bcb9ab,0 8px 16px #29232712;backface-visibility:hidden}
+.album-cap-card{position:absolute;left:50%;top:50%;width:var(--cap-size);height:var(--cap-size);padding:0;border:0;border-radius:50%;background:transparent;pointer-events:auto;cursor:pointer;transform:translate(-50%,-50%) translateX(calc(var(--offset)*var(--cap-step) + var(--carousel-drag))) translateY(calc(var(--offset)*var(--offset)*12px)) rotateY(var(--yaw)) scale(var(--scale));transition:transform .46s cubic-bezier(.22,1,.36,1),opacity .24s;opacity:0;box-shadow:-2px 1px 0 #bcb9ab,0 8px 16px #29232712;backface-visibility:hidden}
 .album-cap-card img{display:block;width:100%;height:100%;border-radius:50%;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
 .album-cap-card[data-loaded=true]{opacity:1}.album-cap-card[data-current=true]{opacity:0;pointer-events:none}
 #albumPreview{position:absolute;left:50%;top:50%;width:var(--cap-size);height:var(--cap-size);min-height:0;max-height:none;display:grid;place-items:center;overflow:visible;z-index:20;transform:translate(calc(-50% + var(--carousel-drag)),-50%);transition:transform .2s ease;touch-action:none}
 #albumPreview>.showcase-canvas{position:relative;inset:auto;left:auto;top:auto;transform:none!important;max-width:100%;max-height:100%;display:block;pointer-events:auto;cursor:grab}
 #albumCarousel[data-dragging=true] .album-cap-card,#albumCarousel[data-dragging=true] #albumPreview{transition:none}
-#albumName{flex:none;min-height:28px;padding:0 24px;margin:0;text-align:center;font:500 18px/24px "Golos Text",sans-serif;color:#343136;white-space:normal;overflow:visible;text-overflow:clip}
-#albumDescription{flex:none;min-height:40px;padding:8px 24px 0;margin:0;text-align:center;font:400 13px/20px "Golos Text",sans-serif;color:#77737b}
-#album button:focus-visible,#albumCarousel:focus-visible,#albumPreview>.showcase-canvas:focus-visible{outline:1px solid #62556f;outline-offset:4px}
+#albumName{flex:none;min-height:24px;padding:0 24px;margin:0;text-align:center;font:500 18px/24px "Golos Text",sans-serif;color:#343136;white-space:normal;overflow:visible;text-overflow:clip}
+#albumDescription{flex:none;min-height:24px;padding:4px 24px 0;margin:0;text-align:center;font:400 13px/20px "Golos Text",sans-serif;color:#77737b}
+#album button:focus-visible,#albumPreview>.showcase-canvas:focus-visible{outline:1px solid #62556f;outline-offset:4px}
 html #showcase[data-mode=inspect]::before{background:#f1f0ec;backdrop-filter:blur(5px)}html #showcase[data-mode=inspect]{color:#302c37}html #showcase[data-mode=inspect] #showcaseBack{color:#51445e;background:#f5f4f1e6;border-color:#4a365326}
-@media(max-height:540px){#album .album-header{height:36px;min-height:36px}#albumGrab{height:16px}#albumName{font-size:16px;line-height:20px;min-height:24px}#albumDescription{padding-top:4px;min-height:28px;font-size:12px;line-height:16px}}
+.album-outgoing{position:absolute;left:50%;top:50%;width:var(--cap-size);height:var(--cap-size);transform:translate(-50%,-50%);object-fit:contain;pointer-events:none;z-index:21}.album-cap-card[data-leaving=true]{opacity:0}.album-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;flex:none;padding:0 24px;margin-top:20px}.album-actions button{min-height:52px;padding:12px 16px;border:1px solid #ddded7;border-radius:16px;background:linear-gradient(#f0f0eb,#e5e6df);color:#41423c;font:500 14px/20px "IBM Plex Mono",monospace;cursor:pointer;box-shadow:inset 0 1px 1px #ffffffb3,0 2px 4px #24272208;touch-action:manipulation}.album-actions #shareAlbum{background:linear-gradient(#363831,#272923);color:#fff;border-color:#25271f;box-shadow:inset 0 1px 1px #ffffff1a,0 2px 4px #24272212}.album-actions button:active{transform:translateY(1px)}#albumCarousel:focus-visible #albumPreview{filter:drop-shadow(0 0 4px #62556f40)}
+@media(max-height:540px){#album{--cap-size:min(300px,calc(100vw - 40px),calc(92svh - 200px));padding-bottom:12px}#album .album-header{height:24px;min-height:24px}#albumGrab{height:16px}#albumName{font-size:16px;line-height:20px;min-height:24px}#albumDescription{padding-top:4px;min-height:20px;font-size:12px;line-height:16px}.album-actions{margin-top:12px}.album-actions button{min-height:40px}}
 @media(prefers-reduced-motion:reduce){#album[open]{animation:none}.album-cap-card,#albumPreview{transition:none}}
 
 /* Larger thumb controls, tighter grouping and a quieter corner radius. */
@@ -137,3 +137,22 @@ html #showcase[data-mode=inspect]::before{background:#f1f0ec;backdrop-filter:blu
 #stage[data-mode=placement],#stage[data-mode=placement]:active{cursor:ns-resize}
 #stage:focus{outline:none}
 #stage:focus-visible::after{content:"";position:absolute;inset:72px 12px 112px;border:1px solid #87709555;border-radius:16px;pointer-events:none}
+
+/* Strategy HUD: flat controls; the only modeled surface is the slammer itself. */
+html .controls{--control-size:76px;display:grid;grid-template-columns:minmax(0,1fr) var(--control-size);gap:8px;width:calc(100% - 24px);max-width:440px;bottom:calc(20px + env(safe-area-inset-bottom));align-items:stretch}
+.stack-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;min-width:0}
+html .controls button{box-sizing:border-box;width:100%;height:var(--control-size);min-width:0;border:1px solid #c4c6cb;border-radius:8px;background:#dfe1e4;box-shadow:none;color:#32323c;font:500 26px/1 "IBM Plex Mono",monospace;cursor:pointer;transition:background .14s,border-color .14s,transform .18s cubic-bezier(.2,.8,.3,1);padding:0;display:flex;align-items:center;justify-content:center;text-shadow:none;touch-action:manipulation}
+html .controls button:active{transform:scale(.96);background:#cdd0d6}html .controls button:disabled{opacity:.5;cursor:default}
+html .controls .toss,html .controls .toss.charging{flex-direction:column;gap:4px;background:#27242e;border-color:#141019;color:#f5f1fb;box-shadow:none;font:500 11px/16px "IBM Plex Mono",monospace;letter-spacing:0}
+.controls .toss svg{width:32px;height:32px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:square;stroke-linejoin:miter;pointer-events:none}.controls .toss .restack-icon{display:none}.controls .toss[data-action=restack] .impact-icon{display:none}.controls .toss[data-action=restack] .restack-icon{display:block}
+html .controls .slammer-button{perspective:160px;background:#dfe1e4;isolation:isolate}html .controls .slammer-button[aria-pressed=true]{background:#e8e1f4;border-color:#8d70b6;box-shadow:inset 0 -3px #8d70b6}
+.slammer-button img{width:52px;height:52px;border-radius:50%;object-fit:contain;transform:rotateX(48deg) rotateZ(-12deg);filter:drop-shadow(0 4px 0 #36527b);pointer-events:none}
+.slammer-picker{position:absolute;z-index:6;left:var(--slammer-picker-x,50%);bottom:calc(112px + env(safe-area-inset-bottom));display:flex;gap:8px;transform:translateX(-50%);animation:slammer-picker-in .28s cubic-bezier(.22,1,.36,1);transform-origin:50% 100%}
+.slammer-picker button{position:relative;display:grid;place-items:center;width:64px;height:64px;padding:8px;background:#e4e5e8;border:1px solid #c4c6cb;border-radius:8px;cursor:pointer;animation:slammer-choice-in .32s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--choice)*40ms)}.slammer-picker img{width:48px;height:48px;border-radius:50%;object-fit:contain;transform:rotateX(20deg);pointer-events:none}.slammer-picker button[aria-pressed=true]{background:#e7dff3;border-color:#8062ad;box-shadow:inset 0 -3px #8062ad}.slammer-picker button:focus-visible{outline:2px solid #8062ad;outline-offset:4px}
+#slammerPointer{position:absolute;z-index:5;width:56px;height:48px;display:grid;place-items:center;transform:translate(-100%,-50%);touch-action:none;cursor:ns-resize;color:#78618f}#slammerPointer svg{width:48px;height:32px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:miter}#slammerPointer svg path{pointer-events:none}#slammerPointer:focus-visible{outline:2px solid #8062ad;outline-offset:0;border-radius:8px}
+#stage[data-mode=table],#stage[data-mode=table]:active{cursor:default}
+@keyframes slammer-picker-in{from{opacity:0;transform:translate(-50%,32px) scale(.65)}to{opacity:1;transform:translate(-50%,0) scale(1)}}@keyframes slammer-choice-in{from{opacity:0;translate:0 20px;scale:.7}to{opacity:1;translate:0 0;scale:1}}
+@media(max-width:350px){html .controls{--control-size:64px;width:calc(100% - 16px)}.slammer-button img{width:44px;height:44px}.slammer-picker{bottom:calc(100px + env(safe-area-inset-bottom))}}
+@media(prefers-reduced-motion:reduce){html .controls button{transition:none}.slammer-picker,.slammer-picker button{animation:none}}
+
+html .controls .adjust,html .controls .slammer-button,html .controls .toss{width:100%;min-width:0;height:var(--control-size);min-height:0}

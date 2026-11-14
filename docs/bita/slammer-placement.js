@@ -1,6 +1,6 @@
 const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
 const ease=t=>t*t*(3-2*t);
-export const SLAMMER_PEEK=.18;
+export const SLAMMER_PEEK=0;
 export const SLAMMER_OUTSIDE=1.24;
 
 // Give thin layers a useful finger travel, independent of the camera scale.
@@ -24,6 +24,7 @@ export function createSlammerPlacement({slot=2,count=5,heightForLayer}){
   begin(){dragging=true;if(phase==='seated'||phase==='inserting')extract()},
   select(nextSlot){requested=clamp(nextSlot,0,count);if(phase==='seated'&&selected!==requested)extract()},
   end(){dragging=false},
+  commit(){selected=requested;y=heightForLayer(selected);distance=SLAMMER_PEEK;phase='seated';dragging=false;elapsed=gapAge=0;return {distance,y}},
   update(dt){
    dt=clamp(dt,0,.1);
    if(phase==='extracting'){

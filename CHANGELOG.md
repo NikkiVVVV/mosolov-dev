@@ -123,3 +123,11 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 - Coin: enlarge the selected plan and its ticket, keeping the raised surface and shadow.
 - Pogs: remove the close button; retain handle/backdrop/Escape dismissal. Show distinct won designs / playable catalog total instead of carousel position.
 - Local checks: radio selection moves the enlargement; collection progress stays fixed while paging; no new model or physics changes.
+
+## 2026-11-14 · Game HUD, slammer mode and collection sharing
+
+- Flat strategy-style bar: grouped minus/slammer/plus, separate impact-arrow strike. Retain the electric effect; remove frosted-glass button rendering.
+- Slammer mode reveals three real designs and a left layer pointer, lowers the camera, and hides immediately when strike starts. Strike commits the requested slot even during insertion. Material profiles follow the selected design; flight physics is unchanged.
+- Larger light collection sheet, centered progress, tighter metadata, horizontal close/share actions and directional model transitions. Share links open an exact read-only collection without overwriting ownership.
+- Coin pricing tray has more top/bottom padding around the selected plan.
+- Checks: collection link round trips/filtering; insertion/reversal/interrupt controller tests; real drag 2 → 5, blue → purple swap and strike; copied collection link opens the same set. Local mobile UI checked at 390×844.

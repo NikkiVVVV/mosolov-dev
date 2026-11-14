@@ -1,8 +1,11 @@
 // One light sheet: a five-cap fan, with the inspected cap in the center.
-export function createCollectionSheet({getItems,getTotal,ensureItem,imageFor,nameFor,descriptionFor=()=>'',inspect,stopInspect}){
+export function createCollectionSheet({getItems,getTotal,ensureItem,imageFor,nameFor,descriptionFor=()=>'',inspect,snapshot=()=>null,stopInspect,shareUrl,onClose=()=>{}}){
  const dialog=document.getElementById('album'),track=document.getElementById('albumCarousel'),preview=document.getElementById('albumPreview'),neighbors=document.getElementById('albumNeighbors'),name=document.getElementById('albumName'),description=document.getElementById('albumDescription'),position=document.getElementById('albumPosition'),grab=document.getElementById('albumGrab');
  const reduced=matchMedia('(prefers-reduced-motion:reduce)'),cards=new Map();
- let items=[],selected=-1,cursor=0,revision=0,closing=false,gesture=null,swipe=null,returnFocus=null;
+ const shareButton=document.getElementById('shareAlbum');
+ let items=[],selected=-1,cursor=0,revision=0,closing=false,gesture=null,swipe=null,returnFocus=null,ghost=null,shareTimer=null;
+ const motion=[];
+ function clearMotion(){for(const a of motion.splice(0))a.cancel();ghost?.remove();ghost=null;for(const b of cards.values())delete b.dataset.leaving}
  const wrap=i=>(i%items.length+items.length)%items.length;
  async function loadCard(button,index){
   if(button.dataset.loaded)return;button.dataset.loaded='pending';
@@ -14,15 +17,22 @@ export function createCollectionSheet({getItems,getTotal,ensureItem,imageFor,nam
   for(const [i,offset]of visible){
    let b=cards.get(i);
    if(!b){b=document.createElement('button');b.type='button';b.className='album-cap-card';b.dataset.index=i;b.tabIndex=-1;b.setAttribute('aria-label',`View ${nameFor(items[i])}`);const img=new Image();img.alt='';img.width=img.height=160;img.decoding='async';b.append(img);b.onclick=e=>{if(e.detail===0)select(i)};neighbors.append(b);cards.set(i,b);loadCard(b,i)}
-   const abs=Math.abs(offset);b.style.setProperty('--offset',offset);b.style.setProperty('--scale',abs===0?1:abs===1?.76:.56);b.style.setProperty('--yaw',`${offset===0?0:-Math.sign(offset)*(abs===1?42:56)}deg`);b.style.zIndex=String(10-abs);b.dataset.current=String(offset===0);b.setAttribute('aria-hidden',String(offset===0));
+   const abs=Math.abs(offset);b.style.setProperty('--offset',offset);b.style.setProperty('--scale',abs===0?1:abs===1?.58:.42);b.style.setProperty('--yaw',`${offset===0?0:-Math.sign(offset)*(abs===1?32:48)}deg`);b.style.zIndex=String(10-abs);b.dataset.current=String(offset===0);b.setAttribute('aria-hidden',String(offset===0));
   }
  }
  async function select(index){
-  if(!dialog.open||!items.length)return;const delta=index-cursor;index=wrap(index);if(index===selected&&index===cursor)return;
-  const token=++revision,direction=Math.abs(delta)>items.length/2?-Math.sign(delta):Math.sign(delta);cursor=index;preview.setAttribute('aria-busy','true');paint();
+  if(!dialog.open||!items.length)return;index=wrap(index);if(index===selected&&index===cursor)return;
+  const token=++revision;cursor=index;preview.setAttribute('aria-busy','true');
   try{await ensureItem(items[index]);if(token!==revision||!dialog.open)return;
-   selected=index;inspect(items[index],preview);name.textContent=nameFor(items[index]);description.textContent=descriptionFor(items[index]);preview.setAttribute('aria-label',nameFor(items[index]));
-   if(!reduced.matches)preview.animate([{opacity:.35,translate:`${direction*20}px 0`},{opacity:1,translate:'0 0'}],{duration:240,easing:'cubic-bezier(.2,.7,.2,1)'});
+   clearMotion();const previous=selected;let delta=previous<0?0:index-previous;if(Math.abs(delta)>items.length/2)delta-=Math.sign(delta)*items.length;const direction=Math.sign(delta)||1;
+   if(previous>=0&&!reduced.matches){ghost=snapshot();if(ghost){ghost.className='album-outgoing';ghost.setAttribute('aria-hidden','true');track.append(ghost)}}
+   selected=index;paint();inspect(items[index],preview);name.textContent=nameFor(items[index]);description.textContent=descriptionFor(items[index]);preview.setAttribute('aria-label',nameFor(items[index]));
+   if(previous>=0&&!reduced.matches){
+    const shift=preview.clientWidth*.44;
+    if(ghost){const leaving=cards.get(previous);if(leaving)leaving.dataset.leaving='true';const outgoing=ghost,a=ghost.animate([{translate:'0 0',scale:1,rotate:'y 0deg',opacity:1},{translate:`${-direction*shift}px 12px`,scale:.58,rotate:`y ${direction*32}deg`,opacity:0}],{duration:420,easing:'cubic-bezier(.22,1,.36,1)',fill:'forwards'});motion.push(a);a.finished.then(()=>{outgoing.remove();if(leaving)delete leaving.dataset.leaving}).catch(()=>{})}
+    motion.push(preview.animate([{translate:`${direction*shift}px 12px`,scale:.58,rotate:`y ${-direction*32}deg`,opacity:.4},{translate:'0 0',scale:1,rotate:'y 0deg',opacity:1}],{duration:480,easing:'cubic-bezier(.22,1,.36,1)'}));
+    for(const e of [name,description])motion.push(e.animate([{opacity:0,translate:`${direction*12}px 0`},{opacity:1,translate:'0 0'}],{duration:320,easing:'ease-out'}));
+   }
   }catch{if(token===revision&&selected>=0){cursor=selected;paint()}}
   finally{if(token===revision)preview.setAttribute('aria-busy','false')}
  }
@@ -37,8 +47,10 @@ export function createCollectionSheet({getItems,getTotal,ensureItem,imageFor,nam
   if(!reduced.matches){const from=getComputedStyle(dialog).transform;await dialog.animate([{transform:from==='none'?'translateY(0)':from,opacity:1},{transform:'translateY(32px)',opacity:0}],{duration:160,easing:'ease-in',fill:'forwards'}).finished.catch(()=>{})}
   dialog.close();
  }
- dialog.addEventListener('close',()=>{++revision;stopInspect();dialog.getAnimations().forEach(a=>a.cancel());resetDrag();resetSwipe();closing=false;preview.setAttribute('aria-busy','false');returnFocus?.focus({preventScroll:true})});
+ dialog.addEventListener('close',()=>{++revision;clearMotion();clearTimeout(shareTimer);shareButton.textContent='share';stopInspect();dialog.getAnimations().forEach(a=>a.cancel());resetDrag();resetSwipe();closing=false;preview.setAttribute('aria-busy','false');onClose();returnFocus?.focus({preventScroll:true})});
  dialog.addEventListener('cancel',e=>{e.preventDefault();close()});
+ document.getElementById('closeAlbum').onclick=close;
+ shareButton.onclick=async()=>{const url=shareUrl();try{if(navigator.share){try{await navigator.share({title:'My pog collection',url});return}catch(e){if(e.name==='AbortError')return}}await navigator.clipboard.writeText(url);shareButton.textContent='copied'}catch{shareButton.textContent='try again'}finally{clearTimeout(shareTimer);shareTimer=setTimeout(()=>shareButton.textContent='share',2200)}};
  dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close()}});
  grab.addEventListener('pointerdown',e=>{if(e.button!==0)return;dialog.getAnimations().forEach(a=>a.cancel());gesture={id:e.pointerId,y:e.clientY,lastY:e.clientY,at:performance.now(),speed:0,dy:0};grab.setPointerCapture(e.pointerId)});
  grab.addEventListener('pointermove',e=>{if(gesture?.id!==e.pointerId)return;const now=performance.now();gesture.speed=(e.clientY-gesture.lastY)/Math.max(1,now-gesture.at);gesture.lastY=e.clientY;gesture.at=now;gesture.dy=Math.max(0,e.clientY-gesture.y);dialog.style.transform=`translateY(${gesture.dy}px)`});

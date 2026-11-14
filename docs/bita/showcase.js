@@ -30,5 +30,6 @@ export function createShowcase({makeModel,nameFor,onBack}){
   }
   if(model){model.scale.setScalar(size/1.06*scale);renderer.render(scene,camera)}
  }
- window.addEventListener('resize',()=>{if(mode)resize()});return {inspect,award,update,stopInspect(){if(mode==='inspect')close(false)},active:()=>!!mode};
+ function snapshotInspect(){if(mode!=='inspect')return null;renderer.render(scene,camera);const canvas=document.createElement('canvas');canvas.width=renderer.domElement.width;canvas.height=renderer.domElement.height;canvas.getContext('2d').drawImage(renderer.domElement,0,0);return canvas}
+ window.addEventListener('resize',()=>{if(mode)resize()});return {inspect,award,update,snapshotInspect,stopInspect(){if(mode==='inspect')close(false)},active:()=>!!mode};
 }
