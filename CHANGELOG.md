@@ -117,3 +117,9 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 /bita/: светлая шторка с горизонтальным веером, крупным 3D-центром, соседями и названием/серией/материалом. Свайпы и стрелки листают, вертикальные жесты вращают; просмотр зациклен. Нижней сетки нет. Сохранения, физика и игровой бар прежние; новые концепты бара пока только в исходном проекте. Кэш 20261114-carousel26.
 
 Уточнение: годовой ценник 7 990 ₽ → 799 ₽; выбранный тариф поднят мягкой тенью, без рамки.
+
+## 2026-11-14 · Collection progress and larger selected plan
+
+- Coin: enlarge the selected plan and its ticket, keeping the raised surface and shadow.
+- Pogs: remove the close button; retain handle/backdrop/Escape dismissal. Show distinct won designs / playable catalog total instead of carousel position.
+- Local checks: radio selection moves the enlargement; collection progress stays fixed while paging; no new model or physics changes.

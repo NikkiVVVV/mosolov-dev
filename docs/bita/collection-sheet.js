@@ -1,5 +1,5 @@
 // One light sheet: a five-cap fan, with the inspected cap in the center.
-export function createCollectionSheet({getItems,ensureItem,imageFor,nameFor,descriptionFor=()=>'',inspect,stopInspect}){
+export function createCollectionSheet({getItems,getTotal,ensureItem,imageFor,nameFor,descriptionFor=()=>'',inspect,stopInspect}){
  const dialog=document.getElementById('album'),track=document.getElementById('albumCarousel'),preview=document.getElementById('albumPreview'),neighbors=document.getElementById('albumNeighbors'),name=document.getElementById('albumName'),description=document.getElementById('albumDescription'),position=document.getElementById('albumPosition'),grab=document.getElementById('albumGrab');
  const reduced=matchMedia('(prefers-reduced-motion:reduce)'),cards=new Map();
  let items=[],selected=-1,cursor=0,revision=0,closing=false,gesture=null,swipe=null,returnFocus=null;
@@ -21,7 +21,7 @@ export function createCollectionSheet({getItems,ensureItem,imageFor,nameFor,desc
   if(!dialog.open||!items.length)return;const delta=index-cursor;index=wrap(index);if(index===selected&&index===cursor)return;
   const token=++revision,direction=Math.abs(delta)>items.length/2?-Math.sign(delta):Math.sign(delta);cursor=index;preview.setAttribute('aria-busy','true');paint();
   try{await ensureItem(items[index]);if(token!==revision||!dialog.open)return;
-   selected=index;inspect(items[index],preview);name.textContent=nameFor(items[index]);description.textContent=descriptionFor(items[index]);position.textContent=`${index+1} / ${items.length}`;preview.setAttribute('aria-label',nameFor(items[index]));
+   selected=index;inspect(items[index],preview);name.textContent=nameFor(items[index]);description.textContent=descriptionFor(items[index]);preview.setAttribute('aria-label',nameFor(items[index]));
    if(!reduced.matches)preview.animate([{opacity:.35,translate:`${direction*20}px 0`},{opacity:1,translate:'0 0'}],{duration:240,easing:'cubic-bezier(.2,.7,.2,1)'});
   }catch{if(token===revision&&selected>=0){cursor=selected;paint()}}
   finally{if(token===revision)preview.setAttribute('aria-busy','false')}
@@ -38,11 +38,11 @@ export function createCollectionSheet({getItems,ensureItem,imageFor,nameFor,desc
   dialog.close();
  }
  dialog.addEventListener('close',()=>{++revision;stopInspect();dialog.getAnimations().forEach(a=>a.cancel());resetDrag();resetSwipe();closing=false;preview.setAttribute('aria-busy','false');returnFocus?.focus({preventScroll:true})});
- dialog.addEventListener('cancel',e=>{e.preventDefault();close()});document.getElementById('closeAlbum').onclick=close;
+ dialog.addEventListener('cancel',e=>{e.preventDefault();close()});
  dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close()}});
  grab.addEventListener('pointerdown',e=>{if(e.button!==0)return;dialog.getAnimations().forEach(a=>a.cancel());gesture={id:e.pointerId,y:e.clientY,lastY:e.clientY,at:performance.now(),speed:0,dy:0};grab.setPointerCapture(e.pointerId)});
  grab.addEventListener('pointermove',e=>{if(gesture?.id!==e.pointerId)return;const now=performance.now();gesture.speed=(e.clientY-gesture.lastY)/Math.max(1,now-gesture.at);gesture.lastY=e.clientY;gesture.at=now;gesture.dy=Math.max(0,e.clientY-gesture.y);dialog.style.transform=`translateY(${gesture.dy}px)`});
  grab.addEventListener('pointerup',e=>{if(gesture?.id!==e.pointerId)return;if(gesture.dy>80||(gesture.dy>24&&gesture.speed>.65))close();else{const dy=gesture.dy;resetDrag();if(!reduced.matches)dialog.animate([{transform:`translateY(${dy}px)`},{transform:'translateY(0)'}],{duration:220,easing:'cubic-bezier(.2,.8,.2,1)'})}});grab.addEventListener('pointercancel',resetDrag);
- function open(){if(dialog.open)return;items=getItems().slice().reverse();if(!items.length)return;returnFocus=document.activeElement;selected=-1;cursor=0;closing=false;cards.clear();neighbors.replaceChildren();name.textContent=description.textContent='';position.textContent=`1 / ${items.length}`;dialog.showModal();select(0);document.getElementById('closeAlbum').focus({preventScroll:true})}
+ function open(){if(dialog.open)return;items=getItems().slice().reverse();if(!items.length)return;returnFocus=document.activeElement;selected=-1;cursor=0;closing=false;cards.clear();neighbors.replaceChildren();name.textContent=description.textContent='';const won=new Set(items).size,total=getTotal();position.textContent=`${won} / ${total}`;position.setAttribute('aria-label',`${won} of ${total} cap designs won`);dialog.showModal();select(0);track.focus({preventScroll:true})}
  return {open,close,isOpen:()=>dialog.open};
 }
