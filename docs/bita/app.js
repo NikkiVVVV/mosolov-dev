@@ -10,7 +10,7 @@ import {makeCapDeck} from './cap-deck.js?v=20261113-clean24';
 import * as THREE from './vendor/three.module.js';
 import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261114-impact38';
 import {createShowcase} from './showcase.js?v=20261114-reveal32';
-import {createChargeFeedback} from './charge-feedback.js?v=20261114-press35';
+import {createChargeFeedback} from './charge-feedback.js?v=20261114-touch39';
 import {createPackIntro} from './pack-intro.js?v=20261113-clean24';
 const CHARGE_MS=7000;
 const resultSplash=createResultSplash();
@@ -114,6 +114,7 @@ function updatePlacementUI(){
 
 let overloaded=false,assemblingUntil=0,reframeUntil=0,lastPower=0,resetQueued=false;
 function renderLedLabel(el,text){el.replaceChildren(...[...text].map((letter,i)=>{const node=document.createElement('span');node.className='led-glyph';node.textContent=letter;node.style.setProperty('--led-i',i);return node}))}
+for(const type of ['selectstart','contextmenu'])document.querySelector('.controls').addEventListener(type,e=>e.preventDefault());
 renderLedLabel($('strikeLabel'),'strike');for(const el of document.querySelectorAll('.adjust .led-label'))renderLedLabel(el,el.textContent);
 function setStrikeLabel(text){text=text.toLowerCase();strike.dataset.action=text;strike.setAttribute('aria-label',text==='restack'?'restack. Gather the caps':'strike. Hold for a stronger strike');const label=$('strikeLabel');if(label.textContent===text)return;renderLedLabel(label,text);label.animate([{opacity:0,transform:'translateY(4px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'ease-out'})}
 let caps=[],count=5,state='ready',charge=null,physicsTime=0,flightStart=0,impactAt=0,impactElevation=.43,edgeAt=-1,twistAt=-1,groupRest={},still=0;
@@ -167,7 +168,7 @@ let lastMaterialSound=-10;
 function sound(power,plastic=false,level=1){if(!audio||audio.state!=='running')return;const t=audio.currentTime,duration=plastic?.038:.026,buffer=audio.createBuffer(1,audio.sampleRate*duration,audio.sampleRate),samples=buffer.getChannelData(0);for(let i=0;i<samples.length;i++)samples[i]=(Math.random()*2-1)*Math.exp(-i/(samples.length*.17));const src=audio.createBufferSource(),filter=audio.createBiquadFilter(),gain=audio.createGain();src.buffer=buffer;filter.type='lowpass';filter.frequency.value=plastic?4200:1250;gain.gain.value=(.10+power*.06)*level;src.connect(filter).connect(gain).connect(audio.destination);src.start(t);if(plastic){const ring=audio.createOscillator(),envelope=audio.createGain();ring.type='triangle';ring.frequency.setValueAtTime(2700+Math.random()*500,t);ring.frequency.exponentialRampToValueAtTime(2100,t+.035);envelope.gain.setValueAtTime(.025*level,t);envelope.gain.exponentialRampToValueAtTime(.0001,t+.05);ring.connect(envelope).connect(audio.destination);ring.start(t);ring.stop(t+.055)}}
 
 let strikeImpulse=null;
-function pulseStrike(){strikeImpulse?.cancel();const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;if(!reduced)for(const [i,led]of [...document.querySelectorAll('.controls .led-glyph')].entries())led.animate([{opacity:1,color:'#25b6cc'},{opacity:.35,color:'#9b68ef',offset:.12},{opacity:1,color:'#e75ba6',offset:.22},{opacity:.6,color:'#eeaa3c',offset:.35},{opacity:1,color:'#25b6cc',offset:.48},{opacity:1,color:'#9b68ef'}],{duration:420,delay:i*14,easing:'steps(1,end)'});strikeImpulse=$('strikeEnergy').animate(reduced?[{opacity:.35},{opacity:0}]:[{opacity:.45,transform:'translateX(-30%) scale(.8)'},{opacity:.35,transform:'translateX(0) scale(1)',offset:.3},{opacity:0,transform:'translateX(40%) scale(1.3)'}],{duration:reduced?180:520,easing:'cubic-bezier(.16,.7,.3,1)',fill:'both'})}
+function pulseStrike(){strikeImpulse?.cancel();const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;if(!reduced)for(const [i,led]of [...document.querySelectorAll('#strike .led-glyph')].entries())led.animate([{opacity:1,color:'#25b6cc'},{opacity:.35,color:'#9b68ef',offset:.12},{opacity:1,color:'#e75ba6',offset:.22},{opacity:.6,color:'#eeaa3c',offset:.35},{opacity:1,color:'#25b6cc',offset:.48},{opacity:1,color:'#9b68ef'}],{duration:420,delay:i*14,easing:'steps(1,end)'});strikeImpulse=$('strikeEnergy').animate(reduced?[{opacity:.35},{opacity:0}]:[{opacity:.45,transform:'translateX(-30%) scale(.8)'},{opacity:.35,transform:'translateX(0) scale(1)',offset:.3},{opacity:0,transform:'translateX(40%) scale(1.3)'}],{duration:reduced?180:520,easing:'cubic-bezier(.16,.7,.3,1)',fill:'both'})}
 function begin(e){if(!introFinished)return;finishSlammerPlacement();pulseStrike();if(state==='result'){restackRemaining(false);return}if(state!=='ready'||performance.now()<assemblingUntil||caps.some(c=>performance.now()-c.born<800))return;pointerGesture=null;ensureAudio();charge={start:performance.now(),power:0};orbitVelocity=0;state='charging';if(e.pointerId!==undefined)e.currentTarget.setPointerCapture?.(e.pointerId);strike.classList.add('charging');controls()}
 function cancel(){if(!charge)return;charge=null;state='ready';strike.classList.remove('charging');setChargeVisual(0);controls()}
 const chargeFeedback=createChargeFeedback(document.querySelector('.controls'));chargeFeedback.setTone(slammerManifest[slammerDesign].id);
@@ -222,7 +223,7 @@ state='result';count=caps.filter(c=>!c.won).length;renderCollection();controls()
 let previous=performance.now(),acc=0,lastFrame=0;
 function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=(state==='ready'||state==='result'||state==='inspection')&&!slammerMenuOpen;if(idle&&!showcase.active()&&!slammerPlacement.active&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.1);previous=now;const t=now/1000;
  showcase.update(now,dt);if(pendingAdjustment)flushAdjustments();if(charge&&now-charge.start>=CHARGE_MS)overload();if(state==='ready')controls();
- updateAtmosphere(dt);tableDots.update(dt,atmosphere,introFinished);chargeFeedback.update(now,dt);
+ updateAtmosphere(dt);tableDots.update(dt,atmosphere,introFinished);
  if(['ready','charging'].includes(state)){
   slammerPlacement.update(dt);slammerSlot=slammerPlacement.slot;if(slammerSwap&&slammerPlacement.phase==='tracking'){replaceSlammer();slammerPlacement.end()}
   const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0;if(charge)setChargeVisual(p);
@@ -278,6 +279,10 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  if(['charging','airborne','scattering','collecting'].includes(state)||dragging||slammerPlacement.active||performance.now()<assemblingUntil||Math.abs((frame.shadowHeight??-1)-shadowHeight)>.002||Math.abs((frame.shadowAtmosphere??-1)-atmosphere)>.004||caps.some(c=>now-c.born<1000))renderer.shadowMap.needsUpdate=true;
  frame.shadowHeight=shadowHeight;frame.shadowAtmosphere=atmosphere;
  if(state==='ready'&&slammerMenuOpen){const p=new THREE.Vector3(-Math.cos(viewYaw)*.82,slammerPlacement.pose.y,Math.sin(viewYaw)*.82).project(camera),edge=new THREE.Vector3(-Math.cos(viewYaw)*.53,slammerPlacement.pose.y,Math.sin(viewYaw)*.53).project(camera),w=stage.clientWidth,h=stage.clientHeight,x=(p.x+1)*w/2,y=(1-p.y)*h/2,ex=(edge.x+1)*w/2,ey=(1-edge.y)*h/2;$('slammerPointer').style.left=`${x}px`;$('slammerPointer').style.top=`${y}px`;const guide=$('slammerGuide');guide.setAttribute('viewBox',`0 0 ${w} ${h}`);guide.firstElementChild.setAttribute('d',`M${x-8} ${y} L${ex} ${ey}`);guide.lastElementChild.setAttribute('cx',ex);guide.lastElementChild.setAttribute('cy',ey)}
+ if(chargeFeedback.active()){const chargeFloor=new THREE.Vector3(0,.006,0).project(camera),chargeUnder=new THREE.Vector3(0,shadowHeight+.006,0).project(camera),chargeSide=new THREE.Vector3(Math.cos(viewYaw)*.65,.006,-Math.sin(viewYaw)*.65).project(camera),chargeDepth=new THREE.Vector3(Math.sin(viewYaw)*.65,.006,Math.cos(viewYaw)*.65).project(camera);
+ const chargeRect=stage.getBoundingClientRect();
+ chargeFeedback.setStackAnchor({x:chargeRect.left+(chargeFloor.x+1)*chargeRect.width/2,y:chargeRect.top+(1-chargeFloor.y)*chargeRect.height/2,capX:chargeRect.left+(chargeUnder.x+1)*chargeRect.width/2,capY:chargeRect.top+(1-chargeUnder.y)*chargeRect.height/2,radiusX:Math.abs(chargeSide.x-chargeFloor.x)*chargeRect.width/2,radiusY:Math.abs(chargeDepth.y-chargeFloor.y)*chargeRect.height/2})}
+ chargeFeedback.update(now,dt);
  if(introFinished&&!collectionSheet.isOpen())renderer.render(scene,camera);
 }
 reset(5,false);requestAnimationFrame(frame);

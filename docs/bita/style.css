@@ -205,15 +205,15 @@ html .controls #strike.charging::after{content:'';position:absolute;inset:0;z-in
 /* Exact controls from Figma 5394:8989, scaled with the 508 px reference viewport. */
 @font-face{font-family:Bitcount;src:url('assets/fonts/bitcount/bitcount-controls.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
 @font-face{font-family:'Bitcount Grid Double';src:url('assets/fonts/bitcount-grid-double/bitcount-grid-double-controls.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
-html .controls{--console-unit:min(1px,calc(100vw / 508));--key-height:calc(var(--console-unit)*64);grid-template-columns:49fr 49fr 148fr;gap:calc(var(--console-unit)*8);width:calc(var(--console-unit)*288);max-width:288px;height:calc(var(--console-unit)*88);min-height:0;padding:calc(var(--console-unit)*12) calc(var(--console-unit)*13);border-radius:calc(var(--console-unit)*32);bottom:calc(16px + env(safe-area-inset-bottom))}
+html .controls{--console-unit:min(1px,calc(100vw / 420));--key-height:calc(var(--console-unit)*68);grid-template-columns:64fr 64fr 166fr;gap:calc(var(--console-unit)*8);width:calc(var(--console-unit)*336);max-width:336px;height:calc(var(--console-unit)*92);min-height:0;padding:calc(var(--console-unit)*12) calc(var(--console-unit)*13);border-radius:calc(var(--console-unit)*32);bottom:calc(16px + env(safe-area-inset-bottom))}
 html .controls::before{border-radius:inherit;border:1px solid #ffffff78;background:linear-gradient(165.6196deg,rgba(255,255,255,.72) 3.6706%,rgba(229,231,228,.79) 96.329%);box-shadow:inset 0 1px 0 #fff,0 4px 20px #252b3212;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 html .controls>.adjust{background:linear-gradient(142.9804deg,rgba(255,255,255,.863) 7.735%,rgba(233,236,233,.85) 92.265%);border:1px solid #ffffffeb;border-radius:calc(var(--console-unit)*20);box-shadow:inset 0 1px 1px #fff,0 2px 5px #242d280f;color:#505750}
 html .controls #strike{border-radius:calc(var(--console-unit)*20);clip-path:inset(0 round calc(var(--console-unit)*20));-webkit-clip-path:inset(0 round calc(var(--console-unit)*20));background:linear-gradient(168.5994deg,#343632 8.4861%,#171a17 91.514%);border:1px solid #232722;box-shadow:inset 0 1px 0 #ffffff30,0 3px 7px #1820191c}
 html .controls .led-label,html .controls #strikeLabel{display:inline-flex;align-items:center;justify-content:center;gap:0;font-family:'Bitcount Grid Double',monospace;font-size:calc(var(--console-unit)*38);font-weight:300;font-style:normal;font-variation-settings:'CRSV' 0,'ELSH' 0,'ELXP' 0;line-height:calc(var(--console-unit)*32);letter-spacing:0;text-rendering:geometricPrecision}
 html .controls #strikeLabel{font-family:Bitcount,monospace;font-size:calc(var(--console-unit)*27);line-height:calc(var(--console-unit)*20);letter-spacing:calc(var(--console-unit)*-.2);white-space:nowrap}
 .led-glyph{display:inline-block;white-space:pre}
-html .controls[data-level=building] .led-glyph,html .controls[data-level=strong] .led-glyph,html .controls[data-level=edge] .led-glyph{animation:led-voltage 780ms steps(1,end) infinite;animation-delay:calc(var(--led-i)*-67ms)}
-html .controls[data-level=strong] .led-glyph{animation-duration:500ms}html .controls[data-level=edge] .led-glyph{animation-duration:280ms}
+html .controls[data-level=building] #strike .led-glyph,html .controls[data-level=strong] #strike .led-glyph,html .controls[data-level=edge] #strike .led-glyph{animation:led-voltage 780ms steps(1,end) infinite;animation-delay:calc(var(--led-i)*-67ms)}
+html .controls[data-level=strong] #strike .led-glyph{animation-duration:500ms}html .controls[data-level=edge] #strike .led-glyph{animation-duration:280ms}
 html .controls>.adjust{--led-cyan:#007f99;--led-violet:#8548c6;--led-pink:#bd3f82;--led-amber:#a8680b}
 html .controls #strike{--led-cyan:#49d9ed;--led-violet:#b889ff;--led-pink:#ff80bd;--led-amber:#ffc35d}
 @keyframes led-voltage{0%,100%{color:var(--led-cyan);opacity:1;text-shadow:0 0 6px var(--led-cyan)}23%{color:var(--led-violet);opacity:.55;text-shadow:0 0 6px var(--led-violet)}30%{color:var(--led-violet);opacity:1}56%{color:var(--led-pink);opacity:1;text-shadow:0 0 6px var(--led-pink)}62%{color:var(--led-pink);opacity:.6}78%{color:var(--led-amber);opacity:1;text-shadow:0 0 6px var(--led-amber)}}
@@ -244,3 +244,11 @@ html .controls .slammer-picker button:disabled{opacity:1;cursor:default}
 .result-splash[data-entrance=stamp] .result-electric path{stroke-width:5}
 .result-splash[data-entrance=twist] .result-electric{rotate:12deg;scale:1.08}
 .result-splash[data-kind=nice] .result-burst{opacity:.5;scale:.7}
+
+/* v39: finger-sized targets; nested diode labels cannot start iOS text selection. */
+html .controls,html .controls *{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+html .controls .led-label,html .controls #strikeLabel,html .controls .led-glyph{pointer-events:none}
+html .controls>.adjust:active{translate:0 1px;box-shadow:inset 0 2px 5px #242d281c,0 1px 2px #242d2808}
+.charge-fx{z-index:2}
+.stack-charge-glow{position:fixed;z-index:1;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(ellipse,color-mix(in srgb,var(--energy),transparent 25%) 0%,color-mix(in srgb,var(--energy),transparent 66%) 38%,transparent 72%);filter:blur(5px);opacity:0}
+@media(prefers-reduced-motion:reduce){.stack-charge-glow{display:none}}

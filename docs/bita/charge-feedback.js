@@ -1,11 +1,12 @@
 import * as THREE from './vendor/three.module.js';
 import {traceShape,spawnArc,vertex,fragment,ARCS,PULSES,hexToRgb} from './vendor/electric-logo-core.js';
 // React Bits Electric Logo shader and edge tracing, with a Three.js adapter.
-const ARC_COUNT=8;
+const ARC_COUNT=12;
 const chargeFragment=fragment.replace(`uArcEnds[${ARCS}]`,`uArcEnds[${ARC_COUNT}]`).replace(`uArcShape[${ARCS}]`,`uArcShape[${ARC_COUNT}]`).replace(`i < ${ARCS}; i++) addArc`,`i < ${ARC_COUNT}; i++) addArc`);
 export function createChargeFeedback(button){
  const renderer=new THREE.WebGLRenderer({alpha:true,premultipliedAlpha:true,antialias:false,powerPreference:'low-power'});renderer.setClearColor(0,0);
  const canvas=renderer.domElement;canvas.className='charge-fx';canvas.setAttribute('aria-hidden','true');document.body.append(canvas);
+ const stackGlow=document.createElement('div');stackGlow.className='stack-charge-glow';stackGlow.setAttribute('aria-hidden','true');document.body.append(stackGlow);let stackAnchor=null;
  const ends=new Float32Array(ARC_COUNT*4),arcs=new Float32Array(ARC_COUNT*4),pulses=new Float32Array(PULSES*4);
  const uniforms={tFieldFrom:{value:null},tFieldTo:{value:null},tGlowFrom:{value:null},tGlowTo:{value:null},uMapFrom:{value:[0,0,1,0]},uMapTo:{value:[0,0,1,0]},uSizeFrom:{value:[1,1,1,1]},uSizeTo:{value:[1,1,1,1]},uMorph:{value:1},uResolution:{value:[1,1]},uUnit:{value:1},uTime:{value:0},uPresence:{value:0},uHover:{value:[0,0,0]},uHoverRadius:{value:80},uPulses:{value:pulses},uPulseBoost:{value:0},uFlash:{value:0},uColor:{value:hexToRgb('#f3dfff')},uGlowColor:{value:hexToRgb('#a35cff')},uIntensity:{value:1},uGlow:{value:1},uThickness:{value:1.1},uStrands:{value:2},uBend:{value:.5},uCrackle:{value:1.5},uFlicker:{value:.5},uFill:{value:0},uInk:{value:1},uBlack:{value:0},uArcEnds:{value:ends},uArcShape:{value:arcs}};
  const material=new THREE.RawShaderMaterial({vertexShader:vertex.replace('#version 300 es',''),fragmentShader:chargeFragment.replace('#version 300 es','').replace('uniform float uInk;','uniform float uInk; uniform float uBlack;').replace('fragColor = vec4(clamp(color + grain, 0.0, alpha), alpha);','color = mix(color, vec3(0.055,0.065,0.085)*alpha, uBlack); fragColor = vec4(clamp(color + grain, 0.0, alpha), alpha);'),glslVersion:THREE.GLSL3,uniforms,transparent:true,premultipliedAlpha:true,depthTest:false,depthWrite:false});
@@ -27,11 +28,12 @@ export function createChargeFeedback(button){
   place();dirty=true;
  }
  const observer=new ResizeObserver(resize);observer.observe(button);window.addEventListener('resize',resize);resize();
- return {setTone(id){const tone=id==='mk-dragon'?'black':id==='chupa-blue'?'blue':'purple',colors=tone==='black'?['#171b23','#414852']:tone==='blue'?['#d5efff','#318bff']:['#f3dfff','#a35cff'];button.style.setProperty('--energy',tone==='black'?'#c2cad4':colors[1]);uniforms.uColor.value=hexToRgb(colors[0]);uniforms.uGlowColor.value=hexToRgb(colors[1]);canvas.dataset.tone=tone;uniforms.uBlack.value=tone==='black'?1:0},setPower(value){power=Math.max(0,Math.min(1,value));button.style.setProperty('--charge',power);button.dataset.level=power>.8?'edge':power>.45?'strong':power?'building':'idle'},update(now,dt){
+ return {setTone(id){const tone=id==='mk-dragon'?'black':id==='chupa-blue'?'blue':'purple',colors=tone==='black'?['#171b23','#414852']:tone==='blue'?['#d5efff','#318bff']:['#f3dfff','#a35cff'];button.style.setProperty('--energy',tone==='black'?'#c2cad4':colors[1]);stackGlow.style.setProperty('--energy',tone==='black'?'#8793a2':colors[1]);uniforms.uColor.value=hexToRgb(colors[0]);uniforms.uGlowColor.value=hexToRgb(colors[1]);canvas.dataset.tone=tone;uniforms.uBlack.value=tone==='black'?1:0},setStackAnchor(value){stackAnchor=value},active(){return power>0||presence>=.002},setPower(value){power=Math.max(0,Math.min(1,value));button.style.setProperty('--charge',power);button.dataset.level=power>.8?'edge':power>.45?'strong':power?'building':'idle'},update(now,dt){
   if(!shape)return;const target=reduced.matches?0:power;presence+=(target-presence)*(1-Math.exp(-dt/(target>presence?.09:.14)));
-  if(!power&&presence<.002){presence=0;if(dirty){renderer.clear();dirty=false}return}if(reduced.matches)return;dirty=true;place();time+=Math.min(dt,.05)*(1.4+power*2.6);
+  if(!power&&presence<.002){presence=0;stackGlow.style.opacity='0';if(dirty){renderer.clear();dirty=false}return}if(reduced.matches)return;dirty=true;place();time+=Math.min(dt,.05)*(1.4+power*2.6);
+  if(stackAnchor){const a=stackAnchor;stackGlow.style.left=a.x+'px';stackGlow.style.top=a.y+'px';stackGlow.style.width=a.radiusX*2.8+'px';stackGlow.style.height=Math.max(12,a.radiusY*2.8)+'px';stackGlow.style.opacity=String(presence*.55)}
   for(let i=sparks.length-1;i>=0;i--)if(time-sparks[i].born>sparks[i].life)sparks.splice(i,1);
-  if(power>.10&&sparks.length<ARC_COUNT&&Math.random()<dt*(6+power*power*74)){
+  if(power>.10&&sparks.filter(p=>p.source!=='stack').length<8&&Math.random()<dt*(10+power*power*90)){
    let spark;
    if(power>.2&&Math.random()<.75+power*.2){
     const angle=sector++*2.399963+(Math.random()-.5)*.22,nx=Math.cos(angle),ny=Math.sin(angle),cx=shape.pad+shape.logoWidth/2,cy=shape.pad+shape.logoHeight/2;
@@ -40,13 +42,23 @@ export function createChargeFeedback(button){
     const ax=shape.edges[edge],ay=shape.edges[edge+1];
     // No button-sized crop or artificial screen-edge endpoint. The arc fades
     // along its own length; only the physical viewport can cut it off.
-    const reach=(48+power*180)*(.75+Math.random()*.5)/fit;
+    const reach=(72+power*220)*(.75+Math.random()*.5)/fit;
     spark={ax,ay,bx:ax+nx*reach,by:ay+ny*reach,bow:(Math.random()-.5)*reach*.6,seed:1+Math.random()*60,born:time,life:.45+Math.random()*.4};
    }else spark=spawnArc(shape,time,null);
    if(spark)sparks.push(spark)
   }
-  for(let i=0;i<ARC_COUNT;i++){const p=sparks[i],o=i*4;if(!p){arcs[o+1]=0;continue}ends[o]=ox+p.ax*fit;ends[o+1]=oy+p.ay*fit;ends[o+2]=ox+p.bx*fit;ends[o+3]=oy+p.by*fit;arcs[o]=p.bow*fit;arcs[o+1]=Math.sin(Math.PI*Math.min(1,(time-p.born)/p.life))*presence;arcs[o+2]=p.seed}
-  uniforms.uTime.value=time;uniforms.uPresence.value=Math.sqrt(presence);uniforms.uIntensity.value=.35+power*power*1.9;uniforms.uGlow.value=.4+power*.5;uniforms.uThickness.value=.65+power*.85;uniforms.uStrands.value=1+Math.floor(power*4);uniforms.uBend.value=.16+power*power*.9;uniforms.uCrackle.value=.6+power*2;
+  if(stackAnchor&&power>.1&&sparks.filter(p=>p.source==='stack').length<4&&Math.random()<dt*(8+power*40))sparks.push({source:'stack',angle:Math.random()*Math.PI*2,span:.6+Math.random()*.25,bow:(Math.random()-.5)*28,seed:1+Math.random()*60,born:time,life:.35+Math.random()*.3});
+  for(let i=0;i<ARC_COUNT;i++){
+   const p=sparks[i],o=i*4;if(!p){arcs[o+1]=0;continue}
+   if(p.source==='stack'&&stackAnchor){
+    const a=stackAnchor,angle=p.angle;
+    ends[o]=a.x+Math.cos(angle)*a.radiusX*.95;ends[o+1]=a.y+Math.sin(angle)*a.radiusY*.95;
+    ends[o+2]=a.capX+Math.cos(angle+.45)*a.radiusX*p.span;ends[o+3]=a.capY+Math.sin(angle+.45)*a.radiusY*p.span;
+    arcs[o]=p.bow;
+   }else{ends[o]=ox+p.ax*fit;ends[o+1]=oy+p.ay*fit;ends[o+2]=ox+p.bx*fit;ends[o+3]=oy+p.by*fit;arcs[o]=p.bow*fit}
+   arcs[o+1]=Math.sin(Math.PI*Math.min(1,(time-p.born)/p.life))*presence;arcs[o+2]=p.seed;
+  }
+  uniforms.uTime.value=time;uniforms.uPresence.value=Math.sqrt(presence);uniforms.uIntensity.value=.45+power*power*2.4;uniforms.uGlow.value=.45+power*.65;uniforms.uThickness.value=.8+power*1.1;uniforms.uStrands.value=1+Math.floor(power*4);uniforms.uBend.value=.16+power*power*.9;uniforms.uCrackle.value=.6+power*2;
   const ambient=Number(document.documentElement.style.getPropertyValue('--scene-dark'))||0;uniforms.uInk.value=1-ambient;renderer.render(scene,camera);
- },destroy(){observer.disconnect();window.removeEventListener('resize',resize);field?.dispose();glow?.dispose();mesh.geometry.dispose();material.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove()}};
+ },destroy(){observer.disconnect();window.removeEventListener('resize',resize);field?.dispose();glow?.dispose();mesh.geometry.dispose();material.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();stackGlow.remove()}};
 }
