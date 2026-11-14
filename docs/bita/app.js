@@ -2,7 +2,7 @@ import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261114
 import {isPlayable,readOwnedCollection} from './cap-catalog.js?v=20261113-clean24';
 import {prepareFace,faceThumbnail} from './face-texture.js?v=20261113-clean24';
 import {readSharedCollection,collectionShareUrl} from './collection-share.js?v=20261114-collection28';
-import {createCollectionSheet} from './collection-sheet.js?v=20261114-reveal32';
+import {createCollectionSheet} from './collection-sheet.js?v=20261114-carousel40';
 import {createTableDots} from './table-dots.js?v=20261113-clean24';
 import {PHYSICS_RATE} from './physics-scale.js?v=20261113-clean24';
 import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-placement.js?v=20261114-hud29';
@@ -112,6 +112,7 @@ function updatePlacementUI(){
  else for(const name of ['aria-orientation','aria-valuemin','aria-valuemax','aria-valuenow','aria-valuetext'])stage.removeAttribute(name);
 }
 
+let restackHeld=false;
 let overloaded=false,assemblingUntil=0,reframeUntil=0,lastPower=0,resetQueued=false;
 function renderLedLabel(el,text){el.replaceChildren(...[...text].map((letter,i)=>{const node=document.createElement('span');node.className='led-glyph';node.textContent=letter;node.style.setProperty('--led-i',i);return node}))}
 for(const type of ['selectstart','contextmenu'])document.querySelector('.controls').addEventListener(type,e=>e.preventDefault());
@@ -126,7 +127,7 @@ const renderSize=new THREE.Vector2();
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.getSize(renderSize);if(w&&h&&(renderSize.x!==w||renderSize.y!==h))renderer.setSize(w,h)}new ResizeObserver(resize).observe(stage);resize();
 let storedCollection=null;try{storedCollection=localStorage.getItem('bita-collection-v3')}catch{}
 const ownership=readOwnedCollection(storedCollection,manifest),collection=ownership.visible,ownedCapIds=ownership.ids;
-function controls(){const locked=!introFinished||!['ready','result'].includes(state)||performance.now()<assemblingUntil;updatePlacementUI();$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=!introFinished;$('plus').disabled=!introFinished;strike.disabled=(locked&&state!=='charging'&&!slammerMenuOpen)||(state==='ready'&&!slammerMenuOpen&&caps.some(c=>performance.now()-c.born<800));}
+function controls(){const locked=!introFinished||!['ready','result'].includes(state)||performance.now()<assemblingUntil;updatePlacementUI();$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=!introFinished;$('plus').disabled=!introFinished;strike.disabled=!restackHeld&&((locked&&state!=='charging'&&!slammerMenuOpen)||(state==='ready'&&!slammerMenuOpen&&caps.some(c=>performance.now()-c.born<800)));}
 function renderCollection(){const fan=$('collectionFan');fan.dataset.count=Math.min(3,collection.length);fan.replaceChildren();for(const i of collection.slice(-3)){const img=new Image();img.alt='';fan.append(img);ensureCap(i).then(()=>img.src=thumbnailFor(i)).catch(()=>{})}$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label','Open won caps');}
 const seriesNames={pokemon:'Pokémon',mk:'Mortal Kombat',turtles:'Teenage Mutant Ninja Turtles',sonic:'Sonic the Hedgehog',batman:'Batman','power-rangers':'Power Rangers',digimon:'Digimon',streetfighter:'Street Fighter II','mad-monster':'Mad Monster Light','bionicle-2001':'Bionicle · 2001','bionicle-2003':'Bionicle · 2003',dbz:'Dragon Ball Z',nintendo:'Nintendo',cheetos:'Cheetos',spacejam:'Space Jam','simpsons-2006':'The Simpsons','bakugan-roks':'Bakugan'};
 const collectionSheet=createCollectionSheet({getItems:()=>sharedCollection??collection,ensureItem:i=>ensureCap(i),imageFor:i=>thumbnailFor(i),nameFor:i=>manifest[i].name,descriptionFor:i=>`${seriesNames[manifest[i].series]??manifest[i].series} · ${manifest[i].material==='plastic'?'Plastic cap':'Cardboard cap'}`,inspect:(i,host,options)=>showcase.inspect({index:i},host,{verticalOnly:true,fit:.96,...options}),snapshot:()=>showcase.snapshotInspect(),stopInspect:()=>showcase.stopInspect(),shareUrl:()=>collectionShareUrl(sharedCollection??collection,manifest,location.href),onClose:()=>{if(sharedCollection){sharedCollection=null;history.replaceState(null,'',location.pathname+location.search);renderCollection()}}});
@@ -169,14 +170,15 @@ function sound(power,plastic=false,level=1){if(!audio||audio.state!=='running')r
 
 let strikeImpulse=null;
 function pulseStrike(){strikeImpulse?.cancel();const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;if(!reduced)for(const [i,led]of [...document.querySelectorAll('#strike .led-glyph')].entries())led.animate([{opacity:1,color:'#25b6cc'},{opacity:.35,color:'#9b68ef',offset:.12},{opacity:1,color:'#e75ba6',offset:.22},{opacity:.6,color:'#eeaa3c',offset:.35},{opacity:1,color:'#25b6cc',offset:.48},{opacity:1,color:'#9b68ef'}],{duration:420,delay:i*14,easing:'steps(1,end)'});strikeImpulse=$('strikeEnergy').animate(reduced?[{opacity:.35},{opacity:0}]:[{opacity:.45,transform:'translateX(-30%) scale(.8)'},{opacity:.35,transform:'translateX(0) scale(1)',offset:.3},{opacity:0,transform:'translateX(40%) scale(1.3)'}],{duration:reduced?180:520,easing:'cubic-bezier(.16,.7,.3,1)',fill:'both'})}
-function begin(e){if(!introFinished)return;finishSlammerPlacement();pulseStrike();if(state==='result'){restackRemaining(false);return}if(state!=='ready'||performance.now()<assemblingUntil||caps.some(c=>performance.now()-c.born<800))return;pointerGesture=null;ensureAudio();charge={start:performance.now(),power:0};orbitVelocity=0;state='charging';if(e.pointerId!==undefined)e.currentTarget.setPointerCapture?.(e.pointerId);strike.classList.add('charging');controls()}
-function cancel(){if(!charge)return;charge=null;state='ready';strike.classList.remove('charging');setChargeVisual(0);controls()}
+function startCharge(now=performance.now()){pointerGesture=null;ensureAudio();charge={start:now,power:0};orbitVelocity=0;state='charging';strike.classList.add('charging');controls()}
+function begin(e){if(!introFinished)return;finishSlammerPlacement();pulseStrike();if(state==='result'){restackHeld=true;if(e.pointerId!==undefined)e.currentTarget.setPointerCapture?.(e.pointerId);restackRemaining(false);return}if(state!=='ready'||performance.now()<assemblingUntil||caps.some(c=>performance.now()-c.born<800))return;if(e.pointerId!==undefined)e.currentTarget.setPointerCapture?.(e.pointerId);startCharge()}
+function cancel(){restackHeld=false;if(!charge){controls();return}charge=null;state='ready';strike.classList.remove('charging');setChargeVisual(0);controls()}
 const chargeFeedback=createChargeFeedback(document.querySelector('.controls'));chargeFeedback.setTone(slammerManifest[slammerDesign].id);
 const resultTone=()=>slammerDesign===0?'black':slammerDesign===1?'blue':'purple';
 function setChargeVisual(p){chargeFeedback.setPower(Math.min(1,p*CHARGE_MS/2000))}
-function release(){if(!charge)return;if(performance.now()-charge.start>=CHARGE_MS)return overload();const power=clamp((performance.now()-charge.start)/CHARGE_MS,.15,1);lastPower=power;charge=null;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;still=0;groupRest={};slammerContact=false;slammerAt=-1;strikeStackDown(pieces().map(c=>c.body),power);pieces().forEach(c=>{c.power=power;c.rest={}});controls()}
+function release(){restackHeld=false;if(!charge){controls();return}if(performance.now()-charge.start>=CHARGE_MS)return overload();const power=clamp((performance.now()-charge.start)/CHARGE_MS,.15,1);lastPower=power;charge=null;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;still=0;groupRest={};slammerContact=false;slammerAt=-1;strikeStackDown(pieces().map(c=>c.body),power);pieces().forEach(c=>{c.power=power;c.rest={}});controls()}
 function overload(){if(!charge)return;lastPower=1;charge=null;overloaded=true;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;groupRest={};still=0;slammerContact=false;slammerAt=-2;strikeStackDown(pieces().map(c=>c.body),.1);pieces().forEach((c,i)=>{const angle=i*2.399963;c.power=.1;c.rest={};c.body.setLinvel({x:Math.cos(angle)*(1.6+i*.02)*PHYSICS_RATE,y:-.7*PHYSICS_RATE,z:Math.sin(angle)*(1.6+i*.02)*PHYSICS_RATE},true);c.body.setAngvel({x:Math.cos(angle)*3*PHYSICS_RATE,y:Math.sin(angle)*2*PHYSICS_RATE,z:Math.sin(angle)*3*PHYSICS_RATE},true)});setStrikeLabel('restack');controls()}
-strike.addEventListener('pointerdown',begin);strike.addEventListener('pointerup',release);strike.addEventListener('pointercancel',cancel);
+strike.addEventListener('pointerdown',begin);strike.addEventListener('pointerup',release);strike.addEventListener('pointercancel',cancel);strike.addEventListener('lostpointercapture',cancel);
 strike.addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)&&!e.repeat){e.preventDefault();begin(e)}});strike.addEventListener('keyup',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();release()}});window.addEventListener('blur',cancel);
 const pointers=new Map();let lastGesture=null,dragging=null,placementGesture=null;
 const pickRay=new THREE.Raycaster(),pointerNDC=new THREE.Vector2(),dragPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0),planePoint=new THREE.Vector3();
@@ -222,7 +224,7 @@ for(const [i,c]of won.entries()){c.collected=true;c.mesh.visible=false;const r=$
 state='result';count=caps.filter(c=>!c.won).length;renderCollection();controls();}
 let previous=performance.now(),acc=0,lastFrame=0;
 function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=(state==='ready'||state==='result'||state==='inspection')&&!slammerMenuOpen;if(idle&&!showcase.active()&&!slammerPlacement.active&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.1);previous=now;const t=now/1000;
- showcase.update(now,dt);if(pendingAdjustment)flushAdjustments();if(charge&&now-charge.start>=CHARGE_MS)overload();if(state==='ready')controls();
+ showcase.update(now,dt);if(restackHeld&&state==='ready'&&now>=assemblingUntil&&caps.every(c=>now-c.born>=800)){restackHeld=false;pulseStrike();startCharge(now)}if(pendingAdjustment)flushAdjustments();if(charge&&now-charge.start>=CHARGE_MS)overload();if(state==='ready')controls();
  updateAtmosphere(dt);tableDots.update(dt,atmosphere,introFinished);
  if(['ready','charging'].includes(state)){
   slammerPlacement.update(dt);slammerSlot=slammerPlacement.slot;if(slammerSwap&&slammerPlacement.phase==='tracking'){replaceSlammer();slammerPlacement.end()}
