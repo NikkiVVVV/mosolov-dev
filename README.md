@@ -84,3 +84,12 @@ Current /bita controls: plastic31, three-key ruby panel. The existing charge ren
 - Replaced the horizontal result banner with a center impact and an actual local Lottie vector burst (Agnis Design, Burst stars animation). Player: lottie-web 5.13.0 SVG light, MIT. Asset/license/source in assets/effects and vendor/THIRD-PARTY.md. No third-party runtime requests.
 - Result tiers: 1–2 nice, 3–4 wow, 5–7 super, 8–25 epic. Zero is monochrome miss; overload is monochrome overload, before individual reward reveals. Reduced motion uses a short fade without the burst.
 - Checked tier boundaries and overload precedence; placement tests pass. Browser 508×987: centered selector, design replacement, layer drag 2→3, whole-tray black lightning, normal strike and 7.2-second overload, then restack available. Lottie SVG renders 162 paths; no JS/GLSL errors. Local preview fixture is not published.
+
+## 2026-11-14 · v35 · Plain slammer key and strike feedback
+
+- Removed the slammer key's persistent selected fill/border/shadow and aria-pressed; it is a disclosure button with aria-expanded only.
+- Explicit rounded clipping on slammer and strike keys, including WebKit and the small-screen radius.
+- Enlarged the layer handle to a 56 px target / 48 px visible SVG. A subtle dashed SVG link ends at the chosen layer on the stack and follows camera projection. The SVG hidden attribute is toggled explicitly.
+- Every strike press closes placement before checking the assembly guard. During assembly an open selector still accepts that press and closes without triggering an unsafe hit.
+- Strike gets an immediate 520 ms inner energy streak, plus a pulsing lower glow while charging. Color follows the chosen slammer; existing unrestricted whole-bar lightning remains. Reduced motion gets a short fade.
+- Placement tests and syntax checks pass. Browser 508×987: layer drag 2→5, short strike closes selector/guide, immediate strike during restack also closes both without an extra hit; no JS/GLSL errors.

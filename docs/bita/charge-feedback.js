@@ -27,7 +27,7 @@ export function createChargeFeedback(button){
   place();dirty=true;
  }
  const observer=new ResizeObserver(resize);observer.observe(button);window.addEventListener('resize',resize);resize();
- return {setTone(id){const tone=id==='mk-dragon'?'black':id==='chupa-blue'?'blue':'purple',colors=tone==='black'?['#171b23','#414852']:tone==='blue'?['#d5efff','#318bff']:['#f3dfff','#a35cff'];uniforms.uColor.value=hexToRgb(colors[0]);uniforms.uGlowColor.value=hexToRgb(colors[1]);canvas.dataset.tone=tone;uniforms.uBlack.value=tone==='black'?1:0},setPower(value){power=Math.max(0,Math.min(1,value));button.style.setProperty('--charge',power);button.dataset.level=power>.8?'edge':power>.45?'strong':power?'building':'idle'},update(now,dt){
+ return {setTone(id){const tone=id==='mk-dragon'?'black':id==='chupa-blue'?'blue':'purple',colors=tone==='black'?['#171b23','#414852']:tone==='blue'?['#d5efff','#318bff']:['#f3dfff','#a35cff'];button.style.setProperty('--energy',tone==='black'?'#c2cad4':colors[1]);uniforms.uColor.value=hexToRgb(colors[0]);uniforms.uGlowColor.value=hexToRgb(colors[1]);canvas.dataset.tone=tone;uniforms.uBlack.value=tone==='black'?1:0},setPower(value){power=Math.max(0,Math.min(1,value));button.style.setProperty('--charge',power);button.dataset.level=power>.8?'edge':power>.45?'strong':power?'building':'idle'},update(now,dt){
   if(!shape)return;const target=reduced.matches?0:power;presence+=(target-presence)*(1-Math.exp(-dt/(target>presence?.09:.14)));
   if(!power&&presence<.002){presence=0;if(dirty){renderer.clear();dirty=false}return}if(reduced.matches)return;dirty=true;place();time+=Math.min(dt,.05)*(1.4+power*2.6);
   for(let i=sparks.length-1;i>=0;i--)if(time-sparks[i].born>sparks[i].life)sparks.splice(i,1);
