@@ -1,5 +1,5 @@
 import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-arcade22';
-import {capProfile,slammerProfile} from './physical-profiles.js?v=20261113-arcade22';
+import {capProfile,slammerProfile,slammerTransfer} from './physical-profiles.js?v=20261114-profiles37';
 import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
 export async function createWorld({extent=3.12}={}){
@@ -183,11 +183,11 @@ export function slammerWeights(count,slot){
 // A local elastic response at the stiff plastic insert. No final sides are chosen.
 // On top there are no overlying caps: only the insert receives the extra rebound.
 export function slammerResponse(bodies,insert,slot,power){
- const weights=slammerWeights(bodies.length,slot);let reaction=0,affected=0;
+ const weights=slammerWeights(bodies.length,slot),profile=insert.bitaProfile??slammerProfile(),transfer=slammerTransfer(profile,power);let reaction=0,affected=0;
  if(slot>=bodies.length)return {affected,weights};
  bodies.forEach((body,i)=>{const contact=body.collider(0).contactCollider(insert.collider(0),.025),k=weights[i]*(.5+power*.5);if(!k||!contact)return;
- const p=body.translation(),a=i*2.399963,impulse=body.mass()*1.6*RATE*k*(insert.bitaProfile?.kick??1);
- body.applyImpulseAtPoint({x:Math.cos(a)*impulse*.15,y:impulse,z:Math.sin(a)*impulse*.15},{x:p.x+Math.sin(a)*.16,y:p.y,z:p.z-Math.cos(a)*.16},true);reaction+=impulse;affected++;
+ const p=body.translation(),a=i*2.399963,impulse=body.mass()*1.9*RATE*k*transfer;
+ body.applyImpulseAtPoint({x:Math.cos(a)*impulse*profile.spread,y:impulse,z:Math.sin(a)*impulse*profile.spread},{x:p.x+Math.sin(a)*profile.lever,y:p.y,z:p.z-Math.cos(a)*profile.lever},true);reaction+=impulse;affected++;
  });insert.applyImpulse({x:0,y:-reaction,z:0},true);return {affected,weights};
 }
 

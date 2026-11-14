@@ -22,3 +22,6 @@ Agnis Design, from Idle Box Factory. https://lottiefiles.com/free-animation/burs
 
 ## Bitcount
 Petr van Blokland / The Bitcount Project Authors. Source: https://github.com/google/fonts/tree/main/ofl/bitcount . SIL Open Font License 1.1, bundled in assets/fonts/bitcount/OFL.txt. Controls-only WOFF2 subset generated with fonttools, variable axes preserved; outlines unchanged.
+
+## Bitcount Grid Double
+The Bitcount Project Authors. Official source: https://github.com/google/fonts/tree/main/ofl/bitcountgriddouble . SIL Open Font License 1.1, bundled in assets/fonts/bitcount-grid-double/OFL.txt. Local controls-only WOFF2 subset (minus/plus), variable axes preserved; outlines unchanged.
