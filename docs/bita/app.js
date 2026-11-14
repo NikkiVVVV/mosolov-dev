@@ -6,6 +6,7 @@ import {createCollectionSheet} from './collection-sheet.js?v=20261114-carousel40
 import {createTableDots} from './table-dots.js?v=20261113-clean24';
 import {PHYSICS_RATE} from './physics-scale.js?v=20261113-clean24';
 import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-placement.js?v=20261114-hud29';
+import {chargeFill,createWonRail} from './hud-progress.js?v=20261114-hud41';
 import {makeCapDeck} from './cap-deck.js?v=20261113-clean24';
 import * as THREE from './vendor/three.module.js';
 import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261114-impact38';
@@ -128,7 +129,8 @@ function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.getSiz
 let storedCollection=null;try{storedCollection=localStorage.getItem('bita-collection-v3')}catch{}
 const ownership=readOwnedCollection(storedCollection,manifest),collection=ownership.visible,ownedCapIds=ownership.ids;
 function controls(){const locked=!introFinished||!['ready','result'].includes(state)||performance.now()<assemblingUntil;updatePlacementUI();$('collectionToggle').disabled=!['ready','result'].includes(state);$('minus').disabled=!introFinished;$('plus').disabled=!introFinished;strike.disabled=!restackHeld&&((locked&&state!=='charging'&&!slammerMenuOpen)||(state==='ready'&&!slammerMenuOpen&&caps.some(c=>performance.now()-c.born<800)));}
-function renderCollection(){const fan=$('collectionFan');fan.dataset.count=Math.min(3,collection.length);fan.replaceChildren();for(const i of collection.slice(-3)){const img=new Image();img.alt='';fan.append(img);ensureCap(i).then(()=>img.src=thumbnailFor(i)).catch(()=>{})}$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label','Open won caps');}
+const wonRail=createWonRail({fan:$('collectionFan'),getItems:()=>collection,ensureItem:ensureCap,imageFor:thumbnailFor,enabled:()=>introFinished});
+function renderCollection(){$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label',`Open won caps. ${collection.length} collected`);wonRail.render()}
 const seriesNames={pokemon:'Pokémon',mk:'Mortal Kombat',turtles:'Teenage Mutant Ninja Turtles',sonic:'Sonic the Hedgehog',batman:'Batman','power-rangers':'Power Rangers',digimon:'Digimon',streetfighter:'Street Fighter II','mad-monster':'Mad Monster Light','bionicle-2001':'Bionicle · 2001','bionicle-2003':'Bionicle · 2003',dbz:'Dragon Ball Z',nintendo:'Nintendo',cheetos:'Cheetos',spacejam:'Space Jam','simpsons-2006':'The Simpsons','bakugan-roks':'Bakugan'};
 const collectionSheet=createCollectionSheet({getItems:()=>sharedCollection??collection,ensureItem:i=>ensureCap(i),imageFor:i=>thumbnailFor(i),nameFor:i=>manifest[i].name,descriptionFor:i=>`${seriesNames[manifest[i].series]??manifest[i].series} · ${manifest[i].material==='plastic'?'Plastic cap':'Cardboard cap'}`,inspect:(i,host,options)=>showcase.inspect({index:i},host,{verticalOnly:true,fit:.96,...options}),snapshot:()=>showcase.snapshotInspect(),stopInspect:()=>showcase.stopInspect(),shareUrl:()=>collectionShareUrl(sharedCollection??collection,manifest,location.href),onClose:()=>{if(sharedCollection){sharedCollection=null;history.replaceState(null,'',location.pathname+location.search);renderCollection()}}});
 function showCollection(){finishSlammerPlacement();collectionSheet.open()}
@@ -175,7 +177,7 @@ function begin(e){if(!introFinished)return;finishSlammerPlacement();pulseStrike(
 function cancel(){restackHeld=false;if(!charge){controls();return}charge=null;state='ready';strike.classList.remove('charging');setChargeVisual(0);controls()}
 const chargeFeedback=createChargeFeedback(document.querySelector('.controls'));chargeFeedback.setTone(slammerManifest[slammerDesign].id);
 const resultTone=()=>slammerDesign===0?'black':slammerDesign===1?'blue':'purple';
-function setChargeVisual(p){chargeFeedback.setPower(Math.min(1,p*CHARGE_MS/2000))}
+function setChargeVisual(p){chargeFeedback.setPower(Math.min(1,p*CHARGE_MS/2000));strike.style.setProperty('--power-fill',chargeFill(p))}
 function release(){restackHeld=false;if(!charge){controls();return}if(performance.now()-charge.start>=CHARGE_MS)return overload();const power=clamp((performance.now()-charge.start)/CHARGE_MS,.15,1);lastPower=power;charge=null;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;still=0;groupRest={};slammerContact=false;slammerAt=-1;strikeStackDown(pieces().map(c=>c.body),power);pieces().forEach(c=>{c.power=power;c.rest={}});controls()}
 function overload(){if(!charge)return;lastPower=1;charge=null;overloaded=true;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;groupRest={};still=0;slammerContact=false;slammerAt=-2;strikeStackDown(pieces().map(c=>c.body),.1);pieces().forEach((c,i)=>{const angle=i*2.399963;c.power=.1;c.rest={};c.body.setLinvel({x:Math.cos(angle)*(1.6+i*.02)*PHYSICS_RATE,y:-.7*PHYSICS_RATE,z:Math.sin(angle)*(1.6+i*.02)*PHYSICS_RATE},true);c.body.setAngvel({x:Math.cos(angle)*3*PHYSICS_RATE,y:Math.sin(angle)*2*PHYSICS_RATE,z:Math.sin(angle)*3*PHYSICS_RATE},true)});setStrikeLabel('restack');controls()}
 strike.addEventListener('pointerdown',begin);strike.addEventListener('pointerup',release);strike.addEventListener('pointercancel',cancel);strike.addEventListener('lostpointercapture',cancel);
@@ -220,7 +222,7 @@ state='inspection';won.forEach((c,i)=>c.rank=i+1);$('announcer').textContent=`Fl
 async function collectWinners(){if(state!=='inspection'||dragging)return;state='collecting';renderCollection();controls();$('markers').replaceChildren();const won=caps.filter(c=>c.won).sort((a,b)=>a.rank-b.rank);
 if(resultSplashKind(won.length,false))await resultSplash.play(resultSplashKind(won.length,false),resultTone());
 ownedCapIds.push(...won.map(c=>manifest[c.index].id));try{localStorage.setItem('bita-collection-v3',JSON.stringify(ownedCapIds))}catch{}
-for(const [i,c]of won.entries()){c.collected=true;c.mesh.visible=false;const r=$('collectionFan').getBoundingClientRect();await showcase.award({index:c.index},{target:{x:r.right-18,y:r.y+r.height/2},index:i,total:won.length});collection.push(c.index);renderCollection()}
+for(const [i,c]of won.entries()){c.collected=true;c.mesh.visible=false;const target=wonRail.nextTarget();await showcase.award({index:c.index},{target,index:i,total:won.length});collection.push(c.index);renderCollection()}
 state='result';count=caps.filter(c=>!c.won).length;renderCollection();controls();}
 let previous=performance.now(),acc=0,lastFrame=0;
 function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=(state==='ready'||state==='result'||state==='inspection')&&!slammerMenuOpen;if(idle&&!showcase.active()&&!slammerPlacement.active&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.1);previous=now;const t=now/1000;
@@ -288,7 +290,7 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  if(introFinished&&!collectionSheet.isOpen())renderer.render(scene,camera);
 }
 reset(5,false);requestAnimationFrame(frame);
-if(sharedCollection){introFinished=true;controls();collectionSheet.open();backgroundCaps()}
+if(sharedCollection){introFinished=true;renderCollection();controls();collectionSheet.open();backgroundCaps()}
 else packIntro.setReady(caps.map(c=>c.mesh)).then(()=>{
  const now=performance.now();
  for(const [i,c]of caps.entries()){
@@ -296,7 +298,7 @@ else packIntro.setReady(caps.map(c=>c.mesh)).then(()=>{
   const target={x:c.position.x+1.6,y:c.position.y+capInsertionOffset(i,slammerSlot)+.8,z:c.position.z};
   c.body.setTranslation(target,true);c.body.setNextKinematicTranslation(target);c.mesh.position.copy(target);c.mesh.visible=i===0;
  }
- introFinished=true;renderer.shadowMap.needsUpdate=true;controls();backgroundCaps();
+ introFinished=true;renderCollection();renderer.shadowMap.needsUpdate=true;controls();backgroundCaps();
 });
 
 async function backgroundCaps(){while(true){await new Promise(r=>setTimeout(r,1500));if(!deck.length&&readyDeck.length<10)deck=makeCapDeck(manifest);if(deck.length){await loadBatch();controls()}}}
