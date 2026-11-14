@@ -146,3 +146,5 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 - Existing electric shader traces the entire panel; charge dimming and win/overload transitions are retained.
 - Removed slammer-design controls. Fixed blue slammer remains movable by the left layer pointer or a direct vertical stack gesture before a strike.
 - Checked layer controller tests, cap addition, layer 2 → 6 and a real 2.1-second strike with panel-wide arcs; no JS/GLSL errors.
+
+- Collection follow-up: remove top counter/handle, reduce sheet to 680 px and cap to 384 px. Each incoming cap starts on its reverse, turns to the artwork in the swipe direction, then pauses before idle rotation. Reduced motion skips the turn; dragging interrupts it. App/CSS plastic32, collection/showcase reveal32.
