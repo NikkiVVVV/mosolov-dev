@@ -139,3 +139,10 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 - A violet wow/lightning wipe plays before individual rewards when at least three caps flip. Overload uses a gray oops variant before returning to restack.
 - One 1.25-second continuous DOM animation, reduced-motion fade, no new renderer. Flight physics and the existing controls are unchanged.
 - Checked win thresholds 0/1/2/3/4/25, overload precedence and both visual variants in the local preview.
+
+## 2026-11-14 · Ruby soft-touch control panel
+
+- Straight black panel with consistent inset padding, light plastic minus/plus keys and a central ruby impact diamond. Four-pixel key travel on press.
+- Existing electric shader traces the entire panel; charge dimming and win/overload transitions are retained.
+- Removed slammer-design controls. Fixed blue slammer remains movable by the left layer pointer or a direct vertical stack gesture before a strike.
+- Checked layer controller tests, cap addition, layer 2 → 6 and a real 2.1-second strike with panel-wide arcs; no JS/GLSL errors.

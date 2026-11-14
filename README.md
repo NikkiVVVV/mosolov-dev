@@ -66,3 +66,5 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 Latest UI update: /money uses pricing11 with a larger selected plan. /bita uses collection27, no close button, and unique won designs / 102 available designs.
 
 Current UI versions: /bita hud29 (collection/share/showcase28), /money pricing12. See CHANGELOG for the slammer mode, share links and updated payment tray.
+
+Current /bita controls: plastic31, three-key ruby panel. The existing charge renderer receives the complete .controls outline.
