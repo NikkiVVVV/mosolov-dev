@@ -1766,5 +1766,275 @@
     "rimColor": "#d5ccb9",
     "enabled": false,
     "qualityIssue": "small atlas crop with clipped edges; insufficient detail for the 3D viewer"
+  },
+  {
+    "id": "cheetos-cities-02",
+    "name": "Chester · Shanghai",
+    "series": "cheetos-cities",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/02-%E4%B8%8A%E6%B5%B7-Shanghai.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html",
+    "material": "plastic",
+    "file": "assets/caps/cheetos-cities-02.webp",
+    "backFile": "assets/caps/cheetos-cities-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/Back.png",
+    "sourceResolution": [
+      383,
+      383
+    ]
+  },
+  {
+    "id": "cheetos-cities-03",
+    "name": "Chester · Guangzhou",
+    "series": "cheetos-cities",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/03-%E5%BB%A3%E5%B7%9E-Guangzhou.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html",
+    "material": "plastic",
+    "file": "assets/caps/cheetos-cities-03.webp",
+    "backFile": "assets/caps/cheetos-cities-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/Back.png",
+    "sourceResolution": [
+      370,
+      370
+    ]
+  },
+  {
+    "id": "cheetos-cities-04",
+    "name": "Chester · Xian",
+    "series": "cheetos-cities",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/04-%E8%A5%BF%E5%AE%89-Xian.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html",
+    "material": "plastic",
+    "file": "assets/caps/cheetos-cities-04.webp",
+    "backFile": "assets/caps/cheetos-cities-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/Back.png",
+    "sourceResolution": [
+      385,
+      385
+    ]
+  },
+  {
+    "id": "cheetos-cities-07",
+    "name": "Chester · Japan",
+    "series": "cheetos-cities",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/07-%E6%97%A5%E6%9C%AC-Japan.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html",
+    "material": "plastic",
+    "file": "assets/caps/cheetos-cities-07.webp",
+    "backFile": "assets/caps/cheetos-cities-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/Back.png",
+    "sourceResolution": [
+      395,
+      395
+    ]
+  },
+  {
+    "id": "cheetos-cities-10",
+    "name": "Chester · Singapore",
+    "series": "cheetos-cities",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/10-%E6%96%B0%E5%8A%A0%E5%9D%A1-Singapore.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html",
+    "material": "plastic",
+    "file": "assets/caps/cheetos-cities-10.webp",
+    "backFile": "assets/caps/cheetos-cities-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/Back.png",
+    "sourceResolution": [
+      375,
+      375
+    ]
+  },
+  {
+    "id": "cheetos-cities-12",
+    "name": "Chester · Korea",
+    "series": "cheetos-cities",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/12-%E9%9F%93%E5%9C%8B-Korea.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html",
+    "material": "plastic",
+    "file": "assets/caps/cheetos-cities-12.webp",
+    "backFile": "assets/caps/cheetos-cities-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/Back.png",
+    "sourceResolution": [
+      375,
+      375
+    ]
+  },
+  {
+    "id": "cheetos-cities-15",
+    "name": "Chester · New Zealand",
+    "series": "cheetos-cities",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/15-%E6%96%B0%E8%A5%BF%E8%98%AD-New-Zealand.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html",
+    "material": "plastic",
+    "file": "assets/caps/cheetos-cities-15.webp",
+    "backFile": "assets/caps/cheetos-cities-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/Back.png",
+    "sourceResolution": [
+      375,
+      375
+    ]
+  },
+  {
+    "id": "cheetos-cities-17",
+    "name": "Chester · New York",
+    "series": "cheetos-cities",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/17-%E7%B4%90%E7%B4%84-New-York.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html",
+    "material": "plastic",
+    "file": "assets/caps/cheetos-cities-17.webp",
+    "backFile": "assets/caps/cheetos-cities-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/Back.png",
+    "sourceResolution": [
+      375,
+      375
+    ]
+  },
+  {
+    "id": "cheetos-cities-18",
+    "name": "Chester · Los Angeles",
+    "series": "cheetos-cities",
+    "source": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/18-%E6%B4%9B%E6%9D%89%E7%A3%AF-Los-Angeles.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html",
+    "material": "plastic",
+    "file": "assets/caps/cheetos-cities-18.webp",
+    "backFile": "assets/caps/cheetos-cities-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Tazo/China/%E5%A4%A9%E6%97%8F/Cities/300DPI/Back.png",
+    "sourceResolution": [
+      375,
+      375
+    ]
+  },
+  {
+    "id": "mk-gold-01",
+    "name": "Mortal Kombat Gold · 01",
+    "series": "mk-gold",
+    "source": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/01.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html",
+    "material": "cardboard",
+    "file": "assets/caps/mk-gold-01.webp",
+    "backFile": "assets/caps/mk-gold-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Back.png",
+    "sourceResolution": [
+      475,
+      475
+    ]
+  },
+  {
+    "id": "mk-gold-02",
+    "name": "Mortal Kombat Gold · 02",
+    "series": "mk-gold",
+    "source": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/02.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html",
+    "material": "cardboard",
+    "file": "assets/caps/mk-gold-02.webp",
+    "backFile": "assets/caps/mk-gold-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Back.png",
+    "sourceResolution": [
+      475,
+      475
+    ]
+  },
+  {
+    "id": "mk-gold-cyrax",
+    "name": "Mortal Kombat Gold · Cyrax",
+    "series": "mk-gold",
+    "source": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Cyrax.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html",
+    "material": "cardboard",
+    "file": "assets/caps/mk-gold-cyrax.webp",
+    "backFile": "assets/caps/mk-gold-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Back.png",
+    "sourceResolution": [
+      475,
+      475
+    ]
+  },
+  {
+    "id": "mk-gold-goro",
+    "name": "Mortal Kombat Gold · Goro",
+    "series": "mk-gold",
+    "source": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Goro.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html",
+    "material": "cardboard",
+    "file": "assets/caps/mk-gold-goro.webp",
+    "backFile": "assets/caps/mk-gold-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Back.png",
+    "sourceResolution": [
+      475,
+      475
+    ]
+  },
+  {
+    "id": "mk-gold-goro-2",
+    "name": "Mortal Kombat Gold · Goro (alternate)",
+    "series": "mk-gold",
+    "source": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Goro-2.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html",
+    "material": "cardboard",
+    "file": "assets/caps/mk-gold-goro-2.webp",
+    "backFile": "assets/caps/mk-gold-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Back.png",
+    "sourceResolution": [
+      475,
+      475
+    ]
+  },
+  {
+    "id": "mk-gold-mk3-logo",
+    "name": "Mortal Kombat Gold · MK3 logo",
+    "series": "mk-gold",
+    "source": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/MK3-logo.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html",
+    "material": "cardboard",
+    "file": "assets/caps/mk-gold-mk3-logo.webp",
+    "backFile": "assets/caps/mk-gold-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Back.png",
+    "sourceResolution": [
+      475,
+      475
+    ]
+  },
+  {
+    "id": "mk-gold-motaro",
+    "name": "Mortal Kombat Gold · Motaro",
+    "series": "mk-gold",
+    "source": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Motaro.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html",
+    "material": "cardboard",
+    "file": "assets/caps/mk-gold-motaro.webp",
+    "backFile": "assets/caps/mk-gold-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Back.png",
+    "sourceResolution": [
+      475,
+      475
+    ]
+  },
+  {
+    "id": "mk-gold-motaro-2",
+    "name": "Mortal Kombat Gold · Motaro (alternate)",
+    "series": "mk-gold",
+    "source": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Motaro-2.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html",
+    "material": "cardboard",
+    "file": "assets/caps/mk-gold-motaro-2.webp",
+    "backFile": "assets/caps/mk-gold-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Back.png",
+    "sourceResolution": [
+      475,
+      475
+    ]
+  },
+  {
+    "id": "mk-gold-sheeva",
+    "name": "Mortal Kombat Gold · Sheeva",
+    "series": "mk-gold",
+    "source": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Sheeva.png",
+    "collectionSource": "https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html",
+    "material": "cardboard",
+    "file": "assets/caps/mk-gold-sheeva.webp",
+    "backFile": "assets/caps/mk-gold-back.webp",
+    "backSource": "https://static1.milkcapmania.co.uk/Img/Taso/Mortal%20Kombat%20Gold/300DPI/Back.png",
+    "sourceResolution": [
+      475,
+      475
+    ]
   }
 ]

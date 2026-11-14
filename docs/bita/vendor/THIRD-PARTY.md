@@ -29,3 +29,8 @@ The Bitcount Project Authors. Official source: https://github.com/google/fonts/t
 Manrope reaction display subset (v38): instantiated at the original font's true 800 weight with fonttools and subset to reaction Cyrillic glyphs as manrope-reactions-800.woff2. Outlines unchanged; same SIL OFL 1.1 in assets/fonts/manrope/OFL.txt.
 
 Bitcount v40 controls subset adds close/share/copied/try again glyphs for collection actions, preserving the original variable axes and SIL OFL 1.1. File: assets/fonts/bitcount/bitcount-controls-v40.woff2.
+
+## Added collection scans · v45
+Mortal Kombat Gold: https://www.milkcapmania.co.uk/Taso/775-Mortal-Kombat-Gold.html (scans credited there to Pavel Chugaynov).
+Cheetos Cities, China 1996: https://www.milkcapmania.co.uk/Tazos/China/1088-%E5%A4%A9%E6%97%8F-Cities.html (scans credited there to MarkLuo).
+Nine front designs plus one shared reverse from each set. Exact source URLs and native resolutions are retained in assets/caps/manifest.json and references/collections45/imported.json. Local WebP conversion, no enlargement or generative redrawing.
