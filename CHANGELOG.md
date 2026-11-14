@@ -148,3 +148,10 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 - Checked layer controller tests, cap addition, layer 2 → 6 and a real 2.1-second strike with panel-wide arcs; no JS/GLSL errors.
 
 - Collection follow-up: remove top counter/handle, reduce sheet to 680 px and cap to 384 px. Each incoming cap starts on its reverse, turns to the artwork in the swipe direction, then pauses before idle rotation. Reduced motion skips the turn; dragging interrupts it. App/CSS plastic32, collection/showcase reveal32.
+
+## 2026-11-14 · Glass controls v33
+
+- Restrained glass tray: upright cropped slammer, minus, plus, black strike/restack. No rubber deformation.
+- Available slammers emerge as discs behind the tray. The active button changes tint; selecting a design replaces the actual 3D body and material during extraction.
+- Thin left layer pointer appears only in slammer mode. Strike closes placement immediately and retains whole-tray lightning and charge dimming.
+- Verified placement controller tests, switching to purple, layer 2 → 5, strike from placement, no browser errors. Physics and collection remain unchanged.

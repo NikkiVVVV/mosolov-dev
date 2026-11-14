@@ -68,3 +68,10 @@ Latest UI update: /money uses pricing11 with a larger selected plan. /bita uses 
 Current UI versions: /bita hud29 (collection/share/showcase28), /money pricing12. See CHANGELOG for the slammer mode, share links and updated payment tray.
 
 Current /bita controls: plastic31, three-key ruby panel. The existing charge renderer receives the complete .controls outline.
+
+## 2026-11-14 · Glass controls v33
+
+- Restrained glass tray: upright cropped slammer, minus, plus, black strike/restack. No rubber deformation.
+- Available slammers emerge as discs behind the tray. The active button changes tint; selecting a design replaces the actual 3D body and material during extraction.
+- Thin left layer pointer appears only in slammer mode. Strike closes placement immediately and retains whole-tray lightning and charge dimming.
+- Verified placement controller tests, switching to purple, layer 2 → 5, strike from placement, no browser errors. Physics and collection remain unchanged.

@@ -138,26 +138,28 @@ html #showcase[data-mode=inspect]::before{background:#f1f0ec;backdrop-filter:blu
 #stage:focus{outline:none}
 #stage:focus-visible::after{content:"";position:absolute;inset:72px 12px 112px;border:1px solid #87709555;border-radius:16px;pointer-events:none}
 
-/* Ruby ABS keys seated in a straight, soft-touch panel. */
-html .controls{--key-height:clamp(60px,20vw,84px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:16px;width:calc(100% - 24px);max-width:408px;min-height:calc(var(--key-height) + 60px);padding:20px 16px;bottom:calc(20px + env(safe-area-inset-bottom));border:1px solid #414247;border-radius:28px;background:linear-gradient(165deg,#303135,#17181b 70%);box-shadow:inset 0 1px 2px #ffffff30,inset 0 -3px 3px #0008,0 8px 18px #15151b24;isolation:isolate;overflow:visible}
-html .controls::before{content:'';position:absolute;inset:4px;border:1px solid #ffffff0b;border-radius:24px;pointer-events:none;z-index:-1}
-html .controls button,html .controls .adjust,html .controls #strike{position:relative;display:grid;place-items:center;width:100%;min-width:0;height:var(--key-height);padding:0;border:0;border-radius:20px;background:linear-gradient(#18191c,#08090a);color:#202124;box-shadow:0 1px 0 #ffffff16,inset 0 2px 4px #000b;font:600 40px/1 Arial,sans-serif;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-tap-highlight-color:transparent;transform:none;overflow:visible}
+/* Quiet glass controls; slammers emerge behind the shared tray. */
+html .controls{--key-height:64px;display:grid;grid-template-columns:.95fr .8fr .8fr 1.75fr;align-items:center;gap:8px;width:calc(100% - 24px);max-width:408px;min-height:0;padding:12px;bottom:calc(16px + env(safe-area-inset-bottom));border:0;border-radius:24px;background:transparent;box-shadow:none;isolation:isolate;overflow:visible}
+html .controls::before{content:'';position:absolute;inset:0;z-index:0;border:1px solid #ffffffd9;border-radius:24px;background:linear-gradient(140deg,#ffffffb8,#e5e7e4c9);box-shadow:inset 0 1px 0 #fff,0 4px 20px #252b3212;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);pointer-events:none}
+html .controls>button{z-index:1}
+html .controls button,html .controls .adjust,html .controls #strike{position:relative;left:auto;right:auto;top:auto;bottom:auto;margin:0;display:grid;place-items:center;width:100%;min-width:0;height:var(--key-height);padding:0;border:1px solid #ffffffeb;border-radius:16px;background:linear-gradient(150deg,#ffffffdc,#e9ece9d9);color:#505750;box-shadow:inset 0 1px 1px #fff,0 2px 5px #242d2810;font:500 28px/1 "Golos Text",sans-serif;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-tap-highlight-color:transparent;transform:none;overflow:hidden;transition:background .18s,box-shadow .18s,translate .1s}
+html .controls #strike{background:linear-gradient(155deg,#343632,#171a17);border-color:#232722;color:#fff;font:500 16px/1 "Golos Text",sans-serif;letter-spacing:-.2px;box-shadow:inset 0 1px 0 #ffffff30,0 3px 7px #1820191c}
+html .controls #strike::before,html .controls #strike::after{content:none}
+html .controls button:active,html .controls #strike.charging{translate:0 1px;transform:none;box-shadow:inset 0 2px 5px #151d2420}
+html .controls #strike:active,html .controls #strike.charging{background:linear-gradient(155deg,#292c28,#151815);box-shadow:inset 0 2px 5px #0005}
 html .controls button:disabled{opacity:.55;cursor:default}
-.controls .key-face{position:absolute;inset:0 0 5px;display:grid;place-items:center;border:1px solid #bfc1c5;border-radius:19px;background:radial-gradient(ellipse at 25% 0,#ffffffb3,transparent 55%),linear-gradient(155deg,#ededed,#b8b9bc 65%,#b2b4b7);box-shadow:inset 0 2px 2px #ffffffed,inset 0 -2px 2px #6b6c6f66,0 5px 0 #787a7e,0 7px 3px #0006;transition:translate .09s ease-out,box-shadow .09s ease-out;pointer-events:none}
-.controls .key-face::after{content:'';position:absolute;top:5px;left:8px;right:12px;height:13px;border-top:2px solid #ffffffa6;border-radius:14px;opacity:.7}
-html .controls #strike{background:none;box-shadow:none;border-radius:24px}
-html .controls #strike .strike-face{inset:auto;left:50%;top:50%;width:76%;aspect-ratio:1;height:auto;border:1px solid #b71d49;border-radius:22%;background:radial-gradient(ellipse at 26% 0,#ff8aa9b3,transparent 50%),linear-gradient(145deg,#f13969,#d31649 58%,#b60f3c);box-shadow:inset 1px 2px 2px #ffb1c1c9,inset -2px -2px 2px #82062c80,4px 4px 0 #780d2d,6px 6px 4px #0008;transform:translate(-50%,-50%) rotate(45deg)}
-.controls .strike-face svg{position:relative;width:70%;height:70%;transform:rotate(-45deg);pointer-events:none}
-html .controls #strike .impact-icon{fill:#fffdf8;stroke:none;filter:drop-shadow(1px 2px 0 #890c3340)}
-html .controls #strike .restack-icon{display:none;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;width:54%;height:54%}
-html .controls #strike[data-action=restack] .impact-icon{display:none}html .controls #strike[data-action=restack] .restack-icon{display:block}
-html .controls button:active,html .controls #strike.charging{transform:none;background:inherit}
-html .controls button:active .key-face{translate:0 4px;box-shadow:inset 0 2px 3px #ffffffa3,inset 0 -1px 2px #6b6c6f66,0 1px 0 #787a7e,0 2px 2px #0008}
-html .controls #strike:active .strike-face,html .controls #strike.charging .strike-face{translate:0 4px;box-shadow:inset 1px 2px 2px #ffb1c1b3,inset -1px -1px 2px #82062c80,1px 1px 0 #780d2d,2px 2px 3px #0009}
-html .controls button:focus-visible{outline:2px solid #ad86df;outline-offset:5px}
-#slammerPointer{position:absolute;z-index:5;width:56px;height:48px;display:grid;place-items:center;transform:translate(-100%,-50%);touch-action:none;cursor:ns-resize;color:#706b75}#slammerPointer svg{width:48px;height:32px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:miter}#slammerPointer svg path{pointer-events:none}#slammerPointer:focus-visible{outline:2px solid #8062ad;border-radius:8px}
-@media(max-width:350px){html .controls{gap:12px;padding:16px 12px;border-radius:24px;width:calc(100% - 16px)}.controls .key-face{border-radius:16px}html .controls button{font-size:34px}}
-@media(prefers-reduced-motion:reduce){.controls .key-face{transition:none}}
+html .controls button:focus-visible{outline:2px solid #857a99;outline-offset:3px}
+html .controls #slammerButton{isolation:isolate}
+#slammerButtonImage{position:absolute;width:160%;height:160%;max-width:none;left:-55%;top:-55%;object-fit:contain;transform:none;pointer-events:none;filter:drop-shadow(0 2px 2px #14284425)}
+html .controls #slammerButton[aria-pressed=true]{background:linear-gradient(145deg,#e4e0efd9,#d4d0dfd9);border-color:#b9b0ca;box-shadow:inset 0 1px 3px #6a607a20}
+html .controls .slammer-picker{position:absolute;z-index:-1;left:12px;bottom:calc(100% - 16px);display:flex;gap:8px;align-items:flex-end;width:auto;padding:0;background:none;border:0;box-shadow:none}
+html .controls .slammer-picker button{flex:0 0 60px;width:60px;height:60px;border-radius:50%;border:0;background:none;box-shadow:none;overflow:visible;animation:slammer-emerge .28s cubic-bezier(.2,.7,.25,1) both;animation-delay:calc(var(--choice)*35ms)}
+html .controls .slammer-picker img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;filter:drop-shadow(0 2px 2px #2224);transition:translate .18s}
+html .controls .slammer-picker button[aria-pressed=true] img{translate:0 -5px;filter:drop-shadow(0 0 1px #fff) drop-shadow(0 2px 3px #2225)}
+@keyframes slammer-emerge{from{opacity:0;translate:0 28px}to{opacity:1;translate:0 0}}
+#slammerPointer{position:absolute;z-index:5;width:48px;height:48px;display:grid;place-items:center;transform:translate(-100%,-50%);touch-action:none;cursor:ns-resize;color:#77717f;background:none;border:0;box-shadow:none}#slammerPointer svg{width:48px;height:32px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}#slammerPointer:focus-visible{outline:2px solid #8062ad;border-radius:8px}
+@media(max-width:350px){html .controls{--key-height:56px;gap:6px;padding:10px;width:calc(100% - 16px);border-radius:20px}html .controls::before{border-radius:20px}html .controls button{border-radius:12px}html .controls #strike{font-size:15px}}
+@media(prefers-reduced-motion:reduce){html .controls button{transition:none}html .controls .slammer-picker button{animation:none}}
 
 /* A single continuous result wipe, before the individual cap reveals. */
 .result-splash{position:fixed;inset:0;z-index:90;overflow:hidden;pointer-events:none;isolation:isolate;--splash:#8655ef;--splash-edge:#e4d5ff;--splash-ink:#26143e}
@@ -169,7 +171,7 @@ html .controls button:focus-visible{outline:2px solid #ad86df;outline-offset:5px
 .result-splash-band i{position:absolute;width:52px;height:8px;background:var(--splash-edge);opacity:.55;transform:skewX(-35deg);left:calc(50% - 180px);top:40%}.result-splash-band i:nth-last-child(2){left:calc(50% + 120px);top:65%;width:72px}.result-splash-band i:last-child{left:calc(50% + 154px);top:38%;width:28px}
 @media(max-height:540px){.result-splash-band{min-height:160px;padding:24px 0;border-block-width:12px}.result-splash-bolt{top:-52px;width:64px;height:76px;left:calc(50% - 32px)}}
 
-html .controls #strike:active,html .controls #strike.charging{background:none}
+
 
 html .controls button,html .controls .adjust,html .controls #strike{left:auto;right:auto;top:auto;bottom:auto;margin:0}
 html .controls #strike::before,html .controls #strike::after{content:none}
