@@ -1,5 +1,5 @@
 import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-arcade22';
-import {capProfile,slammerProfile,slammerTransfer} from './physical-profiles.js?v=20261114-profiles37';
+import {capProfile,slammerProfile,slammerTransfer} from './physical-profiles.js?v=20261114-impact38';
 import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
 export async function createWorld({extent=3.12}={}){
@@ -157,7 +157,7 @@ export function fanStack(bodies,power,contactConfirmed=false,released=null){
  const touches=contactConfirmed||p.y-support<.025||bodies.some(other=>other!==body&&body.collider(0).contactCollider(other.collider(0),.012));
  if(!touches||body.linvel().y>2.5*RATE)return;released?.add(body.collider(0).handle);
  const a=2*Math.atan2(q.z,q.x)+i*2.399963+p.x*7+p.z*11,dx=Math.cos(a),dz=Math.sin(a),mass=body.mass(),k=(.95+power*.45)*(body.bitaProfile?.flex??1);
- body.applyImpulseAtPoint({x:dx*mass*1.3*k*RATE,y:mass*(4.2*k*RATE-Math.min(0,body.linvel().y)),z:dz*mass*1.3*k*RATE},{x:p.x+dz*.30,y:p.y,z:p.z-dx*.30},true);body.applyTorqueImpulse({x:dz*mass*.65*k*RATE,y:0,z:-dx*mass*.65*k*RATE},true);affected++;
+ body.applyImpulseAtPoint({x:dx*mass*1.3*(1+power*.15)*k*RATE,y:mass*(4.2*(1+power*.10)*k*RATE-Math.min(0,body.linvel().y)),z:dz*mass*1.3*(1+power*.15)*k*RATE},{x:p.x+dz*.30,y:p.y,z:p.z-dx*.30},true);body.applyTorqueImpulse({x:dz*mass*.65*k*RATE,y:0,z:-dx*mass*.65*k*RATE},true);affected++;
  });return affected;
 }
 // Kept for old callers; rigid contact handles the later tumbling.
@@ -186,7 +186,7 @@ export function slammerResponse(bodies,insert,slot,power){
  const weights=slammerWeights(bodies.length,slot),profile=insert.bitaProfile??slammerProfile(),transfer=slammerTransfer(profile,power);let reaction=0,affected=0;
  if(slot>=bodies.length)return {affected,weights};
  bodies.forEach((body,i)=>{const contact=body.collider(0).contactCollider(insert.collider(0),.025),k=weights[i]*(.5+power*.5);if(!k||!contact)return;
- const p=body.translation(),a=i*2.399963,impulse=body.mass()*1.9*RATE*k*transfer;
+ const p=body.translation(),a=i*2.399963,impulse=body.mass()*1.9*(1+power*.08)*RATE*k*transfer;
  body.applyImpulseAtPoint({x:Math.cos(a)*impulse*profile.spread,y:impulse,z:Math.sin(a)*impulse*profile.spread},{x:p.x+Math.sin(a)*profile.lever,y:p.y,z:p.z-Math.cos(a)*profile.lever},true);reaction+=impulse;affected++;
  });insert.applyImpulse({x:0,y:-reaction,z:0},true);return {affected,weights};
 }

@@ -233,3 +233,14 @@ html .controls .slammer-picker button:disabled{opacity:1;cursor:default}
 .result-splash[data-entrance=stamp] .result-ring{border-radius:24px;rotate:8deg}
 .result-splash[data-entrance=twist] .result-ring{border-radius:32px;rotate:45deg}
 .result-splash[data-kind=nice] .result-ring{opacity:.2}
+
+/* v38: real 800-weight Cyrillic outlines; no synthetic italic or filtered text layer. */
+@font-face{font-family:'Result Display';src:url('assets/fonts/manrope/manrope-reactions-800.woff2') format('woff2');font-weight:800;font-style:normal;font-display:swap}
+.result-impact strong{font-family:'Result Display',sans-serif;font-weight:800;font-style:normal;font-synthesis:none;letter-spacing:-1px;color:var(--result-color);-webkit-text-stroke:0;filter:none;text-shadow:0 2px 0 #10121b;text-rendering:optimizeLegibility}
+.result-impact strong .result-letter{filter:none}
+.result-splash[data-kind=miss] strong,.result-splash[data-kind=spill] strong{filter:none;text-shadow:0 2px 0 #10121b}
+.result-electric{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.result-electric path{fill:none;stroke:var(--result-color);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;opacity:0}
+.result-splash[data-entrance=stamp] .result-electric path{stroke-width:5}
+.result-splash[data-entrance=twist] .result-electric{rotate:12deg;scale:1.08}
+.result-splash[data-kind=nice] .result-burst{opacity:.5;scale:.7}

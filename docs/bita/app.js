@@ -1,4 +1,4 @@
-import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261114-reactions37';
+import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261114-impact38';
 import {isPlayable,readOwnedCollection} from './cap-catalog.js?v=20261113-clean24';
 import {prepareFace,faceThumbnail} from './face-texture.js?v=20261113-clean24';
 import {readSharedCollection,collectionShareUrl} from './collection-share.js?v=20261114-collection28';
@@ -8,7 +8,7 @@ import {PHYSICS_RATE} from './physics-scale.js?v=20261113-clean24';
 import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-placement.js?v=20261114-hud29';
 import {makeCapDeck} from './cap-deck.js?v=20261113-clean24';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261114-profiles37';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261114-impact38';
 import {createShowcase} from './showcase.js?v=20261114-reveal32';
 import {createChargeFeedback} from './charge-feedback.js?v=20261114-press35';
 import {createPackIntro} from './pack-intro.js?v=20261113-clean24';

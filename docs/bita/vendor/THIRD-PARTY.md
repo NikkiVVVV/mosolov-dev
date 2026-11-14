@@ -25,3 +25,5 @@ Petr van Blokland / The Bitcount Project Authors. Source: https://github.com/goo
 
 ## Bitcount Grid Double
 The Bitcount Project Authors. Official source: https://github.com/google/fonts/tree/main/ofl/bitcountgriddouble . SIL Open Font License 1.1, bundled in assets/fonts/bitcount-grid-double/OFL.txt. Local controls-only WOFF2 subset (minus/plus), variable axes preserved; outlines unchanged.
+
+Manrope reaction display subset (v38): instantiated at the original font's true 800 weight with fonttools and subset to reaction Cyrillic glyphs as manrope-reactions-800.woff2. Outlines unchanged; same SIL OFL 1.1 in assets/fonts/manrope/OFL.txt.
