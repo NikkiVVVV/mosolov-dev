@@ -13,3 +13,9 @@ Original shape tracing, arc generation, GLSL and constants in electric-logo-core
 ## Manrope
 Google Fonts upstream: https://github.com/google/fonts/tree/main/ofl/manrope .
 Unmodified variable TrueType font; SIL Open Font License 1.1, copyright 2018 The Manrope Project Authors. Font and complete license are in assets/fonts/manrope/.
+
+## Lottie Web 5.13.0
+Official airbnb/lottie-web SVG light player, MIT. See lottie-LICENSE.md. Vendored locally; no CDN requests at runtime.
+
+## Burst stars animation
+Agnis Design, from Idle Box Factory. https://lottiefiles.com/free-animation/burst-stars-animation-s27HzIxQ2u . Lottie Simple License; see assets/effects/LICENSE.txt. Vector source retained; stroke colors adapted to the chosen slammer.

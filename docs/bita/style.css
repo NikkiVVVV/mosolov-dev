@@ -161,19 +161,33 @@ html .controls .slammer-picker button[aria-pressed=true] img{translate:0 -5px;fi
 @media(max-width:350px){html .controls{--key-height:56px;gap:6px;padding:10px;width:calc(100% - 16px);border-radius:20px}html .controls::before{border-radius:20px}html .controls button{border-radius:12px}html .controls #strike{font-size:15px}}
 @media(prefers-reduced-motion:reduce){html .controls button{transition:none}html .controls .slammer-picker button{animation:none}}
 
-/* A single continuous result wipe, before the individual cap reveals. */
-.result-splash{position:fixed;inset:0;z-index:90;overflow:hidden;pointer-events:none;isolation:isolate;--splash:#8655ef;--splash-edge:#e4d5ff;--splash-ink:#26143e}
-.result-splash[data-kind=spill]{--splash:#777d87;--splash-edge:#d9dcdf;--splash-ink:#30353d}
-.result-splash-veil{position:absolute;inset:0;background:#10112466}
-.result-splash-band{position:absolute;top:50%;left:50%;width:140vw;min-height:224px;padding:40px 0;display:grid;place-items:center;background:var(--splash);border-block:20px solid var(--splash-edge);transform:translate(-50%,-50%) rotate(-6deg);box-shadow:0 8px 0 var(--splash-ink)}
-.result-splash-band strong{position:relative;z-index:2;font:900 italic clamp(64px,16vw,104px)/1 "Golos Text",sans-serif;letter-spacing:-4px;text-transform:uppercase;color:#fff;-webkit-text-stroke:2px var(--splash-ink);paint-order:stroke fill;text-shadow:4px 5px 0 var(--splash-ink)}
-.result-splash-bolt{position:absolute;z-index:3;top:-76px;left:calc(50% - 44px);width:88px;height:104px;filter:drop-shadow(4px 5px 0 var(--splash-ink));rotate:6deg}.result-splash-bolt svg{display:block;width:100%;height:100%;fill:var(--splash-edge);stroke:var(--splash-ink);stroke-width:3;stroke-linejoin:round}
-.result-splash-band i{position:absolute;width:52px;height:8px;background:var(--splash-edge);opacity:.55;transform:skewX(-35deg);left:calc(50% - 180px);top:40%}.result-splash-band i:nth-last-child(2){left:calc(50% + 120px);top:65%;width:72px}.result-splash-band i:last-child{left:calc(50% + 154px);top:38%;width:28px}
-@media(max-height:540px){.result-splash-band{min-height:160px;padding:24px 0;border-block-width:12px}.result-splash-bolt{top:-52px;width:64px;height:76px;left:calc(50% - 32px)}}
+/* Centered result impact, not a sliding banner. */
+.result-splash{position:fixed;inset:0;z-index:90;overflow:hidden;pointer-events:none;isolation:isolate;--result-color:#8d5de1;--result-light:#eee4ff}
+.result-splash-veil{position:absolute;inset:0;background:#10121bd1;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.result-burst{position:absolute;inset:0;pointer-events:none;opacity:1}.result-burst svg{width:100%;height:100%;display:block}
+.result-impact{position:absolute;inset:0;display:grid;place-items:center;transform-origin:center}
+.result-impact strong{position:relative;display:flex;align-items:center;justify-content:center;z-index:2;font:900 italic clamp(72px,20vw,128px)/1 "Golos Text",sans-serif;letter-spacing:-4px;color:var(--result-light);text-transform:uppercase;-webkit-text-stroke:1px var(--result-color);paint-order:stroke fill;filter:drop-shadow(0 4px 0 var(--result-color)) drop-shadow(0 0 24px color-mix(in srgb,var(--result-color),transparent 50%))}
+.result-impact strong span{display:inline-block}
+.result-ring{position:absolute;left:calc(50% - 96px);top:calc(50% - 96px);width:192px;height:192px;border:4px solid var(--result-color);border-radius:50%;box-shadow:0 0 32px color-mix(in srgb,var(--result-color),transparent 60%)}
+.result-splash[data-kind=nice] strong{font-size:clamp(56px,12vw,88px)}
+.result-splash[data-kind=miss] strong,.result-splash[data-kind=spill] strong{color:#d9dcdf;filter:drop-shadow(0 4px 0 #181b22);-webkit-text-stroke:0}
+.result-splash[data-kind=spill] strong{font-size:clamp(40px,10vw,80px);letter-spacing:-2px}
 
+/* Compact raised disc, seated active key and centered slammer fan. */
+html .controls{border-radius:28px}html .controls::before{border-radius:28px}
+html .controls button{border-radius:20px}
+html .controls #slammerButton{border-radius:20px;background:linear-gradient(145deg,#fff,#e7eae7);box-shadow:inset 0 1px 1px #fff,0 2px 5px #30362b12}
+#slammerButtonImage{width:115%;height:115%;left:-24%;top:auto;bottom:-25%;border-radius:50%;filter:drop-shadow(1px -1px 0 #ffffffa0) drop-shadow(1px 3px 3px #23334835)}
+html .controls #slammerButton[aria-pressed=true]{border-color:#ffffff80;background:linear-gradient(150deg,#d5d9d6,#e4e8e4);box-shadow:inset 0 2px 5px #39403825,inset 0 -1px 1px #ffffffa0;translate:0 1px}
+html .controls .slammer-picker{left:50%;bottom:calc(100% - 24px);width:260px;height:96px;transform:translateX(-50%);display:block;gap:0}
+html .controls .slammer-picker button{position:absolute;left:calc(50% - 42px);top:12px;width:84px;height:84px;border-radius:50%;translate:calc(var(--slot)*64px) 12px;transform:scale(.9);z-index:1;animation:slammer-fan-in .28s ease-out both;animation-delay:0ms;transition:translate .28s cubic-bezier(.2,.7,.3,1),transform .28s;box-shadow:none}
+html .controls .slammer-picker button[aria-pressed=true]{translate:0 -4px;transform:scale(1.08);z-index:3}
+html .controls .slammer-picker img{translate:none;filter:drop-shadow(0 3px 3px #272b3935)}
+html .controls .slammer-picker button[aria-pressed=true] img{translate:none;filter:drop-shadow(0 4px 4px #272b3940)}
+@keyframes slammer-fan-in{from{opacity:0;margin-top:36px}to{opacity:1;margin-top:0}}
+#slammerPointer{width:48px;height:48px;color:#90978f;filter:drop-shadow(0 2px 3px #28302b20)}
+#slammerPointer svg{width:40px;height:32px;overflow:visible}#slammerPointer svg path:first-child{fill:#f9faf7;stroke:#d2d7d0;stroke-width:1}#slammerPointer svg path:last-child{stroke:#9aa197;stroke-width:1.5}#slammerPointer:active svg{scale:.96}
+@media(max-width:350px){html .controls button,html .controls #slammerButton{border-radius:16px}}
+@media(prefers-reduced-motion:reduce){html .controls .slammer-picker button{animation:none;transition:none}}
 
-
-html .controls button,html .controls .adjust,html .controls #strike{left:auto;right:auto;top:auto;bottom:auto;margin:0}
-html .controls #strike::before,html .controls #strike::after{content:none}
-
-html .controls #strike .strike-face{pointer-events:auto}
+.result-splash[data-kind=nice] .result-burst{scale:.82}.result-splash[data-kind=epic] .result-burst{scale:1.12}

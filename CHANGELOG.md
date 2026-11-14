@@ -155,3 +155,12 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 - Available slammers emerge as discs behind the tray. The active button changes tint; selecting a design replaces the actual 3D body and material during extraction.
 - Thin left layer pointer appears only in slammer mode. Strike closes placement immediately and retains whole-tray lightning and charge dimming.
 - Verified placement controller tests, switching to purple, layer 2 → 5, strike from placement, no browser errors. Physics and collection remain unchanged.
+
+## 2026-11-14 · v34 · Slammer controls and result impacts
+
+- Smaller upright slammer on the lower-left of a fully rounded raised glass key. Active mode uses a seated gray fill and inner shadow, without a purple border.
+- Centered overlapping 84 px slammer choices; the selected disc rises to the front. Rounded layer handle moved farther left, with the same 48 px drag target.
+- Electric Logo keeps its viewport canvas and power-dependent reach. Blue/purple/black follow the actual selected slammer; dark strokes retain opacity instead of becoming invisible.
+- Replaced the horizontal result banner with a center impact and an actual local Lottie vector burst (Agnis Design, Burst stars animation). Player: lottie-web 5.13.0 SVG light, MIT. Asset/license/source in assets/effects and vendor/THIRD-PARTY.md. No third-party runtime requests.
+- Result tiers: 1–2 nice, 3–4 wow, 5–7 super, 8–25 epic. Zero is monochrome miss; overload is monochrome overload, before individual reward reveals. Reduced motion uses a short fade without the burst.
+- Checked tier boundaries and overload precedence; placement tests pass. Browser 508×987: centered selector, design replacement, layer drag 2→3, whole-tray black lightning, normal strike and 7.2-second overload, then restack available. Lottie SVG renders 162 paths; no JS/GLSL errors. Local preview fixture is not published.
