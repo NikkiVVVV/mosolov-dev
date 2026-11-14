@@ -1,6 +1,6 @@
 import {isPlayable,readOwnedCollection} from './cap-catalog.js?v=20261113-clean24';
 import {prepareFace,faceThumbnail} from './face-texture.js?v=20261113-clean24';
-import {createCollectionSheet} from './collection-sheet.js?v=20261114-carousel26';
+import {createCollectionSheet} from './collection-sheet.js?v=20261114-carousel26b';
 import {createTableDots} from './table-dots.js?v=20261113-clean24';
 import {PHYSICS_RATE} from './physics-scale.js?v=20261113-clean24';
 import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-placement.js?v=20261113-insert25';

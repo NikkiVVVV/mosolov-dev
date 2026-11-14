@@ -13,7 +13,7 @@ export function createCollectionSheet({getItems,ensureItem,imageFor,nameFor,desc
   for(const [i,b]of cards)if(!visible.has(i)){b.remove();cards.delete(i)}
   for(const [i,offset]of visible){
    let b=cards.get(i);
-   if(!b){b=document.createElement('button');b.type='button';b.className='album-cap-card';b.dataset.index=i;b.tabIndex=-1;b.setAttribute('aria-label',`View ${nameFor(items[i])}`);const img=new Image();img.alt='';img.width=img.height=160;img.decoding='async';b.append(img);b.onclick=()=>select(i);neighbors.append(b);cards.set(i,b);loadCard(b,i)}
+   if(!b){b=document.createElement('button');b.type='button';b.className='album-cap-card';b.dataset.index=i;b.tabIndex=-1;b.setAttribute('aria-label',`View ${nameFor(items[i])}`);const img=new Image();img.alt='';img.width=img.height=160;img.decoding='async';b.append(img);b.onclick=e=>{if(e.detail===0)select(i)};neighbors.append(b);cards.set(i,b);loadCard(b,i)}
    const abs=Math.abs(offset);b.style.setProperty('--offset',offset);b.style.setProperty('--scale',abs===0?1:abs===1?.76:.56);b.style.setProperty('--yaw',`${offset===0?0:-Math.sign(offset)*(abs===1?42:56)}deg`);b.style.zIndex=String(10-abs);b.dataset.current=String(offset===0);b.setAttribute('aria-hidden',String(offset===0));
   }
  }
