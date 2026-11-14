@@ -1,3 +1,4 @@
+import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261114-result30';
 import {isPlayable,readOwnedCollection} from './cap-catalog.js?v=20261113-clean24';
 import {prepareFace,faceThumbnail} from './face-texture.js?v=20261113-clean24';
 import {readSharedCollection,collectionShareUrl} from './collection-share.js?v=20261114-collection28';
@@ -12,6 +13,7 @@ import {createShowcase} from './showcase.js?v=20261114-collection28';
 import {createChargeFeedback} from './charge-feedback.js?v=20261113-clean24';
 import {createPackIntro} from './pack-intro.js?v=20261113-clean24';
 const CHARGE_MS=7000;
+const resultSplash=createResultSplash();
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
 let introFinished=false,atmosphere=0;
 const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
@@ -203,10 +205,11 @@ stage.addEventListener('keydown',e=>{if(state!=='ready'||!introFinished||!slamme
 function impact(plastic=false){if(state!=='airborne')return;hasHit=true;setStrikeLabel('restack');state='scattering';renderCollection();impactAt=physicsTime;impactElevation=viewElevation;edgeAt=-1;twistAt=-1;const p=caps[0].power;if(!overloaded)fanStack(caps.map(c=>c.body),p,false,flexed);sound(p,plastic);lastMaterialSound=physicsTime;navigator.vibrate?.(12)}
 function parkBody(body){const p=body.translation(),q=body.rotation();body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased,true);body.setTranslation(p,true);body.setRotation(q,true);body.setNextKinematicTranslation(p);body.setNextKinematicRotation(q)}
 function projectCap(c){return c.mesh.position.clone().project(camera)}
-function finish(){separateDiscs(world,pieces());stage.setAttribute('aria-label','Drag caps across the table');pieces().forEach(c=>{c.won=!overloaded&&!c.isSlammer&&faceUp(c.body);parkBody(c.body)});const won=caps.filter(c=>c.won).sort((a,b)=>projectCap(b).y-projectCap(a).y);$('markers').replaceChildren();setStrikeLabel('restack');
-if(!won.length){state='result';$('announcer').textContent=overloaded?'Too much power. The stack scattered':'No caps flipped';renderCollection();controls();return}
+async function finish(){separateDiscs(world,pieces());stage.setAttribute('aria-label','Drag caps across the table');pieces().forEach(c=>{c.won=!overloaded&&!c.isSlammer&&faceUp(c.body);parkBody(c.body)});const won=caps.filter(c=>c.won).sort((a,b)=>projectCap(b).y-projectCap(a).y);$('markers').replaceChildren();setStrikeLabel('restack');
+if(!won.length){if(resultSplashKind(0,overloaded)){state='celebrating';controls();await resultSplash.play('spill')}state='result';$('announcer').textContent=overloaded?'Too much power. The stack scattered':'No caps flipped';renderCollection();controls();return}
 state='inspection';won.forEach((c,i)=>c.rank=i+1);$('announcer').textContent=`Flipped: ${won.length}`;collectWinners();}
 async function collectWinners(){if(state!=='inspection'||dragging)return;state='collecting';renderCollection();controls();$('markers').replaceChildren();const won=caps.filter(c=>c.won).sort((a,b)=>a.rank-b.rank);
+if(resultSplashKind(won.length,false))await resultSplash.play('win');
 ownedCapIds.push(...won.map(c=>manifest[c.index].id));try{localStorage.setItem('bita-collection-v3',JSON.stringify(ownedCapIds))}catch{}
 for(const [i,c]of won.entries()){c.collected=true;c.mesh.visible=false;const r=$('collectionFan').getBoundingClientRect();await showcase.award({index:c.index},{target:{x:r.right-18,y:r.y+r.height/2},index:i,total:won.length});collection.push(c.index);renderCollection()}
 state='result';count=caps.filter(c=>!c.won).length;renderCollection();controls();}
@@ -243,7 +246,7 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  if(displaySaved){for(const {body,p}of displaySaved)if(body.translation().y!==p.y)body.setTranslation(p,false);world.propagateModifiedBodyPositionsToColliders()}
  if(state==='scattering'){const moving=pieces().some(c=>{const v=c.body.linvel(),w=c.body.angvel();return discIsMoving(c.body)});still=!moving&&physicsTime-impactAt>1/PHYSICS_RATE?still+dt:0;if(still>.5/PHYSICS_RATE)finish()}
  if(!pointers.size&&idle&&state!=='ready'){orbitYaw+=orbitVelocity;orbitVelocity*=.87}
- const spreading=['scattering','inspection','collecting','result'].includes(state),air=state==='airborne';
+ const spreading=['scattering','inspection','collecting','celebrating','result'].includes(state),air=state==='airborne';
  const progress=spreading?clamp((physicsTime-impactAt)/.75,0,1):0,smooth=progress*progress*(3-2*progress);
  const desiredElevation=spreading?lerp(impactElevation,1.515,smooth):slammerMode?.14:orbitElevation;
  const extent=Math.max(...caps.map(c=>Math.abs(c.mesh.position.x*Math.cos(viewYaw)-c.mesh.position.z*Math.sin(viewYaw))+.58));

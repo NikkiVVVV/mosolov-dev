@@ -133,3 +133,9 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 - Checks: collection link round trips/filtering; insertion/reversal/interrupt controller tests; real drag 2 → 5, blue → purple swap and strike; copied collection link opens the same set. Local mobile UI checked at 390×844.
 
 - Share routing: use the native share sheet on touch devices; desktop copies the exact collection link. This also keeps sharing useful inside desktop embedded browsers. App cache hud29b, sheet cache collection28b.
+
+## 2026-11-14 · Result wipe
+
+- A violet wow/lightning wipe plays before individual rewards when at least three caps flip. Overload uses a gray oops variant before returning to restack.
+- One 1.25-second continuous DOM animation, reduced-motion fade, no new renderer. Flight physics and the existing controls are unchanged.
+- Checked win thresholds 0/1/2/3/4/25, overload precedence and both visual variants in the local preview.

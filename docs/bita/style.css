@@ -156,3 +156,13 @@ html .controls .slammer-button{perspective:160px;background:#dfe1e4;isolation:is
 @media(prefers-reduced-motion:reduce){html .controls button{transition:none}.slammer-picker,.slammer-picker button{animation:none}}
 
 html .controls .adjust,html .controls .slammer-button,html .controls .toss{width:100%;min-width:0;height:var(--control-size);min-height:0}
+
+/* A single continuous result wipe, before the individual cap reveals. */
+.result-splash{position:fixed;inset:0;z-index:90;overflow:hidden;pointer-events:none;isolation:isolate;--splash:#8655ef;--splash-edge:#e4d5ff;--splash-ink:#26143e}
+.result-splash[data-kind=spill]{--splash:#777d87;--splash-edge:#d9dcdf;--splash-ink:#30353d}
+.result-splash-veil{position:absolute;inset:0;background:#10112466}
+.result-splash-band{position:absolute;top:50%;left:50%;width:140vw;min-height:224px;padding:40px 0;display:grid;place-items:center;background:var(--splash);border-block:20px solid var(--splash-edge);transform:translate(-50%,-50%) rotate(-6deg);box-shadow:0 8px 0 var(--splash-ink)}
+.result-splash-band strong{position:relative;z-index:2;font:900 italic clamp(64px,16vw,104px)/1 "Golos Text",sans-serif;letter-spacing:-4px;text-transform:uppercase;color:#fff;-webkit-text-stroke:2px var(--splash-ink);paint-order:stroke fill;text-shadow:4px 5px 0 var(--splash-ink)}
+.result-splash-bolt{position:absolute;z-index:3;top:-76px;left:calc(50% - 44px);width:88px;height:104px;filter:drop-shadow(4px 5px 0 var(--splash-ink));rotate:6deg}.result-splash-bolt svg{display:block;width:100%;height:100%;fill:var(--splash-edge);stroke:var(--splash-ink);stroke-width:3;stroke-linejoin:round}
+.result-splash-band i{position:absolute;width:52px;height:8px;background:var(--splash-edge);opacity:.55;transform:skewX(-35deg);left:calc(50% - 180px);top:40%}.result-splash-band i:nth-last-child(2){left:calc(50% + 120px);top:65%;width:72px}.result-splash-band i:last-child{left:calc(50% + 154px);top:38%;width:28px}
+@media(max-height:540px){.result-splash-band{min-height:160px;padding:24px 0;border-block-width:12px}.result-splash-bolt{top:-52px;width:64px;height:76px;left:calc(50% - 32px)}}
