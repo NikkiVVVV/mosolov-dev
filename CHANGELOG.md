@@ -131,3 +131,5 @@ Manrope из Google Fonts хранится локально вместе с SIL 
 - Larger light collection sheet, centered progress, tighter metadata, horizontal close/share actions and directional model transitions. Share links open an exact read-only collection without overwriting ownership.
 - Coin pricing tray has more top/bottom padding around the selected plan.
 - Checks: collection link round trips/filtering; insertion/reversal/interrupt controller tests; real drag 2 → 5, blue → purple swap and strike; copied collection link opens the same set. Local mobile UI checked at 390×844.
+
+- Share routing: use the native share sheet on touch devices; desktop copies the exact collection link. This also keeps sharing useful inside desktop embedded browsers. App cache hud29b, sheet cache collection28b.
