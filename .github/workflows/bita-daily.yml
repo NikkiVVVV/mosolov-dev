@@ -1,0 +1,52 @@
+name: Bita daily Telegram report
+on:
+  schedule:
+    - cron: '0 7 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Run mode
+        type: choice
+        options: [dry-run, report, check-delivery]
+        default: dry-run
+permissions:
+  contents: read
+concurrency:
+  group: bita-daily-report
+  cancel-in-progress: false
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      METRICA_TOKEN: ${{ secrets.METRICA_TOKEN }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      TELEGRAM_THREAD_ID: ${{ secrets.TELEGRAM_THREAD_ID }}
+      REPORT_MODE: ${{ inputs.mode || 'report' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check configuration
+        id: config
+        shell: bash
+        run: |
+          if [[ -z "$TELEGRAM_BOT_TOKEN" || -z "$TELEGRAM_CHAT_ID" ]]; then
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo '::notice::Daily report is not active: Telegram secrets are missing.'
+          elif [[ "$REPORT_MODE" != 'check-delivery' && -z "$METRICA_TOKEN" ]]; then
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo '::notice::Daily report is not active: read-only Metrica token is missing.'
+          else
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Validate report code
+        run: python3 -m unittest discover -s scripts/bita-report -p 'test_*.py'
+      - name: Check bot and chat without sending
+        if: steps.config.outputs.ready == 'true' && env.REPORT_MODE == 'check-delivery'
+        run: python3 scripts/bita-report/check_delivery.py
+      - name: Validate live Metrica report without sending
+        if: steps.config.outputs.ready == 'true' && env.REPORT_MODE == 'dry-run'
+        run: python3 scripts/bita-report/daily_report.py --dry-run
+      - name: Send daily summary to admin chat
+        if: steps.config.outputs.ready == 'true' && env.REPORT_MODE == 'report'
+        run: python3 scripts/bita-report/daily_report.py

@@ -7,6 +7,6 @@ export function createCollectionShareUI({button,getItems,ensureItem,imageFor,url
  const controller=createCollectionShare({getItems,ensureItem,imageFor,urlFor,getLanguage,platform,onBusy:value=>{busy=value;label()}});
  function prepare(){label();return controller.prepare().catch(()=>{busy=false;label();renderLedLabel(button,t('retry'))})}
  async function fallback(data){const url=URL.createObjectURL(data.file),a=document.createElement('a');a.href=url;a.download=data.file.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);try{await navigator.clipboard.writeText(data.text)}catch{}}
- button.onclick=()=>{const data=controller.ready();if(!data){prepare();return}if(controller.canShare(data)){/* Keep native sharing in the tap activation; never await clipboard first. */try{navigator.clipboard?.writeText(data.text).catch(()=>{})}catch{}controller.share().catch(error=>{if(error.name!=='AbortError')fallback(data)})}else fallback(data)};
+ button.onclick=()=>{window.bitaAnalytics?.track('bita_share_click');const data=controller.ready();if(!data){prepare();return}if(controller.canShare(data)){/* Keep native sharing in the tap activation; never await clipboard first. */try{navigator.clipboard?.writeText(data.text).catch(()=>{})}catch{}controller.share().catch(error=>{if(error.name!=='AbortError')fallback(data)})}else fallback(data)};
  onLanguageChange(()=>{label();if(isOpen())prepare()});label();return{prepare};
 }
