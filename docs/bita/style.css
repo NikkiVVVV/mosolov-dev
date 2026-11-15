@@ -296,3 +296,6 @@ html .controls>.adjust:active{translate:0 1px;box-shadow:inset 0 2px 5px #242d28
 #collectionFan .collection-slot[data-ready=true]::after,#collectionFan .collection-slot[data-failed=true]::after{display:none}
 @keyframes cap-skeleton{to{translate:100% 0}}
 @media(prefers-reduced-motion:reduce){#collectionFan .collection-slot{transition:none}#collectionFan .collection-slot::after{animation:none;translate:0;background:#ffffff30}}
+
+/* v55: inspect the ready stack with a single-finger orbit. */
+#stage[data-mode=orbit]{cursor:grab}#stage[data-mode=orbit]:active{cursor:grabbing}
