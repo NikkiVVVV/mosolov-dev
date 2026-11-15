@@ -1,11 +1,11 @@
 // One light sheet: a five-cap fan, with the inspected cap in the center.
-export function createCollectionSheet({getItems,ensureItem,imageFor,nameFor,descriptionFor=()=>'',inspect,snapshot=()=>null,stopInspect,shareUrl,onClose=()=>{}}){
+export function createCollectionSheet({getItems,ensureItem,imageFor,nameFor,descriptionFor=()=>'',inspect,stopInspect,shareUrl,onClose=()=>{}}){
  const dialog=document.getElementById('album'),track=document.getElementById('albumCarousel'),preview=document.getElementById('albumPreview'),neighbors=document.getElementById('albumNeighbors'),name=document.getElementById('albumName'),description=document.getElementById('albumDescription'),grab=document.getElementById('albumGrab');
  const reduced=matchMedia('(prefers-reduced-motion:reduce)'),cards=new Map();
  const shareButton=document.getElementById('shareAlbum');
- let items=[],selected=null,cursor=0,revision=0,closing=false,gesture=null,swipe=null,returnFocus=null,ghost=null,shareTimer=null;
+ let items=[],selected=null,cursor=0,revision=0,closing=false,gesture=null,swipe=null,returnFocus=null,shareTimer=null;
  const motion=[];
- function clearMotion(){for(const a of motion.splice(0))a.cancel();ghost?.remove();ghost=null;}
+ function clearMotion(){for(const a of motion.splice(0))a.cancel();}
  const wrap=i=>(i%items.length+items.length)%items.length;
  async function loadCard(button,index){
   if(button.dataset.loaded)return;button.dataset.loaded='pending';
@@ -27,15 +27,11 @@ export function createCollectionSheet({getItems,ensureItem,imageFor,nameFor,desc
   const index=wrap(position),token=++revision;cursor=position;preview.setAttribute('aria-busy','true');
   try{await ensureItem(items[index]);if(token!==revision||!dialog.open)return;
    clearMotion();const previous=selected,delta=previous===null?0:position-previous,direction=Math.sign(delta)||1;
-   if(previous!==null&&!reduced.matches&&Math.abs(delta)<=2){ghost=snapshot();if(ghost){ghost.className='album-outgoing';ghost.setAttribute('aria-hidden','true');track.append(ghost)}}
-   selected=position;paint();inspect(items[index],preview,{revealFromBack:true,direction});name.textContent=nameFor(items[index]);description.textContent=descriptionFor(items[index]);preview.setAttribute('aria-label',nameFor(items[index]));
+   selected=position;paint();inspect(items[index],preview,{revealFromBack:true,direction,revealDelay:previous===null?80:460,revealDuration:420,autoRotate:false});name.textContent=nameFor(items[index]);description.textContent=descriptionFor(items[index]);preview.setAttribute('aria-label',nameFor(items[index]));
    if(previous!==null&&!reduced.matches){
     const shift=preview.clientWidth*.44;
-    if(ghost){const outgoing=ghost,abs=Math.abs(delta),a=ghost.animate([{translate:'0 0',scale:1,rotate:'y 0deg',opacity:1},{translate:`${-delta*shift}px ${abs*abs*12}px`,scale:abs===1?.58:.42,rotate:`y ${direction*(abs===1?32:48)}deg`,opacity:0}],{duration:460,easing:'cubic-bezier(.22,1,.36,1)',fill:'forwards'});motion.push(a);a.finished.then(()=>outgoing.remove()).catch(()=>{})}
-    // The adjacent image remains underneath the snapshot throughout the handoff.
-    // Both layers follow the same trajectory: no blank frame at either edge.
     motion.push(preview.animate([{translate:`${direction*shift}px 12px`,scale:.58,rotate:`y ${-direction*32}deg`,opacity:1},{translate:'0 0',scale:1,rotate:'y 0deg',opacity:1}],{duration:460,easing:'cubic-bezier(.22,1,.36,1)'}));
-    for(const e of [name,description])motion.push(e.animate([{opacity:0,translate:`${direction*12}px 0`},{opacity:1,translate:'0 0'}],{duration:320,easing:'ease-out'}));
+
    }
   }catch{if(token===revision&&selected!==null){cursor=selected;paint()}}
   finally{if(token===revision)preview.setAttribute('aria-busy','false')}

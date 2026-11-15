@@ -1,18 +1,18 @@
-import {createRestackSchedule,AUTO_ASSEMBLY_MS} from './restack-policy.js?v=20261115-balance50';
-import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261115-balance50';
+import {createRestackSchedule,AUTO_ASSEMBLY_MS} from './restack-policy.js?v=20261115-backs51';
+import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261115-backs51';
 import {isPlayable,readOwnedCollection} from './cap-catalog.js?v=20261114-materials45';
 import {prepareFace,faceThumbnail} from './face-texture.js?v=20261113-clean24';
 import {readSharedCollection,collectionShareUrl} from './collection-share.js?v=20261114-collection28';
-import {createCollectionSheet} from './collection-sheet.js?v=20261114-carousel40';
+import {createCollectionSheet} from './collection-sheet.js?v=20261115-backs51';
 import {createTableDots} from './table-dots.js?v=20261113-clean24';
 import {PHYSICS_RATE} from './physics-scale.js?v=20261113-clean24';
 import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-placement.js?v=20261114-hud29';
 import {chargeFill,createWonRail} from './hud-progress.js?v=20261114-count44';
 import {makeCapDeck} from './cap-deck.js?v=20261114-materials45';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261115-balance50';
-import {createShowcase} from './showcase.js?v=20261114-reveal32';
-import {createChargeFeedback} from './charge-feedback.js?v=20261115-balance50';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261115-backs51';
+import {createShowcase} from './showcase.js?v=20261115-backs51';
+import {createChargeFeedback} from './charge-feedback.js?v=20261115-backs51';
 import {createPackIntro} from './pack-intro.js?v=20261114-peek42';
 import {createStrikeHint} from './strike-hint.js?v=20261114-hint43';
 const strikeHint=createStrikeHint();
@@ -43,8 +43,9 @@ if(sharedCollection){$('packIntro').hidden=true;document.documentElement.dataset
 const imageCache=new Map();
 function loadImage(path){if(!imageCache.has(path))imageCache.set(path,new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=e=>{imageCache.delete(path);reject(e)};img.src=path+'?v=20261113-arcade22'}));return imageCache.get(path)}
 async function capImage(entry){return prepareFace(await loadImage(entry.file),{imageRect:entry.imageRect})}
-const images=Array(manifest.length),reverseImages=Array(manifest.length),thumbnailUrls=new Map();
+const images=Array(manifest.length),reverseImages=Array(manifest.length),thumbnailUrls=new Map(),reverseThumbnailUrls=new Map();
 function thumbnailFor(i){if(!thumbnailUrls.has(i))thumbnailUrls.set(i,faceThumbnail(images[i]));return thumbnailUrls.get(i)}
+function reverseThumbnailFor(i){if(!reverseThumbnailUrls.has(i))reverseThumbnailUrls.set(i,faceThumbnail(backMats[i].map.image));return reverseThumbnailUrls.get(i)}
 await Promise.all([document.fonts.load('400 24px "Golos Text"'),document.fonts.load('500 24px "Golos Text"'),document.fonts.load('500 18px "IBM Plex Mono"')]);
 await document.fonts.ready;
 function arcText(c,text,r,y,spacing){c.save();c.translate(256,y);c.fillStyle='#fff8df';c.font='500 43px "Golos Text",sans-serif';c.textAlign='center';for(let i=0;i<text.length;i++){c.save();c.rotate((i-(text.length-1)/2)*spacing);c.fillText(text[i],0,-r);c.restore()}c.restore()}
@@ -135,7 +136,7 @@ function controls(){const locked=!introFinished||!['ready','result'].includes(st
 const wonRail=createWonRail({fan:$('collectionFan'),getItems:()=>collection,ensureItem:ensureCap,imageFor:thumbnailFor,enabled:()=>introFinished});
 function renderCollection(){$('collectionToggle').hidden=!collection.length&&state!=='collecting';$('collectionToggle').setAttribute('aria-label',`Open won caps. ${collection.length} collected`);wonRail.render()}
 const seriesNames={'mk-gold':'Mortal Kombat Gold','cheetos-cities':'Cheetos · Cities',pokemon:'Pokémon',mk:'Mortal Kombat',turtles:'Teenage Mutant Ninja Turtles',sonic:'Sonic the Hedgehog',batman:'Batman','power-rangers':'Power Rangers',digimon:'Digimon',streetfighter:'Street Fighter II','mad-monster':'Mad Monster Light','bionicle-2001':'Bionicle · 2001','bionicle-2003':'Bionicle · 2003',dbz:'Dragon Ball Z',nintendo:'Nintendo',cheetos:'Cheetos',spacejam:'Space Jam','simpsons-2006':'The Simpsons','bakugan-roks':'Bakugan'};
-const collectionSheet=createCollectionSheet({getItems:()=>sharedCollection??collection,ensureItem:i=>ensureCap(i),imageFor:i=>thumbnailFor(i),nameFor:i=>manifest[i].name,descriptionFor:i=>`${seriesNames[manifest[i].series]??manifest[i].series} · ${manifest[i].material==='plastic'?'Plastic cap':'Cardboard cap'}`,inspect:(i,host,options)=>showcase.inspect({index:i},host,{verticalOnly:true,fit:.96,...options}),snapshot:()=>showcase.snapshotInspect(),stopInspect:()=>showcase.stopInspect(),shareUrl:()=>collectionShareUrl(sharedCollection??collection,manifest,location.href),onClose:()=>{if(sharedCollection){sharedCollection=null;history.replaceState(null,'',location.pathname+location.search);renderCollection()}}});
+const collectionSheet=createCollectionSheet({getItems:()=>sharedCollection??collection,ensureItem:i=>ensureCap(i),imageFor:i=>reverseThumbnailFor(i),nameFor:i=>manifest[i].name,descriptionFor:i=>`${seriesNames[manifest[i].series]??manifest[i].series} · ${manifest[i].material==='plastic'?'Plastic cap':'Cardboard cap'}`,inspect:(i,host,options)=>showcase.inspect({index:i},host,{verticalOnly:true,fit:.96,...options}),stopInspect:()=>showcase.stopInspect(),shareUrl:()=>collectionShareUrl(sharedCollection??collection,manifest,location.href),onClose:()=>{if(sharedCollection){sharedCollection=null;history.replaceState(null,'',location.pathname+location.search);renderCollection()}}});
 function showCollection(){finishSlammerPlacement();collectionSheet.open()}
 $('collectionToggle').onclick=showCollection;renderCollection();
 function addCap(drop=true,chosen=null){const i=caps.length,index=chosen??nextCap();if(!Number.isInteger(index)||!isPlayable(manifest[index])||!images[index]||!frontMats[index].map)return null;const physical=createStackBody(world,i,Math.random,manifest[index].material,manifest[index].id);const item={...physical,index,mesh:makeCap(index,i*.91),born:drop?performance.now():-10000,rest:{},won:false};caps.push(item);count=caps.length;if(drop){item.body.setTranslation({x:1.6,y:physical.position.y+.8,z:physical.position.z},true);item.body.setRotation(physical.rotation,true)}return item}
