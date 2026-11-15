@@ -1,5 +1,5 @@
 import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-arcade22';
-import {capProfile,slammerProfile,slammerTransfer} from './physical-profiles.js?v=20261114-impact38';
+import {capProfile,slammerProfile,slammerTransfer,slammerLayerGain} from './physical-profiles.js?v=20261115-balance49';
 import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
 export async function createWorld({extent=3.12}={}){
@@ -180,7 +180,7 @@ export function createSlammerBody(world,slot,design='chupa-blue'){
  const profile=slammerProfile(design);
  const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setCanSleep(false).setTranslation(0,slammerY(slot),0).setCcdEnabled(true).setSoftCcdPrediction(.1));
  const collider=world.createCollider(discCollider(SLAMMER_RADIUS,SLAMMER_HEIGHT).setMass(profile.mass).setFriction(profile.friction).setRestitution(profile.restitution).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS),body);
- body.bitaProfile=profile;body.bitaWalls=world.bitaWalls;return {body,collider,profile,position:{x:0,y:slammerY(slot),z:0},rotation:{x:0,y:0,z:0,w:1}};
+ body.bitaDesign=design;body.bitaProfile=profile;body.bitaWalls=world.bitaWalls;return {body,collider,profile,position:{x:0,y:slammerY(slot),z:0},rotation:{x:0,y:0,z:0,w:1}};
 }
 export function slammerWeights(count,slot){
  if(slot>=count)return Array(count).fill(0);
@@ -189,11 +189,12 @@ export function slammerWeights(count,slot){
 // A local elastic response at the stiff plastic insert. No final sides are chosen.
 // On top there are no overlying caps: only the insert receives the extra rebound.
 export function slammerResponse(bodies,insert,slot,power){
- const weights=slammerWeights(bodies.length,slot),profile=insert.bitaProfile??slammerProfile(),transfer=slammerTransfer(profile,power),impact=insert.bitaStrike?Math.max(.15,Math.min(1.25,insert.bitaStrike.impactSpeed/(4*RATE))):1;let reaction=0,affected=0;
+ const weights=slammerWeights(bodies.length,slot),profile=insert.bitaProfile??slammerProfile(),transfer=slammerTransfer(profile,power)*slammerLayerGain(insert.bitaDesign??'chupa-blue',bodies.length,slot),impact=insert.bitaStrike?Math.max(.15,Math.min(1.25,insert.bitaStrike.impactSpeed/(4*RATE))):1;let reaction=0,affected=0;
  if(slot>=bodies.length)return {affected,weights};
+ const bottomLever=insert.bitaDesign==='chupa-blue'?Math.max(0,1-slot/Math.max(1,bodies.length-1))**4:0,spread=profile.spread*(1+bottomLever*.8),lever=profile.lever*(1+bottomLever*.5);
  bodies.forEach((body,i)=>{const contact=body.collider(0).contactCollider(insert.collider(0),.025),k=weights[i]*(.5+power*.5);if(!k||!contact)return;
  const p=body.translation(),a=i*2.399963,impulse=body.mass()*1.9*(1+power*.08)*RATE*k*transfer*impact;
- body.applyImpulseAtPoint({x:Math.cos(a)*impulse*profile.spread,y:impulse,z:Math.sin(a)*impulse*profile.spread},{x:p.x+Math.sin(a)*profile.lever,y:p.y,z:p.z-Math.cos(a)*profile.lever},true);reaction+=impulse;affected++;
+ body.applyImpulseAtPoint({x:Math.cos(a)*impulse*spread,y:impulse,z:Math.sin(a)*impulse*spread},{x:p.x+Math.sin(a)*lever,y:p.y,z:p.z-Math.cos(a)*lever},true);reaction+=impulse;affected++;
  });insert.applyImpulse({x:0,y:-reaction,z:0},true);return {affected,weights};
 }
 

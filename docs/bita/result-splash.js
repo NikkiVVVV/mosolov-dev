@@ -14,7 +14,7 @@ const impactFrames={
 };
 export function createResultSplash(){
  const root=document.createElement('div');root.className='result-splash';root.hidden=true;root.setAttribute('aria-hidden','true');root.innerHTML='<div class="result-splash-veil"></div><div class="result-burst"></div><svg class="result-electric" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"></svg><div class="result-impact"><div class="result-ring"></div><strong></strong></div>';document.body.append(root);
- const veil=root.firstElementChild,burst=root.querySelector('.result-burst'),impact=root.querySelector('.result-impact'),label=root.querySelector('strong'),ring=root.querySelector('.result-ring'),electric=root.querySelector('.result-electric');document.fonts.load('800 64px "Result Display"').catch(()=>{});let pending=null,previous={},prism=null;
+ const veil=root.firstElementChild,burst=root.querySelector('.result-burst'),impact=root.querySelector('.result-impact'),label=root.querySelector('strong'),ring=root.querySelector('.result-ring'),electric=root.querySelector('.result-electric');document.fonts.load('italic 900 64px "Result Display"').catch(()=>{});let pending=null,previous={},prism=null;
  const preload=()=>loadResources();if('requestIdleCallback'in window)requestIdleCallback(preload,{timeout:3000});else setTimeout(preload,1500);
  function play(kind){
   if(pending)return pending;const style=chooseResultStyle(kind,previous);previous=style;const{palette,phrase,entrance}=style;root.dataset.kind=kind;root.dataset.entrance=entrance;root.dataset.color=style.colorName;root.dataset.long=String(phrase.includes(' '));root.style.setProperty('--result-color',palette[1]);root.style.setProperty('--result-light',palette[0]);
