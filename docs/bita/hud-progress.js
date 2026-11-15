@@ -1,8 +1,9 @@
 // A quick visible start, then a slower approach to full power. Physics stays linear.
 export function chargeFill(power){const p=Math.max(0,Math.min(1,power));return Math.log1p(4*p)/Math.log(5)}
 export function wonRailLayout(count,width,{size=36,step=14}={}){
- const capacity=Math.max(1,Math.floor((Math.max(size,width)-size)/step)+1),visible=Math.min(count,capacity),start=Math.max(0,count-visible);
- return {capacity,start,visible,hidden:count-visible,width:visible?size+(visible-1)*step:0,slots:Array.from({length:visible},(_,i)=>({ordinal:start+i,right:i*step})),nextRight:Math.min(count,capacity-1)*step};
+ const available=Math.max(size,width),capacity=Math.max(1,Math.floor((available-size)/step)+1);
+ function row(n){const visible=Math.min(n,capacity),start=Math.max(0,n-visible),spacing=visible>=capacity&&visible>1?(available-size)/(visible-1):step,span=visible?size+(visible-1)*spacing:0,offset=(available-span)/2;return{start,visible,hidden:n-visible,width:span,slots:Array.from({length:visible},(_,i)=>({ordinal:start+i,right:offset+i*spacing}))}}
+ const current=row(count),next=row(count+1);return{capacity,...current,nextRight:next.slots.at(-1)?.right??(available-size)/2};
 }
 export function createWonRail({fan,getItems,ensureItem,imageFor,enabled=()=>true}){
  const overflow=document.createElement('span');overflow.className='collection-overflow';overflow.setAttribute('aria-hidden','true');overflow.hidden=true;fan.append(overflow);
@@ -17,7 +18,7 @@ export function createWonRail({fan,getItems,ensureItem,imageFor,enabled=()=>true
    }
    img.style.setProperty('--rail-right',right+'px');img.style.setProperty('--rail-tilt',((ordinal%3)-1)*4+'deg');img.style.zIndex=ordinal+1;
   }
-  overflow.hidden=layout.hidden===0;overflow.textContent=layout.hidden?`+${layout.hidden}`:'';overflow.style.zIndex=items.length+2;fan.dataset.count=items.length;previousCount=items.length;
+  overflow.hidden=layout.hidden===0;overflow.textContent=layout.hidden?`+${layout.hidden}`:'';overflow.style.zIndex=items.length+2;overflow.style.right=(layout.slots[0]?.right??0)+'px';fan.dataset.count=items.length;previousCount=items.length;
  }
  const observer=new ResizeObserver(render);observer.observe(fan);
  return {render,nextTarget(){const r=fan.getBoundingClientRect(),layout=wonRailLayout(getItems().length,r.width);return{x:r.right-layout.nextRight-18,y:r.top+r.height/2}},destroy(){observer.disconnect();nodes.clear()}};
