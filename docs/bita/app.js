@@ -1,5 +1,5 @@
-import {createRestackSchedule,AUTO_ASSEMBLY_MS} from './restack-policy.js?v=20261115-balance49';
-import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261115-balance49';
+import {createRestackSchedule,AUTO_ASSEMBLY_MS} from './restack-policy.js?v=20261115-balance50';
+import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261115-balance50';
 import {isPlayable,readOwnedCollection} from './cap-catalog.js?v=20261114-materials45';
 import {prepareFace,faceThumbnail} from './face-texture.js?v=20261113-clean24';
 import {readSharedCollection,collectionShareUrl} from './collection-share.js?v=20261114-collection28';
@@ -10,9 +10,9 @@ import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-
 import {chargeFill,createWonRail} from './hud-progress.js?v=20261114-count44';
 import {makeCapDeck} from './cap-deck.js?v=20261114-materials45';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261115-balance49';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261115-balance50';
 import {createShowcase} from './showcase.js?v=20261114-reveal32';
-import {createChargeFeedback} from './charge-feedback.js?v=20261115-balance49';
+import {createChargeFeedback} from './charge-feedback.js?v=20261115-balance50';
 import {createPackIntro} from './pack-intro.js?v=20261114-peek42';
 import {createStrikeHint} from './strike-hint.js?v=20261114-hint43';
 const strikeHint=createStrikeHint();

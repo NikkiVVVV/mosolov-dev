@@ -1,5 +1,5 @@
 import {GRAVITY,PHYSICS_RATE as RATE} from './physics-scale.js?v=20261113-arcade22';
-import {capProfile,slammerProfile,slammerTransfer,slammerLayerGain} from './physical-profiles.js?v=20261115-balance49';
+import {capProfile,slammerProfile,slammerTransfer,slammerLayerGain} from './physical-profiles.js?v=20261115-balance50';
 import RAPIER from './vendor/rapier.mjs';
 export {RAPIER};
 export async function createWorld({extent=3.12}={}){
@@ -147,7 +147,7 @@ export function strikeStackDown(bodies,power,random=Math.random){
   body.setBodyType(RAPIER.RigidBodyType.Dynamic,true);
   body.setLinearDamping(body.bitaProfile?.linearDamping??.35*RATE);body.setAngularDamping(body.bitaProfile?.angularDamping??.8*RATE);
   // Randomize physical contact conditions, never the eventual winning side.
-  body.bitaStrike={impactSpeed:down,angle:angle+i*2.399963+(random()-.5)*.24,lever:.32+random()*.15,efficiency:.88+random()*.24,released:false};
+  body.bitaStrike={impactSpeed:down,angle:angle+i*2.399963+(random()-.5)*.24,lever:.32+random()*.15,efficiency:.75+random()*.5,released:false};
   body.setLinvel({x:Math.cos(angle)*(.025+p*.035)*RATE,y:-down,z:Math.sin(angle)*(.025+p*.035)*RATE},true);
   body.setAngvel({x:Math.sin(angle+i*2)*(.02+p*.07)*RATE,y:.025*RATE,z:Math.cos(angle+i*2.4)*(.02+p*.07)*RATE},true);
  }
@@ -161,7 +161,7 @@ export function fanStack(bodies,power,contactConfirmed=false,released=null){
  if(!touches)return;released?.add(body.collider(0).handle);
  const surface=body.bitaStrike,profile=body.bitaProfile,velocity=body.linvel(),incoming=surface?.impactSpeed??Math.max(-velocity.y,(.45+power*3.8)*RATE);
  const efficiency=(profile?.flex??1)*(surface?.efficiency??1),a=surface?.angle??(2*Math.atan2(q.z,q.x)+i*2.399963+p.x*7+p.z*11),dx=Math.cos(a),dz=Math.sin(a),mass=body.mass();
- const bounce=Math.min(.78,(.32+.38*Math.sqrt(Math.max(0,power)))*efficiency),up=Math.max(0,incoming*bounce-velocity.y),side=incoming*(.12+power*.1)*efficiency,lever=surface?.lever??.3,spin=incoming*(.06+power*.025)*efficiency;
+ const bounce=Math.min(.90,(.68+.12*Math.sqrt(Math.max(0,power)))*efficiency),up=Math.max(0,incoming*bounce-velocity.y),side=incoming*(.15+power*.12)*efficiency,lever=surface?.lever??.3,spin=incoming*(.06+power*.025)*efficiency;
  body.applyImpulseAtPoint({x:dx*mass*side,y:mass*up,z:dz*mass*side},{x:p.x+dz*lever,y:p.y,z:p.z-dx*lever},true);
  body.applyTorqueImpulse({x:dz*mass*spin,y:0,z:-dx*mass*spin},true);if(surface)surface.released=true;affected++;
  });return affected;

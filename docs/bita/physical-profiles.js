@@ -17,7 +17,7 @@ export function slammerTransfer(profile,power){if(typeof profile==='string')prof
 export function slammerLayerGain(id,count,slot){
  if(count<1||slot>=count)return 0;
  const depth=count>1?slot/(count-1):0;
- if(id==='chupa-blue')return .65+1.55*(1-depth)**4;
+ if(id==='chupa-blue')return 1+1.2*(1-depth)**4;
  if(id==='mk-dragon')return 1+.85*Math.sin(Math.PI*depth)**2;
  return 1;
 }
