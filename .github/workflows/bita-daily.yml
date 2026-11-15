@@ -9,6 +9,10 @@ on:
         type: choice
         options: [dry-run, report, check-delivery]
         default: dry-run
+      date:
+        description: Optional report date YYYY-MM-DD; defaults to yesterday in Moscow
+        type: string
+        required: false
 permissions:
   contents: read
 concurrency:
@@ -24,6 +28,7 @@ jobs:
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       TELEGRAM_THREAD_ID: ${{ secrets.TELEGRAM_THREAD_ID }}
       REPORT_MODE: ${{ inputs.mode || 'report' }}
+      REPORT_DATE: ${{ inputs.date }}
     steps:
       - uses: actions/checkout@v4
       - name: Check configuration

@@ -10,8 +10,12 @@ Repository Actions secrets:
 - TELEGRAM_CHAT_ID — intended group ID.
 - TELEGRAM_THREAD_ID — optional, only if a forum topic ID is confirmed; a message link ID alone is not a topic ID.
 
+Manual runs can set an explicit date for verification or backfill; scheduled runs always use yesterday in Moscow.
+
 Workflow modes: report (one real summary), dry-run (API query/validation with no send), check-delivery (read-only bot/chat membership check). Scheduled runs skip until required secrets exist and say so explicitly. No report bodies, API tokens or raw API errors are printed in public job logs.
 
 Metrics: visitors, visits, average visit duration, derived summed visit duration per visitor, actual strikes (not all clicks/holds), unique players, strikes/player, strikes/visitor, wins/misses/overloads and pack/collection/slammer/share-click goal counts. Overload isn't counted as a normal strike. Share click is not proof that a message was sent. Metrica visitors are browser estimates, not identified people. Average visit duration is not active gameplay time.
 
 Local checks: `node tests/analytics.mjs`, `python3 -m unittest discover -s reporting -p 'test_*.py'`. For API verification use workflow dry-run, then report. Bot checks don't call getUpdates or change webhooks, preserving the existing bot's update delivery.
+
+Connection verified: existing @Maonez_admin_bot, administrator in «Админка». It uses only outgoing sendMessage; no updates, polling, webhooks or Railway deployments are changed. Read-only OAuth app “Фишки — ежедневная статистика”, metrika:read; token held only in repository Actions secrets.

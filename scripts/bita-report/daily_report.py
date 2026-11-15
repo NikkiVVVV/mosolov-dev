@@ -65,7 +65,7 @@ def telegram_send(token,chat_id,text,thread_id=None):
     return result['result']['message_id']
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--date',default=yesterday());parser.add_argument('--dry-run',action='store_true');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--date',default=os.environ.get('REPORT_DATE') or yesterday());parser.add_argument('--dry-run',action='store_true');args=parser.parse_args()
     token=os.environ.get('METRICA_TOKEN');bot=os.environ.get('TELEGRAM_BOT_TOKEN');chat=os.environ.get('TELEGRAM_CHAT_ID')
     missing=[key for key in ['METRICA_TOKEN','TELEGRAM_BOT_TOKEN','TELEGRAM_CHAT_ID'] if not os.environ.get(key)]
     if missing:raise ReportError('Missing configuration: '+', '.join(missing))
