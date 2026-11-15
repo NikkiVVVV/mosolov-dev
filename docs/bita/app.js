@@ -9,7 +9,7 @@ import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-
 import {chargeFill,createWonRail} from './hud-progress.js?v=20261114-count44';
 import {makeCapDeck} from './cap-deck.js?v=20261114-materials45';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261114-impact38';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261115-physics46';
 import {createShowcase} from './showcase.js?v=20261114-reveal32';
 import {createChargeFeedback} from './charge-feedback.js?v=20261114-touch39';
 import {createPackIntro} from './pack-intro.js?v=20261114-peek42';
@@ -179,8 +179,8 @@ function begin(e){if(!introFinished)return;finishSlammerPlacement();pulseStrike(
 function cancel(){restackHeld=false;if(!charge){controls();return}charge=null;state='ready';strike.classList.remove('charging');setChargeVisual(0);controls()}
 const chargeFeedback=createChargeFeedback(document.querySelector('.controls'));chargeFeedback.setTone(slammerManifest[slammerDesign].id);
 const resultTone=()=>slammerDesign===0?'black':slammerDesign===1?'blue':'purple';
-function setChargeVisual(p){chargeFeedback.setPower(Math.min(1,p*CHARGE_MS/2000));strike.style.setProperty('--power-fill',chargeFill(p))}
-function release(){restackHeld=false;if(!charge){controls();return}const duration=performance.now()-charge.start;if(duration>=CHARGE_MS)return overload();strikeHint.record(duration);const power=clamp(duration/CHARGE_MS,.15,1);lastPower=power;charge=null;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;still=0;groupRest={};slammerContact=false;slammerAt=-1;strikeStackDown(pieces().map(c=>c.body),power);pieces().forEach(c=>{c.power=power;c.rest={}});controls()}
+function setChargeVisual(p){chargeFeedback.setPower(chargeFill(p));strike.style.setProperty('--power-fill',chargeFill(p))}
+function release(){restackHeld=false;if(!charge){controls();return}const duration=performance.now()-charge.start;if(duration>=CHARGE_MS)return overload();strikeHint.record(duration);const power=clamp(duration/CHARGE_MS,.015,1);lastPower=power;charge=null;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;still=0;groupRest={};slammerContact=false;slammerAt=-1;strikeStackDown(pieces().map(c=>c.body),power);pieces().forEach(c=>{c.power=power;c.rest={}});controls()}
 function overload(){if(!charge)return;strikeHint.record(CHARGE_MS);lastPower=1;charge=null;overloaded=true;strike.classList.remove('charging');setChargeVisual(0);state='airborne';flightStart=physicsTime;groupRest={};still=0;slammerContact=false;slammerAt=-2;strikeStackDown(pieces().map(c=>c.body),.1);pieces().forEach((c,i)=>{const angle=i*2.399963;c.power=.1;c.rest={};c.body.setLinvel({x:Math.cos(angle)*(1.6+i*.02)*PHYSICS_RATE,y:-.7*PHYSICS_RATE,z:Math.sin(angle)*(1.6+i*.02)*PHYSICS_RATE},true);c.body.setAngvel({x:Math.cos(angle)*3*PHYSICS_RATE,y:Math.sin(angle)*2*PHYSICS_RATE,z:Math.sin(angle)*3*PHYSICS_RATE},true)});setStrikeLabel('restack');controls()}
 strike.addEventListener('pointerdown',begin);strike.addEventListener('pointerup',release);strike.addEventListener('pointercancel',cancel);strike.addEventListener('lostpointercapture',cancel);
 strike.addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)&&!e.repeat){e.preventDefault();begin(e)}});strike.addEventListener('keyup',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();release()}});window.addEventListener('blur',cancel);
@@ -234,12 +234,12 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
   slammerPlacement.update(dt);slammerSlot=slammerPlacement.slot;if(slammerSwap&&slammerPlacement.phase==='tracking'){replaceSlammer();slammerPlacement.end()}
   const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0;if(charge)setChargeVisual(p);
   for(const [i,c]of caps.entries()){
-   const age=(now-c.born)/800,progress=clamp(age,0,1),drop=1-progress,bounce=age>1?.018*Math.sin((age-1)*22)*Math.exp(-(age-1)*9):0,jitter=p*p*.052,bob=0;
+   const age=(now-c.born)/800,progress=clamp(age,0,1),drop=1-progress,bounce=age>1?.018*Math.sin((age-1)*22)*Math.exp(-(age-1)*9):0,jitter=.065*p**1.25,bob=0;
    const gap=capInsertionOffset(i,slammerSlot)+(slammerPlacement.active&&i>=slammerSlot?.10:0);c.gapOffset??=gap;c.gapOffset+=(gap-c.gapOffset)*(1-Math.exp(-dt*24));
    const x=c.position.x+drop*drop*1.6+Math.sin(t*56)*jitter,y=c.position.y+c.gapOffset+.8*(1-progress*progress)+bounce+bob+chargeLift(p)+Math.sin(t*65)*jitter*.7,z=c.position.z+Math.cos(t*61)*jitter*.6;
    let target=new THREE.Vector3(x,y,z);if(c.assemble){const a=clamp((now-c.assemble.start)/750,0,1),e=a*a*(3-2*a);target.lerpVectors(new THREE.Vector3(c.assemble.p.x,c.assemble.p.y,c.assemble.p.z),target,e);target.y+=Math.sin(a*Math.PI)*.12;if(a===1)c.assemble=null}c.body.setNextKinematicTranslation(target);const q=new THREE.Quaternion(c.rotation.x,c.rotation.y,c.rotation.z,c.rotation.w);if(jitter){const w=new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.sin(t*67)*jitter*.6,0,Math.cos(t*59)*jitter*.6));q.premultiply(w)}if(c.assemble){const a=clamp((now-c.assemble.start)/750,0,1);q.slerpQuaternions(c.assemble.q,q.clone(),a*a*(3-2*a))}c.body.setNextKinematicRotation(q);
   }
-  if(slammer){const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0,j=p*p*.052,pose=slammerPlacement.pose;
+  if(slammer){const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0,j=.065*p**1.25,pose=slammerPlacement.pose;
    let target=new THREE.Vector3(-Math.cos(viewYaw)*pose.distance+Math.sin(t*56)*j,pose.y+chargeLift(p),Math.sin(viewYaw)*pose.distance+Math.cos(t*61)*j*.6),q=new THREE.Quaternion();
    if(slammer.assemble){const a=clamp((now-slammer.assemble.start)/750,0,1),e=a*a*(3-2*a);target.lerpVectors(new THREE.Vector3(slammer.assemble.p.x,slammer.assemble.p.y,slammer.assemble.p.z),target,e);target.y+=Math.sin(a*Math.PI)*.12;q.slerpQuaternions(slammer.assemble.q,q.clone(),e);if(a===1)slammer.assemble=null}
    slammer.body.setNextKinematicTranslation(target);slammer.body.setNextKinematicRotation(q)
@@ -263,10 +263,10 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  const progress=spreading?clamp((physicsTime-impactAt)/.75,0,1):0,smooth=progress*progress*(3-2*progress);
  const desiredElevation=spreading?lerp(impactElevation,1.515,smooth):slammerMenuOpen?.18:orbitElevation;
  const extent=Math.max(...caps.map(c=>Math.abs(c.mesh.position.x*Math.cos(viewYaw)-c.mesh.position.z*Math.sin(viewYaw))+.58));
- const aspect=stage.clientWidth/stage.clientHeight,chargePower=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0,baseWidth=Math.max(2.18,3.8*aspect),chargeWidth=baseWidth+Math.pow(chargePower,1.2)*2.0;
- const targetWidth=slammerPlacement.active?Math.max(3.8,baseWidth):slammerMenuOpen?Math.max(2.8,baseWidth):spreading?Math.max(3.6+lastPower*1.6,4.4*aspect,extent*2+.3):air?Math.max(baseWidth+lastPower*2,extent*2+.3):Math.max(chargeWidth,performance.now()<reframeUntil?baseWidth+.35:baseWidth);
+ const aspect=stage.clientWidth/stage.clientHeight,chargePower=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0,baseWidth=Math.max(2.18,3.8*aspect),chargeWidth=Math.max(baseWidth+Math.pow(chargePower,1.1)*1.35,(2.4+chargeLift(chargePower)*1.05+count*.014)*aspect);
+ const targetWidth=slammerPlacement.active?Math.max(3.8,baseWidth):slammerMenuOpen?Math.max(2.8,baseWidth):spreading?Math.max(3.6+lastPower*1.6,4.4*aspect,extent*2+.3):air?Math.max(baseWidth+lastPower*2,extent*2+.3,(2.4+chargeLift(lastPower)*1.05+count*.014)*aspect):Math.max(chargeWidth,performance.now()<reframeUntil?baseWidth+.35:baseWidth);
  if(!dragging){const ease=slammerPlacement.active?16:charge?3-chargePower*1.6:spreading?3.2:performance.now()<reframeUntil?1.8:3;viewWidth=lerp(viewWidth,targetWidth,Math.min(1,dt*ease));viewElevation=lerp(viewElevation,desiredElevation,Math.min(1,dt*5));viewYaw=lerp(viewYaw,orbitYaw,Math.min(1,dt*7));
- const averageY=caps.length?caps.reduce((s,c)=>s+c.mesh.position.y,0)/caps.length:0,targetY=spreading?0:Math.max(.06,averageY*.65);
+ const averageY=caps.length?caps.reduce((s,c)=>s+c.mesh.position.y,0)/caps.length:0,targetY=spreading?0:Math.max(.06,averageY*((charge||air) ? .35 : .65));
  viewTarget.y=lerp(viewTarget.y,targetY,Math.min(1,dt*5));camera.position.set(viewTarget.x+Math.sin(viewYaw)*10*Math.cos(viewElevation),viewTarget.y+10*Math.sin(viewElevation),viewTarget.z+Math.cos(viewYaw)*10*Math.cos(viewElevation));camera.lookAt(viewTarget);
  camera.left=-viewWidth/2;camera.right=viewWidth/2;camera.top=viewWidth/aspect/2;camera.bottom=-camera.top;camera.updateProjectionMatrix();}
 

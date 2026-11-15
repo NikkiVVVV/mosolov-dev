@@ -124,8 +124,8 @@ export function createStackBody(world,index,random=Math.random,material='cardboa
  const profile=capProfile(material,id),height=profile.height;
  const body=world.createRigidBody(RAPIER.RigidBodyDesc.kinematicPositionBased().setCanSleep(false).setCcdEnabled(true).setSoftCcdPrediction(.12));
  world.createCollider(discCollider(.53,height).setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS).setContactSkin(.0015).setMass(profile.mass).setFriction(profile.friction).setRestitution(profile.restitution).setRestitutionCombineRule(material==='plastic'?RAPIER.CoefficientCombineRule.Max:RAPIER.CoefficientCombineRule.Average),body);
- const x=[0,.09,-.065,.055][index%4]+(random()-.5)*.055,z=[0,-.045,.055,-.025][index%4]+(random()-.5)*.055;
- const ax=Math.PI+(random()-.5)*.008,ay=random()*Math.PI*2,az=(random()-.5)*.008;
+ const x=[0,.09,-.065,.055][index%4]+(random()-.5)*.12,z=[0,-.045,.055,-.025][index%4]+(random()-.5)*.12;
+ const ax=Math.PI+(random()-.5)*.035,ay=random()*Math.PI*2,az=(random()-.5)*.035;
  const c1=Math.cos(ax/2),c2=Math.cos(ay/2),c3=Math.cos(az/2),s1=Math.sin(ax/2),s2=Math.sin(ay/2),s3=Math.sin(az/2);
  const rotation={x:s1*c2*c3+c1*s2*s3,y:c1*s2*c3-s1*c2*s3,z:c1*c2*s3+s1*s2*c3,w:c1*c2*c3-s1*s2*s3};
  const position={x,y:HOVER_HEIGHT+.014+index*STACK_LAYER_STEP,z};
@@ -141,29 +141,35 @@ export function throwStack(bodies,power){
  }
 }
 
-export function strikeStackDown(bodies,power){
+export function strikeStackDown(bodies,power,random=Math.random){
+ const p=Math.max(0,Math.min(1,power)),angle=random()*Math.PI*2,pressure=.94+random()*.12,down=(.45+p*3.8)*RATE*pressure;
  for(const [i,body] of bodies.entries()){
   body.setBodyType(RAPIER.RigidBodyType.Dynamic,true);
   body.setLinearDamping(body.bitaProfile?.linearDamping??.35*RATE);body.setAngularDamping(body.bitaProfile?.angularDamping??.8*RATE);
-  body.setLinvel({x:Math.sin(i*2.4)*.012*RATE,y:(-2.4-power*3.4)*RATE,z:Math.cos(i*1.7)*.012*RATE},true);
-  body.setAngvel({x:Math.sin(i*2)*.04*RATE,y:.03*RATE,z:Math.cos(i*2.4)*.04*RATE},true);
+  // Randomize physical contact conditions, never the eventual winning side.
+  body.bitaStrike={impactSpeed:down,angle:angle+i*2.399963+(random()-.5)*.24,lever:.32+random()*.15,efficiency:.88+random()*.24,released:false};
+  body.setLinvel({x:Math.cos(angle)*(.025+p*.035)*RATE,y:-down,z:Math.sin(angle)*(.025+p*.035)*RATE},true);
+  body.setAngvel({x:Math.sin(angle+i*2)*(.02+p*.07)*RATE,y:.025*RATE,z:Math.cos(angle+i*2.4)*(.02+p*.07)*RATE},true);
  }
 }
-// A small, mass-scaled flex release only while a cap touches another cap
-// or the table. Never give a flying cap a second upward kick.
+// Thin cardboard flexes once at contact. Rebound now depends on the measured
+// incoming speed; a tap cannot receive the same upward launch as a high drop.
 export function fanStack(bodies,power,contactConfirmed=false,released=null){
  let affected=0;
- bodies.forEach((body,i)=>{if(released?.has(body.collider(0).handle))return;const p=body.translation(),shape=body.collider(0).shape,q=body.rotation(),ny=1-2*(q.x*q.x+q.z*q.z),support=Math.abs(ny)*shape.halfHeight+shape.radius*Math.sqrt(Math.max(0,1-ny*ny));
+ bodies.forEach((body,i)=>{if(released?.has(body.collider(0).handle)||body.bitaStrike?.released)return;const p=body.translation(),shape=body.collider(0).shape,q=body.rotation(),ny=1-2*(q.x*q.x+q.z*q.z),support=Math.abs(ny)*shape.halfHeight+shape.radius*Math.sqrt(Math.max(0,1-ny*ny));
  const touches=contactConfirmed||p.y-support<.025||bodies.some(other=>other!==body&&body.collider(0).contactCollider(other.collider(0),.012));
- if(!touches||body.linvel().y>2.5*RATE)return;released?.add(body.collider(0).handle);
- const a=2*Math.atan2(q.z,q.x)+i*2.399963+p.x*7+p.z*11,dx=Math.cos(a),dz=Math.sin(a),mass=body.mass(),k=(.95+power*.45)*(body.bitaProfile?.flex??1);
- body.applyImpulseAtPoint({x:dx*mass*1.3*(1+power*.15)*k*RATE,y:mass*(4.2*(1+power*.10)*k*RATE-Math.min(0,body.linvel().y)),z:dz*mass*1.3*(1+power*.15)*k*RATE},{x:p.x+dz*.30,y:p.y,z:p.z-dx*.30},true);body.applyTorqueImpulse({x:dz*mass*.65*k*RATE,y:0,z:-dx*mass*.65*k*RATE},true);affected++;
+ if(!touches)return;released?.add(body.collider(0).handle);
+ const surface=body.bitaStrike,profile=body.bitaProfile,velocity=body.linvel(),incoming=surface?.impactSpeed??Math.max(-velocity.y,(.45+power*3.8)*RATE);
+ const efficiency=(profile?.flex??1)*(surface?.efficiency??1),a=surface?.angle??(2*Math.atan2(q.z,q.x)+i*2.399963+p.x*7+p.z*11),dx=Math.cos(a),dz=Math.sin(a),mass=body.mass();
+ const bounce=Math.min(.78,(.32+.38*Math.sqrt(Math.max(0,power)))*efficiency),up=Math.max(0,incoming*bounce-velocity.y),side=incoming*(.12+power*.1)*efficiency,lever=surface?.lever??.3,spin=incoming*(.06+power*.025)*efficiency;
+ body.applyImpulseAtPoint({x:dx*mass*side,y:mass*up,z:dz*mass*side},{x:p.x+dz*lever,y:p.y,z:p.z-dx*lever},true);
+ body.applyTorqueImpulse({x:dz*mass*spin,y:0,z:-dx*mass*spin},true);if(surface)surface.released=true;affected++;
  });return affected;
 }
 // Kept for old callers; rigid contact handles the later tumbling.
 export function turnStack(){return 0}
 
-export function chargeLift(power){return 1.5*Math.max(0,Math.min(1,power))**1.8}
+export function chargeLift(power){return 3.2*Math.max(0,Math.min(1,power))**1.15}
 
 export const MAX_STACK=25;
 export const SLAMMER_HEIGHT=.08;
@@ -183,10 +189,10 @@ export function slammerWeights(count,slot){
 // A local elastic response at the stiff plastic insert. No final sides are chosen.
 // On top there are no overlying caps: only the insert receives the extra rebound.
 export function slammerResponse(bodies,insert,slot,power){
- const weights=slammerWeights(bodies.length,slot),profile=insert.bitaProfile??slammerProfile(),transfer=slammerTransfer(profile,power);let reaction=0,affected=0;
+ const weights=slammerWeights(bodies.length,slot),profile=insert.bitaProfile??slammerProfile(),transfer=slammerTransfer(profile,power),impact=insert.bitaStrike?Math.max(.15,Math.min(1.25,insert.bitaStrike.impactSpeed/(4*RATE))):1;let reaction=0,affected=0;
  if(slot>=bodies.length)return {affected,weights};
  bodies.forEach((body,i)=>{const contact=body.collider(0).contactCollider(insert.collider(0),.025),k=weights[i]*(.5+power*.5);if(!k||!contact)return;
- const p=body.translation(),a=i*2.399963,impulse=body.mass()*1.9*(1+power*.08)*RATE*k*transfer;
+ const p=body.translation(),a=i*2.399963,impulse=body.mass()*1.9*(1+power*.08)*RATE*k*transfer*impact;
  body.applyImpulseAtPoint({x:Math.cos(a)*impulse*profile.spread,y:impulse,z:Math.sin(a)*impulse*profile.spread},{x:p.x+Math.sin(a)*profile.lever,y:p.y,z:p.z-Math.cos(a)*profile.lever},true);reaction+=impulse;affected++;
  });insert.applyImpulse({x:0,y:-reaction,z:0},true);return {affected,weights};
 }
@@ -203,6 +209,6 @@ export function separateDiscs(world,entries,{stableOrder=false}={}){
  }
  world.propagateModifiedBodyPositionsToColliders();return corrections;
 }
-export function limitDiscSpeed(body){const w=body.angvel(),spin=Math.hypot(w.x,w.y,w.z);if(spin>48)body.setAngvel({x:w.x*48/spin,y:w.y*48/spin,z:w.z*48/spin},false);const v=body.linvel(),speed=Math.hypot(v.x,v.y,v.z);if(speed>12*RATE)body.setLinvel({x:v.x*12*RATE/speed,y:v.y*12*RATE/speed,z:v.z*12*RATE/speed},false)}
+export function limitDiscSpeed(body){const strike=body.bitaStrike;if(strike&&!strike.released)strike.impactSpeed=Math.max(strike.impactSpeed,Math.min(12*RATE,Math.max(0,-body.linvel().y)));const w=body.angvel(),spin=Math.hypot(w.x,w.y,w.z);if(spin>48)body.setAngvel({x:w.x*48/spin,y:w.y*48/spin,z:w.z*48/spin},false);const v=body.linvel(),speed=Math.hypot(v.x,v.y,v.z);if(speed>12*RATE)body.setLinvel({x:v.x*12*RATE/speed,y:v.y*12*RATE/speed,z:v.z*12*RATE/speed},false)}
 
 export function discIsMoving(body){const v=body.linvel(),w=body.angvel();return !discCanRest(body)||Math.hypot(v.x,v.y,v.z)>.2*RATE||Math.hypot(w.x,w.y,w.z)>1.3*RATE}
