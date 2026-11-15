@@ -1,3 +1,4 @@
+import {createHoldDemo} from './hold-demo.js?v=20261115-hold57';
 import {getLanguage,t,onLanguageChange} from './i18n.js?v=20261115-album54';
 import {renderLedLabel} from './led-label.js';
 import {createRestackSchedule,AUTO_ASSEMBLY_MS} from './restack-policy.js?v=20261115-album54';
@@ -19,6 +20,7 @@ import {createPackIntro} from './pack-intro.js?v=20261114-peek42';
 import {createStrikeHint} from './strike-hint.js?v=20261115-album54';
 const track=(name,details)=>window.bitaAnalytics?.track(name,details);
 const strikeHint=createStrikeHint();
+const demoReduced=matchMedia('(prefers-reduced-motion:reduce)').matches,holdDemo=createHoldDemo({reduced:demoReduced});
 const CHARGE_MS=7000;
 const resultSplash=createResultSplash();const restackSchedule=createRestackSchedule();
 const $=id=>document.getElementById(id),stage=$('stage'),strike=$('strike');
@@ -37,7 +39,7 @@ const tableDots=createTableDots(scene);
 let hasHit=false;const flexed=new Set();
 document.documentElement.dataset.theme='light';
 document.querySelector('meta[name="theme-color"]').content='#f1f1ee';
-function updateAtmosphere(dt){const elapsed=charge?performance.now()-charge.start:0,t=clamp(elapsed/2400,0,1),target=t**.72;atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/(charge?.12:.4)));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.10,.13,atmosphere)}
+function updateAtmosphere(dt){const elapsed=charge?performance.now()-charge.start:holdDemo.power*CHARGE_MS,t=clamp(elapsed/2400,0,1),target=t**.72;atmosphere+=(target-atmosphere)*(1-Math.exp(-dt/(charge?.12:.4)));if(Math.abs(target-atmosphere)<.0002)atmosphere=target;document.documentElement.style.setProperty('--scene-dark',atmosphere.toFixed(4));hemi.intensity=lerp(1.6,.85,atmosphere);key.intensity=lerp(2.4,3,atmosphere);key.position.x=atmosphere*.15;fill.intensity=lerp(.65,1.1,atmosphere);floor.material.opacity=lerp(.10,.13,atmosphere)}
 function texture(draw,w=512,h=512){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());return t}
 const manifest=await fetch('assets/caps/manifest.json?v=20261114-materials45').then(r=>r.json());
 let sharedCollection=readSharedCollection(location.hash,manifest);
@@ -182,8 +184,11 @@ let strikeImpulse=null;
 function pulseStrike(){strikeImpulse?.cancel();const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;if(!reduced)for(const [i,led]of [...document.querySelectorAll('#strike .led-glyph')].entries())led.animate([{opacity:1,color:'#25b6cc'},{opacity:.35,color:'#9b68ef',offset:.12},{opacity:1,color:'#e75ba6',offset:.22},{opacity:.6,color:'#eeaa3c',offset:.35},{opacity:1,color:'#25b6cc',offset:.48},{opacity:1,color:'#9b68ef'}],{duration:420,delay:i*14,easing:'steps(1,end)'});strikeImpulse=$('strikeEnergy').animate(reduced?[{opacity:.35},{opacity:0}]:[{opacity:.45,transform:'translateX(-30%) scale(.8)'},{opacity:.35,transform:'translateX(0) scale(1)',offset:.3},{opacity:0,transform:'translateX(40%) scale(1.3)'}],{duration:reduced?180:520,easing:'cubic-bezier(.16,.7,.3,1)',fill:'both'})}
 function startCharge(now=performance.now()){strikeHint.hide();pointerGesture=null;ensureAudio();charge={start:now,power:0};orbitElevation=.43;orbitVelocity=0;state='charging';strike.classList.add('charging');controls()}
 function snapAssembly(){assemblingUntil=0;for(const[i,c]of caps.entries()){c.assemble=null;c.body.setTranslation({x:c.position.x,y:c.position.y+capInsertionOffset(i,slammerSlot),z:c.position.z},true);c.body.setRotation(c.rotation,true)}if(slammer){slammer.assemble=null;slammer.body.setTranslation({x:0,y:slammerY(slammerSlot),z:0},true);slammer.body.setRotation({x:0,y:0,z:0,w:1},true)}}
-function begin(e){if(!introFinished)return;finishSlammerPlacement();pulseStrike();if(state==='result'){restackRemaining(false,0);snapAssembly()}else if(state==='ready'&&performance.now()<assemblingUntil)snapAssembly();if(state!=='ready'||caps.some(c=>performance.now()-c.born<800))return;if(e.pointerId!==undefined)e.currentTarget.setPointerCapture?.(e.pointerId);startCharge()}
+function begin(e){if(!introFinished)return;interruptHoldDemo();finishSlammerPlacement();pulseStrike();if(state==='result'){restackRemaining(false,0);snapAssembly()}else if(state==='ready'&&performance.now()<assemblingUntil)snapAssembly();if(state!=='ready'||caps.some(c=>performance.now()-c.born<800))return;if(e.pointerId!==undefined)e.currentTarget.setPointerCapture?.(e.pointerId);startCharge()}
 
+function interruptHoldDemo(){if(!holdDemo.interrupt())return;strike.classList.remove('demo-pressed');if(!charge){strike.classList.remove('charging');setChargeVisual(0)}}
+document.querySelector('main').addEventListener('pointerdown',()=>{if(introFinished)interruptHoldDemo()},{capture:true});
+document.querySelector('main').addEventListener('keydown',e=>{if(introFinished&&['Space','Enter','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Home','End'].includes(e.code))interruptHoldDemo()},{capture:true});
 function cancel(){if(!charge){controls();return}charge=null;state='ready';strike.classList.remove('charging');setChargeVisual(0);controls()}
 const chargeFeedback=createChargeFeedback(document.querySelector('.controls'));chargeFeedback.setTone(slammerManifest[slammerDesign].id);
 const resultTone=()=>slammerDesign===0?'black':slammerDesign===1?'blue':'purple';
@@ -235,19 +240,21 @@ ownedCapIds.push(...won.map(c=>manifest[c.index].id));try{localStorage.setItem('
 for(const [i,c]of won.entries()){c.collected=true;c.mesh.visible=false;const target=wonRail.nextTarget();await showcase.award({index:c.index},{target,index:i,total:won.length});collection.push(c.index);renderCollection()}
 state='result';restackSchedule.schedule(performance.now());count=caps.filter(c=>!c.won).length;renderCollection();controls();}
 let previous=performance.now(),acc=0,lastFrame=0;
-function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=(state==='ready'||state==='result'||state==='inspection')&&!slammerMenuOpen;if(idle&&!pointers.size&&Math.abs(orbitVelocity)<.0001&&!showcase.active()&&!slammerPlacement.active&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.1);previous=now;const t=now/1000;
+function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=now;return}const idle=(state==='ready'||state==='result'||state==='inspection')&&!slammerMenuOpen;if(idle&&!holdDemo.active&&!pointers.size&&Math.abs(orbitVelocity)<.0001&&!showcase.active()&&!slammerPlacement.active&&now-lastFrame<1000/30)return;lastFrame=now;const dt=Math.min((now-previous)/1000,.1);previous=now;const t=now/1000;
+ holdDemo.update(dt,introFinished&&state==='ready'&&!slammerMenuOpen&&!pointers.size&&!collectionSheet.isOpen()&&now>=assemblingUntil&&caps.every(c=>now-c.born>=1000));
+ stage.dataset.holdDemo=holdDemo.phase;strike.classList.toggle('demo-pressed',holdDemo.phase==='holding'&&!demoReduced);strike.classList.toggle('charging',Boolean(charge)||holdDemo.phase==='holding');if(holdDemo.active||holdDemo.phase==='done'&&!charge&&strike.style.getPropertyValue('--power-fill')!=='0')setChargeVisual(holdDemo.power);
  showcase.update(now,dt);if(restackSchedule.ready(now,{result:state==='result',paused:dragging||showcase.active()||$('album').open}))restackRemaining(false,AUTO_ASSEMBLY_MS);if(pendingAdjustment)flushAdjustments();if(charge&&now-charge.start>=CHARGE_MS)overload();if(state==='ready')controls();
  updateAtmosphere(dt);tableDots.update(dt,atmosphere,introFinished);
  if(['ready','charging'].includes(state)){
   slammerPlacement.update(dt);slammerSlot=slammerPlacement.slot;if(slammerSwap&&slammerPlacement.phase==='tracking'){replaceSlammer();slammerPlacement.end()}
-  const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0;if(charge)setChargeVisual(p);
+  const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):holdDemo.power;if(charge)setChargeVisual(p);
   for(const [i,c]of caps.entries()){
-   const age=(now-c.born)/800,progress=clamp(age,0,1),drop=1-progress,bounce=age>1?.018*Math.sin((age-1)*22)*Math.exp(-(age-1)*9):0,jitter=.065*p**1.25,bob=0;
+   const age=(now-c.born)/800,progress=clamp(age,0,1),drop=1-progress,bounce=age>1?.018*Math.sin((age-1)*22)*Math.exp(-(age-1)*9):0,jitter=demoReduced&&holdDemo.active?0:.065*p**1.25,bob=0;
    const gap=capInsertionOffset(i,slammerSlot)+(slammerPlacement.active&&i>=slammerSlot?.10:0);c.gapOffset??=gap;c.gapOffset+=(gap-c.gapOffset)*(1-Math.exp(-dt*24));
    const x=c.position.x+drop*drop*1.6+Math.sin(t*56)*jitter,y=c.position.y+c.gapOffset+.8*(1-progress*progress)+bounce+bob+chargeLift(p)+Math.sin(t*65)*jitter*.7,z=c.position.z+Math.cos(t*61)*jitter*.6;
    let target=new THREE.Vector3(x,y,z);if(c.assemble){const a=clamp((now-c.assemble.start)/c.assemble.duration,0,1),e=a*a*(3-2*a);target.lerpVectors(new THREE.Vector3(c.assemble.p.x,c.assemble.p.y,c.assemble.p.z),target,e);target.y+=Math.sin(a*Math.PI)*.12;if(a===1)c.assemble=null}c.body.setNextKinematicTranslation(target);const q=new THREE.Quaternion(c.rotation.x,c.rotation.y,c.rotation.z,c.rotation.w);if(jitter){const w=new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.sin(t*67)*jitter*.6,0,Math.cos(t*59)*jitter*.6));q.premultiply(w)}if(c.assemble){const a=clamp((now-c.assemble.start)/c.assemble.duration,0,1);q.slerpQuaternions(c.assemble.q,q.clone(),a*a*(3-2*a))}c.body.setNextKinematicRotation(q);
   }
-  if(slammer){const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0,j=.065*p**1.25,pose=slammerPlacement.pose;
+  if(slammer){const p=charge?clamp((now-charge.start)/CHARGE_MS,0,1):holdDemo.power,j=demoReduced&&holdDemo.active?0:.065*p**1.25,pose=slammerPlacement.pose;
    let target=new THREE.Vector3(-Math.cos(viewYaw)*pose.distance+Math.sin(t*56)*j,pose.y+chargeLift(p),Math.sin(viewYaw)*pose.distance+Math.cos(t*61)*j*.6),q=new THREE.Quaternion();
    if(slammer.assemble){const a=clamp((now-slammer.assemble.start)/slammer.assemble.duration,0,1),e=a*a*(3-2*a);target.lerpVectors(new THREE.Vector3(slammer.assemble.p.x,slammer.assemble.p.y,slammer.assemble.p.z),target,e);target.y+=Math.sin(a*Math.PI)*.12;q.slerpQuaternions(slammer.assemble.q,q.clone(),e);if(a===1)slammer.assemble=null}
    slammer.body.setNextKinematicTranslation(target);slammer.body.setNextKinematicRotation(q)
@@ -271,10 +278,10 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  const progress=spreading?clamp((physicsTime-impactAt)/.75,0,1):0,smooth=progress*progress*(3-2*progress);
  const desiredElevation=spreading?lerp(impactElevation,1.515,smooth):slammerMenuOpen?.18:orbitElevation;
  const extent=Math.max(...caps.map(c=>Math.abs(c.mesh.position.x*Math.cos(viewYaw)-c.mesh.position.z*Math.sin(viewYaw))+.58));
- const aspect=stage.clientWidth/stage.clientHeight,chargePower=charge?clamp((now-charge.start)/CHARGE_MS,0,1):0,baseWidth=Math.max(2.18,3.8*aspect),chargeWidth=Math.max(baseWidth+Math.pow(chargePower,1.1)*1.35,(2.4+chargeLift(chargePower)*1.05+count*.014)*aspect);
+ const aspect=stage.clientWidth/stage.clientHeight,chargePower=charge?clamp((now-charge.start)/CHARGE_MS,0,1):holdDemo.power,baseWidth=Math.max(2.18,3.8*aspect),chargeWidth=Math.max(baseWidth+Math.pow(chargePower,1.1)*1.35,(2.4+chargeLift(chargePower)*1.05+count*.014)*aspect);
  const targetWidth=slammerPlacement.active?Math.max(3.8,baseWidth):slammerMenuOpen?Math.max(2.8,baseWidth):spreading?Math.max(3.6+lastPower*1.6,4.4*aspect,extent*2+.3):air?Math.max(baseWidth+lastPower*2,extent*2+.3,(2.4+chargeLift(lastPower)*1.05+count*.014)*aspect):Math.max(chargeWidth,performance.now()<reframeUntil?baseWidth+.35:baseWidth);
  if(!dragging){const ease=slammerPlacement.active?16:charge?3-chargePower*1.6:spreading?3.2:performance.now()<reframeUntil?1.8:3;viewWidth=lerp(viewWidth,targetWidth,Math.min(1,dt*ease));viewElevation=lerp(viewElevation,desiredElevation,Math.min(1,dt*5));viewYaw=lerp(viewYaw,orbitYaw,Math.min(1,dt*7));
- const averageY=caps.length?caps.reduce((s,c)=>s+c.mesh.position.y,0)/caps.length:0,targetY=spreading?0:Math.max(.06,averageY*((charge||air) ? .35 : .65));
+ const averageY=caps.length?caps.reduce((s,c)=>s+c.mesh.position.y,0)/caps.length:0,targetY=spreading?0:Math.max(.06,averageY*((charge||holdDemo.active||air) ? .35 : .65));
  viewTarget.y=lerp(viewTarget.y,targetY,Math.min(1,dt*5));camera.position.set(viewTarget.x+Math.sin(viewYaw)*10*Math.cos(viewElevation),viewTarget.y+10*Math.sin(viewElevation),viewTarget.z+Math.cos(viewYaw)*10*Math.cos(viewElevation));camera.lookAt(viewTarget);
  camera.left=-viewWidth/2;camera.right=viewWidth/2;camera.top=viewWidth/aspect/2;camera.bottom=-camera.top;camera.updateProjectionMatrix();}
 
@@ -290,7 +297,7 @@ function frame(now){requestAnimationFrame(frame);if(document.hidden){previous=no
  const shadowCasters=pieces().filter(c=>!c.collected&&c.mesh.visible),shadowHeight=shadowCasters.length?Math.max(0,Math.min(...shadowCasters.map(c=>c.mesh.position.y-supportHeight(c)))):0;
  key.shadow.radius=.7+Math.min(1,shadowHeight/1.1)*6;
  floor.material.opacity=lerp(.10,.13,atmosphere)*(1-Math.min(.35,shadowHeight*.25));
- if(['charging','airborne','scattering','collecting'].includes(state)||dragging||slammerPlacement.active||performance.now()<assemblingUntil||Math.abs((frame.shadowHeight??-1)-shadowHeight)>.002||Math.abs((frame.shadowAtmosphere??-1)-atmosphere)>.004||caps.some(c=>now-c.born<1000))renderer.shadowMap.needsUpdate=true;
+ if(holdDemo.active||['charging','airborne','scattering','collecting'].includes(state)||dragging||slammerPlacement.active||performance.now()<assemblingUntil||Math.abs((frame.shadowHeight??-1)-shadowHeight)>.002||Math.abs((frame.shadowAtmosphere??-1)-atmosphere)>.004||caps.some(c=>now-c.born<1000))renderer.shadowMap.needsUpdate=true;
  frame.shadowHeight=shadowHeight;frame.shadowAtmosphere=atmosphere;
  if(state==='ready'&&slammerMenuOpen){const p=new THREE.Vector3(-Math.cos(viewYaw)*.82,slammerPlacement.pose.y,Math.sin(viewYaw)*.82).project(camera),edge=new THREE.Vector3(-Math.cos(viewYaw)*.53,slammerPlacement.pose.y,Math.sin(viewYaw)*.53).project(camera),w=stage.clientWidth,h=stage.clientHeight,x=(p.x+1)*w/2,y=(1-p.y)*h/2,ex=(edge.x+1)*w/2,ey=(1-edge.y)*h/2;$('slammerPointer').style.left=`${x}px`;$('slammerPointer').style.top=`${y}px`;const guide=$('slammerGuide');guide.setAttribute('viewBox',`0 0 ${w} ${h}`);guide.firstElementChild.setAttribute('d',`M${x-8} ${y} L${ex} ${ey}`);guide.lastElementChild.setAttribute('cx',ex);guide.lastElementChild.setAttribute('cy',ey)}
  if(chargeFeedback.active()){const chargeFloor=new THREE.Vector3(0,.006,0).project(camera),chargeUnder=new THREE.Vector3(0,shadowHeight+.006,0).project(camera),chargeSide=new THREE.Vector3(Math.cos(viewYaw)*.65,.006,-Math.sin(viewYaw)*.65).project(camera),chargeDepth=new THREE.Vector3(Math.sin(viewYaw)*.65,.006,Math.cos(viewYaw)*.65).project(camera);
@@ -308,7 +315,7 @@ else packIntro.setReady(caps.map(c=>c.mesh)).then(()=>{
   const target={x:c.position.x+1.6,y:c.position.y+capInsertionOffset(i,slammerSlot)+.8,z:c.position.z};
   c.body.setTranslation(target,true);c.body.setNextKinematicTranslation(target);c.mesh.position.copy(target);c.mesh.visible=i===0;
  }
- track('bita_pack_open');introFinished=true;renderCollection();renderer.shadowMap.needsUpdate=true;controls();backgroundCaps();
+ track('bita_pack_open');holdDemo.arm();introFinished=true;renderCollection();renderer.shadowMap.needsUpdate=true;controls();backgroundCaps();
 });
 
 async function backgroundCaps(){while(true){await new Promise(r=>setTimeout(r,1500));if(!deck.length&&readyDeck.length<10)deck=makeCapDeck(manifest);if(deck.length){await loadBatch();controls()}}}
