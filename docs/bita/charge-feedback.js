@@ -2,7 +2,10 @@ import * as THREE from './vendor/three.module.js';
 import {traceShape,spawnArc,vertex,fragment,ARCS,PULSES,hexToRgb} from './vendor/electric-logo-core.js';
 // React Bits Electric Logo shader and edge tracing, with a Three.js adapter.
 const ARC_COUNT=12;
-const chargeFragment=fragment.replace(`uArcEnds[${ARCS}]`,`uArcEnds[${ARC_COUNT}]`).replace(`uArcShape[${ARCS}]`,`uArcShape[${ARC_COUNT}]`).replace(`i < ${ARCS}; i++) addArc`,`i < ${ARC_COUNT}; i++) addArc`);
+const taperedFragment=fragment.replace('if (s < -margin || s > len + margin || abs(h) > margin) return;', 'margin *= 2.5; if (s < -margin || s > len + margin || abs(h) > margin) return;')
+ .replace('float w = uThickness * (c == 0 ? 0.9 : 0.6);','float tip = 1.0-smoothstep(0.65,1.0,u); float w = uThickness * (c == 0 ? 0.9 : 0.6) * max(0.08,tip);')
+ .replace('float k = info.y * (c == 0 ? 1.0 : 0.45);','float k = info.y * (c == 0 ? 1.0 : 0.45) * (1.0-smoothstep(0.78,1.0,u)) * (1.0-smoothstep(margin*0.55,margin,abs(h)));');
+const chargeFragment=taperedFragment.replace(`uArcEnds[${ARCS}]`,`uArcEnds[${ARC_COUNT}]`).replace(`uArcShape[${ARCS}]`,`uArcShape[${ARC_COUNT}]`).replace(`i < ${ARCS}; i++) addArc`,`i < ${ARC_COUNT}; i++) addArc`);
 export function createChargeFeedback(button){
  const renderer=new THREE.WebGLRenderer({alpha:true,premultipliedAlpha:true,antialias:false,powerPreference:'low-power'});renderer.setClearColor(0,0);
  const canvas=renderer.domElement;canvas.className='charge-fx';canvas.setAttribute('aria-hidden','true');document.body.append(canvas);
