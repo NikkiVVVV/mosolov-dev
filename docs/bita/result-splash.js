@@ -1,4 +1,4 @@
-import {getLanguage} from './i18n.js?v=20261115-header53';
+import {getLanguage} from './i18n.js?v=20261115-album54';
 import {createResultPrism} from './result-prism.js?v=20261115-flow47';
 export const resultSplashKind=(won,overloaded)=>overloaded?'spill':won>=8?'epic':won>=5?'super':won>=2?'win':won===1?'nice':'miss';
 const phrases={nice:['тыщ','вау','крутой чел','да ты чо','базару ноль'],win:['вау','крутой чел','чел ты крейзи','тыщ','да ты чо','базару ноль'],super:['крутой чел','чел ты крейзи','да ты чо','базару ноль','вау'],epic:['чел ты крейзи','базару ноль','крутой чел','да ты чо'],miss:['бывает','ну почти'],spill:['перебор']};

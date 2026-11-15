@@ -1,4 +1,4 @@
-import {t} from './i18n.js?v=20261115-header53';
+import {t} from './i18n.js?v=20261115-album54';
 import * as THREE from './vendor/three.module.js';
 export function createShowcase({makeModel,nameFor,onBack}){
  const pane=document.getElementById('showcase'),back=document.getElementById('showcaseBack'),title=document.getElementById('showcaseTitle'),step=document.getElementById('showcaseStep');

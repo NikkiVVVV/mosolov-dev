@@ -4,6 +4,6 @@ export const getLanguage=()=>language;
 export const t=(key,locale=language)=>copy[locale]?.[key]??copy.ru[key]??key;
 export function setLanguage(value){if(!['ru','en'].includes(value)||value===language)return;language=value;for(const listener of listeners)listener(language)}
 export function onLanguageChange(listener){listeners.add(listener);return()=>listeners.delete(listener)}
-export function shareMessage(count,locale=language){return locale==='en'?'Go give it a try!':'Го пробовать!'}
+export function shareMessage(count,locale=language){return locale==='en'?'Let’s play pogs! Open a pack, take your shot, and start your collection.':'Го в фишки! Открывай пачку, бей и собирай свою коллекцию.'}
 
 export function capNoun(count,locale=language){if(locale==='en')return count===1?'cap':'caps';const n=count%100,m=count%10;return n>=11&&n<=14?'фишек':m===1?'фишку':m>=2&&m<=4?'фишки':'фишек'}

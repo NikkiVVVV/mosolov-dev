@@ -286,3 +286,13 @@ html .controls>.adjust:active{translate:0 1px;box-shadow:inset 0 2px 5px #242d28
 @media(prefers-reduced-motion:reduce){#collectionFan img{transition:none}}
 
 #album .album-actions #shareAlbum{background:linear-gradient(#343434,#222);border-color:#262626}
+
+/* v54: stable cap silhouettes while images decode, followed by an ordered reveal. */
+#collectionFan .collection-slot{position:absolute;right:var(--rail-right,0px);top:0;width:36px;height:36px;border-radius:50%;background:#e2e4e2;border:1px solid #ffffffc9;box-shadow:0 2px 5px #00000012;overflow:hidden;transform:rotate(var(--rail-tilt,0deg));transition:right .24s ease-out}
+#collectionFan .collection-slot::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 25%,#ffffffa0 50%,transparent 75%);translate:-100% 0;animation:cap-skeleton 1.6s ease-in-out infinite}
+#collectionFan .collection-slot img:nth-child(n){left:0;right:auto;top:0;width:100%;height:100%;border:0;box-shadow:none;transform:none;opacity:0;transition:none}
+#collectionFan .collection-slot[data-ready=true]{background:transparent}
+#collectionFan .collection-slot[data-ready=true] img{opacity:1}
+#collectionFan .collection-slot[data-ready=true]::after,#collectionFan .collection-slot[data-failed=true]::after{display:none}
+@keyframes cap-skeleton{to{translate:100% 0}}
+@media(prefers-reduced-motion:reduce){#collectionFan .collection-slot{transition:none}#collectionFan .collection-slot::after{animation:none;translate:0;background:#ffffff30}}

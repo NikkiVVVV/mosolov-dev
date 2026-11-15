@@ -10,19 +10,30 @@ export function wonRailLayout(count,width,{size=36,step=14}={}){
 }
 export function createWonRail({fan,getItems,ensureItem,imageFor,enabled=()=>true}){
  const overflow=document.createElement('span');overflow.className='collection-overflow';overflow.setAttribute('aria-hidden','true');overflow.hidden=true;fan.append(overflow);
- const nodes=new Map(),reduced=matchMedia('(prefers-reduced-motion:reduce)');let previousCount=null;
+ const nodes=new Map(),reduced=matchMedia('(prefers-reduced-motion:reduce)');let previousCount=null,destroyed=false;
  function render(){
-  if(!enabled())return;const items=getItems(),layout=wonRailLayout(items.length,fan.clientWidth),visible=new Set(layout.slots.map(s=>s.ordinal));
-  for(const [ordinal,img]of nodes)if(!visible.has(ordinal)){img.remove();nodes.delete(ordinal)}
+  if(!enabled()||destroyed)return;const items=getItems(),layout=wonRailLayout(items.length,fan.clientWidth),visible=new Set(layout.slots.map(s=>s.ordinal)),batch=[];
+  for(const [ordinal,entry]of nodes)if(!visible.has(ordinal)){entry.shell.remove();nodes.delete(ordinal)}
   for(const {ordinal,right}of layout.slots){
-   let img=nodes.get(ordinal);
-   if(!img){img=new Image(36,36);img.alt='';img.draggable=false;img.decoding='async';img.dataset.ordinal=ordinal;img.style.opacity='0';fan.append(img);nodes.set(ordinal,img);const arrives=previousCount!==null&&ordinal>=previousCount;
-    ensureItem(items[ordinal]).then(async()=>{if(!img.isConnected)return;img.src=imageFor(items[ordinal]);await img.decode();if(!img.isConnected)return;img.style.opacity='1';if(arrives&&!reduced.matches)img.animate([{opacity:0,scale:.7,translate:'0 -4px'},{opacity:1,scale:1,translate:'0 0'}],{duration:260,easing:'cubic-bezier(.2,.75,.2,1)'})}).catch(()=>{});
+   let entry=nodes.get(ordinal);
+   if(!entry){
+    const shell=document.createElement('span'),img=new Image(36,36);shell.className='collection-slot';shell.setAttribute('aria-hidden','true');shell.dataset.ordinal=ordinal;img.alt='';img.draggable=false;img.decoding='async';shell.append(img);fan.append(shell);entry={shell,img};nodes.set(ordinal,entry);
+    const arrives=previousCount!==null&&ordinal>=previousCount;
+    const loaded=Promise.resolve().then(()=>ensureItem(items[ordinal])).then(async()=>{if(!shell.isConnected)return;img.src=imageFor(items[ordinal]);await img.decode();return true}).catch(()=>false);
+    batch.push({entry,loaded,arrives});
    }
-   img.style.setProperty('--rail-right',right+'px');img.style.setProperty('--rail-tilt',((ordinal%3)-1)*4+'deg');img.style.zIndex=ordinal+1;
+   entry.shell.style.setProperty('--rail-right',right+'px');entry.shell.style.setProperty('--rail-tilt',((ordinal%3)-1)*4+'deg');entry.shell.style.zIndex=ordinal+1;
   }
+  // Reveal the initial strip as a single ordered wave, never in network completion order.
+  if(batch.length)Promise.all(batch.map(b=>b.loaded)).then(results=>{
+   if(destroyed)return;batch.forEach(({entry:{shell,img},arrives},i)=>{
+    if(!shell.isConnected)return;if(!results[i]){shell.dataset.failed='true';return}
+    const delay=reduced.matches?0:Math.min(i*42,420);shell.dataset.ready='true';
+    if(!reduced.matches){img.animate([{opacity:0,transform:`translateX(${arrives?8:-10}px) scale(.88)`},{opacity:1,transform:'translateX(0) scale(1)'}],{delay,duration:360,easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'});shell.animate([{backgroundColor:'#e2e4e2'},{backgroundColor:'transparent'}],{delay,duration:360,fill:'backwards'})}
+   });
+  });
   overflow.hidden=layout.hidden===0;overflow.textContent=layout.hidden?`+${layout.hidden}`:'';overflow.style.zIndex=items.length+2;overflow.style.right=(layout.overflowRight??0)+'px';fan.dataset.count=items.length;previousCount=items.length;
  }
  const observer=new ResizeObserver(render);observer.observe(fan);
- return {render,nextTarget(){const r=fan.getBoundingClientRect(),layout=wonRailLayout(getItems().length,r.width);return{x:r.right-layout.nextRight-18,y:r.top+r.height/2}},destroy(){observer.disconnect();nodes.clear()}};
+ return {render,nextTarget(){const r=fan.getBoundingClientRect(),layout=wonRailLayout(getItems().length,r.width);return{x:r.right-layout.nextRight-18,y:r.top+r.height/2}},destroy(){destroyed=true;observer.disconnect();for(const e of nodes.values())e.shell.remove();nodes.clear();overflow.remove()}};
 }
