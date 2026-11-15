@@ -1,4 +1,4 @@
-import {shareMessage} from './i18n.js';
+import {shareMessage} from './i18n.js?v=20261115-header53';
 export function featuredCaps(items,limit=12){return [...new Set(items.slice().reverse())].slice(0,limit)}
 function places(n){if(n<=3)return Array.from({length:n},(_,i)=>({x:540+(i-(n-1)/2)*(n===2?340:270),y:540+(i%2?16:-8),diameter:n===1?480:n===2?420:340}));const columns=n<=9?3:4,rows=Math.ceil(n/columns),diameter=columns===4?218:n<=6?290:260;return Array.from({length:n},(_,i)=>{const row=Math.floor(i/columns),inRow=Math.min(columns,n-row*columns),col=i%columns;return{x:540+(col-(inRow-1)/2)*(columns===4?230:290),y:540+(row-(rows-1)/2)*(columns===4?236:280)+(i%2?10:-10),diameter}});}
 export async function renderShareCard({items,images,language='ru'}){

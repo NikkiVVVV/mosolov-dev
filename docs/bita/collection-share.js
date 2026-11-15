@@ -9,10 +9,4 @@ export function readSharedCollection(hash,manifest){
  return items.length?items:null;
 }
 
-export function collectionShareUrl(items,manifest,href){
- const ids=[...new Set(items.filter(i=>isPlayable(manifest[i])).map(i=>manifest[i].id))];
- const url=new URL('./',href);
- url.searchParams.set('v','20261114-hud29');
- url.hash=new URLSearchParams({caps:ids.join(',')}).toString();
- return url.href;
-}
+export function collectionShareUrl(){return 'https://mosolov.dev/bita/'}

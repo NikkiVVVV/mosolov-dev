@@ -1,22 +1,22 @@
-import {getLanguage,t,onLanguageChange,setLanguage} from './i18n.js';
+import {getLanguage,t,onLanguageChange} from './i18n.js?v=20261115-header53';
 import {renderLedLabel} from './led-label.js';
-import {createRestackSchedule,AUTO_ASSEMBLY_MS} from './restack-policy.js?v=20261115-share52';
-import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261115-share52';
+import {createRestackSchedule,AUTO_ASSEMBLY_MS} from './restack-policy.js?v=20261115-header53';
+import {createResultSplash,resultSplashKind} from './result-splash.js?v=20261115-header53';
 import {isPlayable,readOwnedCollection} from './cap-catalog.js?v=20261114-materials45';
 import {prepareFace,faceThumbnail} from './face-texture.js?v=20261113-clean24';
-import {readSharedCollection,collectionShareUrl} from './collection-share.js?v=20261114-collection28';
-import {createCollectionSheet} from './collection-sheet.js?v=20261115-share52';
+import {readSharedCollection,collectionShareUrl} from './collection-share.js?v=20261115-header53';
+import {createCollectionSheet} from './collection-sheet.js?v=20261115-header53';
 import {createTableDots} from './table-dots.js?v=20261113-clean24';
 import {PHYSICS_RATE} from './physics-scale.js?v=20261113-clean24';
 import {createSlammerPlacement,slammerDragSlot,slammerDragStep} from './slammer-placement.js?v=20261114-hud29';
-import {chargeFill,createWonRail} from './hud-progress.js?v=20261115-share52';
+import {chargeFill,createWonRail} from './hud-progress.js?v=20261115-header53';
 import {makeCapDeck} from './cap-deck.js?v=20261114-materials45';
 import * as THREE from './vendor/three.module.js';
-import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261115-share52';
-import {createShowcase} from './showcase.js?v=20261115-share52';
-import {createChargeFeedback} from './charge-feedback.js?v=20261115-share52';
+import {RAPIER,createWorld,createStackBody,strikeStackDown,STACK_DISC_HEIGHT,HOVER_HEIGHT,STACK_LAYER_STEP,chargeLift,fanStack,turnStack,faceUp,sleepRestingBody,sleepRestingGroup,discCanRest,discIsMoving,enforceTable,MAX_STACK,SLAMMER_HEIGHT,SLAMMER_RADIUS,slammerY,capInsertionOffset,createSlammerBody,slammerResponse,separateDiscs,limitDiscSpeed} from './dynamics.js?v=20261115-header53';
+import {createShowcase} from './showcase.js?v=20261115-header53';
+import {createChargeFeedback} from './charge-feedback.js?v=20261115-header53';
 import {createPackIntro} from './pack-intro.js?v=20261114-peek42';
-import {createStrikeHint} from './strike-hint.js?v=20261115-share52';
+import {createStrikeHint} from './strike-hint.js?v=20261115-header53';
 const strikeHint=createStrikeHint();
 const CHARGE_MS=7000;
 const resultSplash=createResultSplash();const restackSchedule=createRestackSchedule();
@@ -140,8 +140,8 @@ const seriesNames={'mk-gold':'Mortal Kombat Gold','cheetos-cities':'Cheetos · C
 const collectionSheet=createCollectionSheet({getItems:()=>sharedCollection??collection,ensureItem:i=>ensureCap(i),imageFor:i=>reverseThumbnailFor(i),nameFor:i=>manifest[i].name,descriptionFor:i=>`${seriesNames[manifest[i].series]??manifest[i].series} · ${manifest[i].material==='plastic'?'Plastic cap':'Cardboard cap'}`,inspect:(i,host,options)=>showcase.inspect({index:i},host,{verticalOnly:true,fit:.96,...options}),stopInspect:()=>showcase.stopInspect(),shareImageFor:i=>images[i],shareUrl:()=>collectionShareUrl(sharedCollection??collection,manifest,location.href),onClose:()=>{if(sharedCollection){sharedCollection=null;history.replaceState(null,'',location.pathname+location.search);renderCollection()}}});
 function showCollection(){finishSlammerPlacement();collectionSheet.open()}
 $('collectionToggle').onclick=showCollection;renderCollection();
-function localizeUI(){document.documentElement.lang=getLanguage();const toggle=$('languageToggle'),text=getLanguage()==='ru'?'EN':'RU';toggle.lang=getLanguage()==='ru'?'en':'ru';toggle.setAttribute('aria-label',getLanguage()==='ru'?'Switch to English':'Переключить на русский');if(toggle.textContent!==text){toggle.textContent=text;if(!matchMedia('(prefers-reduced-motion:reduce)').matches)toggle.animate([{opacity:.1,translate:'0 3px'},{opacity:1,translate:'0 0'}],{duration:200,easing:'ease-out'})}setStrikeLabel();renderCollection();for(const[id,key]of [['minus','remove'],['plus','add'],['slammerPointer','slammer'],['slammerPicker','chooseSlammer'],['openPack','pack']])$(id).setAttribute('aria-label',t(key));document.querySelector('.channel').setAttribute('aria-label',t('channel'));document.querySelector('.topbar').setAttribute('aria-label',t('navigation'));updatePlacementUI.key=null;updatePlacementUI();}
-$('languageToggle').onclick=()=>setLanguage(getLanguage()==='ru'?'en':'ru');onLanguageChange(localizeUI);localizeUI();
+function localizeUI(){document.documentElement.lang=getLanguage();setStrikeLabel();renderCollection();for(const[id,key]of [['minus','remove'],['plus','add'],['slammerPointer','slammer'],['slammerPicker','chooseSlammer'],['openPack','pack']])$(id).setAttribute('aria-label',t(key));document.querySelector('.channel').setAttribute('aria-label',t('channel'));document.querySelector('.topbar').setAttribute('aria-label',t('navigation'));updatePlacementUI.key=null;updatePlacementUI();}
+onLanguageChange(localizeUI);localizeUI();
 function addCap(drop=true,chosen=null){const i=caps.length,index=chosen??nextCap();if(!Number.isInteger(index)||!isPlayable(manifest[index])||!images[index]||!frontMats[index].map)return null;const physical=createStackBody(world,i,Math.random,manifest[index].material,manifest[index].id);const item={...physical,index,mesh:makeCap(index,i*.91),born:drop?performance.now():-10000,rest:{},won:false};caps.push(item);count=caps.length;if(drop){item.body.setTranslation({x:1.6,y:physical.position.y+.8,z:physical.position.z},true);item.body.setRotation(physical.rotation,true)}return item}
 function removeCap(c){scene.remove(c.mesh);c.mesh.userData.ownedMaterial?.dispose();c.mesh.traverse(o=>{if(o.isMesh)o.geometry.dispose()});world.removeRigidBody(c.body)}
 function reset(n=count,drop=true,indices=null){restackSchedule.clear();if(!indices&&!readyDeck.length){if(!resetQueued){resetQueued=true;setTimeout(()=>{resetQueued=false;reset(n,drop,indices)},300)}return}caps.forEach(removeCap);caps=[];count=clamp(n||5,1,MAX_STACK);hasHit=false;flexed.clear();overloaded=false;setStrikeLabel('strike');state='ready';orbitYaw=-.18;orbitElevation=.43;orbitVelocity=0;viewTarget.x=0;viewTarget.z=0;$('announcer').textContent='';$('markers').replaceChildren();edgeAt=twistAt=-1;groupRest={};still=0;const desired=indices?count:Math.min(count,readyDeck.length);for(let i=0;i<desired;i++){const item=addCap(drop,indices?.[i]);if(drop&&item)item.born=performance.now()+i*70}count=caps.length;setupSlammer();renderCollection();controls()}

@@ -1,6 +1,6 @@
-import {t,onLanguageChange} from './i18n.js';
+import {t,onLanguageChange} from './i18n.js?v=20261115-header53';
 import {renderLedLabel} from './led-label.js';
-import {createCollectionShareUI} from './collection-share-ui.js?v=20261115-share52';
+import {createCollectionShareUI} from './collection-share-ui.js?v=20261115-header53';
 // One light sheet: a five-cap fan, with the inspected cap in the center.
 export function createCollectionSheet({getItems,ensureItem,imageFor,nameFor,descriptionFor=()=>'',inspect,stopInspect,shareUrl,shareImageFor,onClose=()=>{}}){
  const dialog=document.getElementById('album'),track=document.getElementById('albumCarousel'),preview=document.getElementById('albumPreview'),neighbors=document.getElementById('albumNeighbors'),name=document.getElementById('albumName'),description=document.getElementById('albumDescription'),grab=document.getElementById('albumGrab');

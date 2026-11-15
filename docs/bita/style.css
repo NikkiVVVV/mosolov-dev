@@ -279,10 +279,10 @@ html .controls>.adjust:active{translate:0 1px;box-shadow:inset 0 2px 5px #242d28
 
 .result-splash[data-prism=true] .result-ring,.result-splash[data-prism=true] .result-electric{visibility:hidden}.result-splash[data-prism=true] .result-burst{opacity:.35}
 
-/* v52: one centered earned-cap rail between two equal header controls. */
-.topbar{gap:16px}.topbar #collectionToggle{justify-content:center}.topbar #languageToggle{flex:0 0 44px;width:44px;height:44px;border:1px solid #ffffffd9;border-radius:16px;background:linear-gradient(145deg,#ffffffb3,#e7ebe7a3);box-shadow:inset 0 1px 1px #fff,0 3px 8px #2530260c;color:#4c554f;font:500 14px/20px 'Golos Text',sans-serif;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;backdrop-filter:blur(12px)}#languageToggle:active{transform:translateY(1px);box-shadow:inset 0 2px 4px #28332d16}#languageToggle:focus-visible{outline:2px solid #6a786e;outline-offset:3px}
+/* v53: right-aligned earned caps; newer caps overlap toward the final +N slot. */
+.topbar{gap:24px}.topbar #collectionToggle{justify-content:flex-end}
 .led-cyrillic svg{display:block;overflow:visible;pointer-events:none}.led-cyrillic{line-height:1;vertical-align:middle}html[lang=ru] #album .album-actions button{font-size:22px;line-height:28px}#album .album-actions button .led-glyph{vertical-align:middle}
 #shareAlbum[aria-busy=true]{opacity:.65;cursor:progress}
-@media(prefers-reduced-motion:reduce){#languageToggle,#collectionFan img{transition:none}}
+@media(prefers-reduced-motion:reduce){#collectionFan img{transition:none}}
 
-#album .album-actions #shareAlbum{background:linear-gradient(#343434,#222);border-color:#262626}#languageToggle{color:#505050!important;background:linear-gradient(145deg,#ffffffc9,#e9e9e9b3)!important}
+#album .album-actions #shareAlbum{background:linear-gradient(#343434,#222);border-color:#262626}

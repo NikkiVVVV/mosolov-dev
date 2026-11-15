@@ -1,5 +1,5 @@
-import {createCollectionShare} from './share-card.js?v=20261115-share52';
-import {getLanguage,t,onLanguageChange} from './i18n.js';
+import {createCollectionShare} from './share-card.js?v=20261115-header53';
+import {getLanguage,t,onLanguageChange} from './i18n.js?v=20261115-header53';
 import {renderLedLabel} from './led-label.js';
 export function createCollectionShareUI({button,getItems,ensureItem,imageFor,urlFor,isOpen,platform}){
  let busy=false;

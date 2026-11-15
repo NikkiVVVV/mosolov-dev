@@ -1,4 +1,4 @@
-import {getLanguage,t,onLanguageChange} from './i18n.js';
+import {getLanguage,t,onLanguageChange} from './i18n.js?v=20261115-header53';
 const KEY='bita-strike-hint-v1';
 export function createStrikeCoach({storage,show=()=>{},hide=()=>{}}={}){
  let learned=false;try{storage??=window.localStorage;learned=storage.getItem(KEY)==='1'}catch{}
